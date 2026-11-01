@@ -1,0 +1,2197 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>:root{color-scheme:light dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style><title>Trading, premiers pas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F2F4F1; --surface:#FFFFFF; --sunk:#E7ECE8; --ink:#16211C; --muted:#56655E; --line:#D3DBD6;
+  --accent:#0B6E5F; --accent-ink:#FFFFFF; --up:#1E8A4F; --down:#C4413A; --warn:#A8690F;
+  --up-soft:#DDF1E5; --down-soft:#F8E1DF; --warn-soft:#F7EBD3;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0E1412; --surface:#16201C; --sunk:#1C2823; --ink:#E3EBE6; --muted:#97A79F; --line:#2B3A34;
+    --accent:#42C2A8; --accent-ink:#06201A; --up:#40C07B; --down:#EF6B60; --warn:#E3AC4C;
+    --up-soft:#15301F; --down-soft:#3A1C1A; --warn-soft:#33270F;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0E1412; --surface:#16201C; --sunk:#1C2823; --ink:#E3EBE6; --muted:#97A79F; --line:#2B3A34;
+  --accent:#42C2A8; --accent-ink:#06201A; --up:#40C07B; --down:#EF6B60; --warn:#E3AC4C;
+  --up-soft:#15301F; --down-soft:#3A1C1A; --warn-soft:#33270F;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--body);padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:980px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.1;margin:0}
+h1{font-size:clamp(2.2rem,6vw,3.8rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.6rem,3.6vw,2.3rem);font-weight:700;letter-spacing:-.01em}
+h3{font-size:1.2rem;font-weight:700}
+p{margin:0}
+a{color:var(--accent)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font:500 .75rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:1.1rem;color:var(--muted);max-width:62ch}
+
+/* nav */
+nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:-16px;padding:10px 16px;overflow-x:auto}
+nav.top ul{display:flex;gap:6px;list-style:none;margin:0 auto;padding:0;max-width:980px;white-space:nowrap}
+nav.top a{display:block;padding:6px 12px;border-radius:999px;text-decoration:none;color:var(--ink);font-size:.9rem;font-weight:500}
+nav.top a:hover{background:var(--sunk)}
+nav.top a.gm{color:var(--accent)}
+
+/* hero */
+header.hero{display:grid;gap:22px;padding-block:48px 36px}
+.ticker{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.tick{background:var(--surface);padding:16px 18px;display:grid;gap:6px;align-content:start}
+.tick b{font:500 2rem/1 var(--mono);color:var(--down);font-variant-numeric:tabular-nums}
+.tick span{font-size:.9rem;color:var(--muted)}
+.tick a{font-size:.8rem}
+
+section{padding-block:44px 8px;display:grid;gap:22px;scroll-margin-top:60px}
+.sec-head{display:grid;gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:grid;gap:8px;align-content:start}
+.card p,.card li{font-size:.95rem}
+.card ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.term{font:500 .8rem/1 var(--mono);color:var(--accent);letter-spacing:.04em}
+.note{border-left:3px solid var(--warn);background:var(--warn-soft);padding:12px 16px;border-radius:0 8px 8px 0;font-size:.95rem}
+.note.red{border-color:var(--down);background:var(--down-soft)}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 .75rem/1.2 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+
+/* tips */
+.tips{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.tips li{background:var(--surface);padding:16px 18px;display:grid;gap:4px;align-content:start}
+.tips li b{font-family:var(--display);font-size:1.05rem}
+.tips li span{font-size:.93rem;color:var(--muted)}
+
+/* games */
+.game{scroll-margin-top:70px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:16px}
+.game-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:baseline}
+.badge{font:500 .75rem/1 var(--mono);padding:6px 10px;border-radius:999px;background:var(--sunk);color:var(--muted);letter-spacing:.05em}
+.btn{font:600 .95rem/1 var(--body);padding:12px 16px;border-radius:8px;border:1px solid var(--line);background:var(--sunk);color:var(--ink);cursor:pointer}
+.btn:hover:not(:disabled){border-color:var(--accent)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.up{background:var(--up);border-color:var(--up);color:#fff}
+.btn.down{background:var(--down);border-color:var(--down);color:#fff}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}
+.opt{text-align:left;font:500 .95rem/1.35 var(--body);padding:12px 14px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.ok{background:var(--up-soft);border-color:var(--up)}
+.opt.ko{background:var(--down-soft);border-color:var(--down)}
+.opt:disabled{cursor:default}
+.q{font-size:1.1rem;font-weight:600}
+.explain{font-size:.95rem;padding:12px 14px;border-radius:8px;background:var(--sunk)}
+.progress{height:6px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+canvas{display:block;width:100%;border-radius:8px;background:var(--bg)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.stat{background:var(--bg);border-radius:8px;padding:10px 12px;display:grid;gap:2px}
+.stat small{font-size:.75rem;color:var(--muted)}
+.stat b{font:500 1.2rem/1.2 var(--mono);font-variant-numeric:tabular-nums}
+label.fld{display:grid;gap:6px;font-size:.9rem;color:var(--muted)}
+select,input[type=range]{font:inherit;color:var(--ink)}
+select{padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.log{font:400 .85rem/1.5 var(--mono);max-height:160px;overflow:auto;background:var(--bg);border-radius:8px;padding:10px 12px;margin:0;list-style:none;display:grid;gap:2px}
+.pos{color:var(--up)} .neg{color:var(--down)}
+.meter{height:14px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.meter i{display:block;height:100%;transition:width .2s,background .2s}
+
+/* sites */
+.site{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:grid;gap:6px;align-content:start}
+.site a{font-family:var(--display);font-weight:700;font-size:1.1rem;text-decoration:none}
+.site a:hover{text-decoration:underline}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:500 .72rem/1 var(--mono);padding:5px 8px;border-radius:99px;background:var(--sunk);color:var(--muted)}
+.chip.ma{background:var(--up-soft);color:var(--up)}
+
+/* plan */
+ol.plan{list-style:none;margin:0;padding:0;display:grid;gap:12px;counter-reset:w}
+ol.plan li{counter-increment:w;display:grid;grid-template-columns:auto 1fr;gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+ol.plan li::before{content:"S" counter(w);font:500 1.4rem/1 var(--mono);color:var(--accent)}
+ol.plan li div{display:grid;gap:4px}
+ol.plan.steps li::before{content:counter(w)}
+.chip.good{background:var(--up-soft);color:var(--up)}
+.chip.mid{background:var(--warn-soft);color:var(--warn)}
+.chip.bad{background:var(--down-soft);color:var(--down)}
+.pat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.pat{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:10px;display:grid;gap:4px;align-content:start}
+.pat b{font-family:var(--display);font-size:1rem}
+.pat span{font-size:.85rem;color:var(--muted)}
+.mk{display:grid;gap:8px;align-content:start}
+footer{padding-block:48px 0;color:var(--muted);font-size:.85rem;display:grid;gap:8px}
+.inp{font:inherit;color:var(--ink);padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);width:100%;min-width:0}
+.cklist{display:grid;gap:8px}
+.ck{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);cursor:pointer;font-size:.95rem}
+.ck input{margin-top:4px;accent-color:var(--accent);width:18px;height:18px;flex:none}
+.ck:has(input:checked){border-color:var(--up);background:var(--up-soft)}
+.ck .chip{margin-left:6px;vertical-align:1px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style></head><body>
+
+<div class="wrap">
+<header class="hero">
+  <p class="eyebrow">Carnet d'apprentissage · zéro base requise</p>
+  <h1>Trading, premiers pas</h1>
+  <p class="lede">Les bases expliquées simplement, quinze mini-jeux en quatre niveaux, un simulateur de trader, un défi final, une grille de vérification avant chaque trade pour t'entraîner sans risquer un dirham, et les sites où pratiquer gratuitement. Commence par les chiffres ci-dessous : ils disent pourquoi la gestion du risque passe avant tout le reste.</p>
+  <div class="ticker">
+    <div class="tick"><b>70–89 %</b><span>des comptes de particuliers perdent de l'argent sur les CFD (chiffres imposés par l'ESMA).</span><a href="https://www.centralcharts.com/fr/gm/1-apprendre/4-forex/11-actualite/98-les-statistiques-choquantes-sur-les-traders-forex-et-cfd" target="_blank" rel="noopener">Source</a></div>
+    <div class="tick"><b>8 sur 10</b><span>day traders perdent de l'argent sur une période typique de 6 mois (étude Barber, Lee, Liu, Odean, Taïwan).</span><a href="http://www.econ.yale.edu/~shiller/behfin/2004-04-10/barber-lee-liu-odean.pdf" target="_blank" rel="noopener">Étude</a></div>
+    <div class="tick"><b>&lt; 1 %</b><span>des day traders gagnent de façon régulière après frais, selon la même équipe de chercheurs.</span><a href="https://faculty.haas.berkeley.edu/odean/papers/day%20traders/Day%20Trading%20Skill%20110523.pdf" target="_blank" rel="noopener">Étude</a></div>
+  </div>
+</header>
+
+<nav class="top" aria-label="Sommaire">
+  <ul>
+    <li><a href="#bases">Les bases</a></li>
+    <li><a href="#graphiques">Lire un graphique</a></li>
+    <li><a href="#risque">Gestion du risque</a></li>
+    <li><a href="#astuces">Astuces</a></li>
+    <li><a class="gm" href="#jeux">Mini-jeux</a></li>
+    <li><a class="gm" href="#avances">Jeux avancés</a></li>
+    <li><a class="gm" href="#g11">Défi final</a></li>
+    <li><a href="#strategies">Stratégies</a></li>
+    <li><a class="gm" href="#pro">Méthodes pro</a></li>
+    <li><a class="gm" href="#live">Trader en direct</a></li>
+    <li><a class="gm" href="#smc">Liquidité & SMC</a></li>
+    <li><a class="gm" href="#check">Checklist de trade</a></li>
+    <li><a href="#sites">Sites gratuits</a></li>
+    <li><a href="#maroc">Au Maroc</a></li>
+    <li><a href="#plan">Plan 4 semaines</a></li>
+  </ul>
+</nav>
+
+<!-- ============ BASES ============ -->
+<section id="bases">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 1</p>
+    <h2>Les bases, sans jargon</h2>
+    <p class="lede">Le trading consiste à acheter et vendre un actif (action, devise, crypto…) pour profiter de ses variations de prix, souvent sur des durées courtes. L'investissement, lui, garde un actif des mois ou des années.</p>
+  </div>
+  <div class="grid2">
+    <div class="card"><p class="term">TRADER vs INVESTIR</p><h3>Deux métiers différents</h3>
+      <ul><li><b>Scalping</b> : quelques secondes à minutes.</li><li><b>Day trading</b> : tout est fermé avant la fin de la journée.</li><li><b>Swing trading</b> : quelques jours à semaines. Le plus accessible si tu as un travail ou des études.</li><li><b>Investissement</b> : des années. Statistiquement le plus sûr pour un débutant.</li></ul></div>
+    <div class="card"><p class="term">LES MARCHÉS</p><h3>Qu'est-ce qu'on échange ?</h3>
+      <ul><li><b>Actions</b> : une part d'entreprise (ex. Maroc Telecom, Attijariwafa).</li><li><b>Indices</b> : un panier d'actions (MASI au Maroc, S&amp;P 500 aux USA).</li><li><b>ETF</b> : un fonds qui copie un indice, acheté comme une action.</li><li><b>Forex</b> : les paires de devises (EUR/USD).</li><li><b>Crypto</b> : Bitcoin, Ethereum… très volatiles, ouvertes 24h/24.</li><li><b>Matières premières</b> : or, pétrole.</li></ul></div>
+    <div class="card"><p class="term">LE PRIX</p><h3>Bid, ask et spread</h3>
+      <p>Le <b>bid</b> est le prix auquel tu peux vendre, l'<b>ask</b> celui auquel tu peux acheter. L'écart entre les deux s'appelle le <b>spread</b> : c'est un coût caché que tu paies à chaque trade. Plus tu trades souvent, plus il pèse.</p></div>
+    <div class="card"><p class="term">LES ORDRES</p><h3>Comment on passe un trade</h3>
+      <ul><li><b>Ordre au marché</b> : exécuté tout de suite, au prix disponible.</li><li><b>Ordre limite</b> : exécuté seulement à ton prix ou mieux.</li><li><b>Stop-loss</b> : ferme automatiquement ta position si elle perd trop.</li><li><b>Take-profit</b> : ferme automatiquement quand ton objectif est atteint.</li></ul></div>
+    <div class="card"><p class="term">LONG / SHORT</p><h3>Gagner à la hausse… ou à la baisse</h3>
+      <p><b>Long</b> (acheter) : tu gagnes si le prix monte. <b>Short</b> (vendre à découvert) : tu gagnes si le prix baisse. Un marché qui monte est dit <b>haussier</b> (bull), un marché qui baisse est <b>baissier</b> (bear).</p></div>
+    <div class="card"><p class="term">LES BOUGIES</p><h3>Lire un graphique en chandeliers</h3>
+      <p>Chaque bougie résume une période (1 minute, 1 jour…) avec 4 prix : <b>ouverture, plus haut, plus bas, clôture</b>. Verte : la clôture est au-dessus de l'ouverture. Rouge : en dessous. Les fines lignes (mèches) montrent les extrêmes atteints. Tu t'entraînes dans le jeu 2.</p></div>
+    <div class="card"><p class="term">ANALYSES</p><h3>Technique ou fondamentale</h3>
+      <p>L'<b>analyse technique</b> étudie les graphiques : tendances, supports (niveaux où le prix rebondit souvent), résistances (niveaux où il bloque), indicateurs comme les moyennes mobiles ou le RSI. L'<b>analyse fondamentale</b> étudie la santé de l'entreprise ou de l'économie : bénéfices, dettes, taux d'intérêt.</p></div>
+    <div class="card"><p class="term">LEVIER &amp; CFD</p><h3>Le produit qui fait perdre le plus</h3>
+      <p>Le <b>levier</b> permet de contrôler une grosse position avec peu d'argent (la <b>marge</b>). Avec un levier ×20, une baisse de 5 % efface ta mise. Les <b>CFD</b> sont des contrats qui utilisent ce levier : c'est sur eux que 70 à 89 % des particuliers perdent. Teste-le dans le jeu 4.</p></div>
+  </div>
+</section>
+
+<!-- ============ GRAPHIQUES ============ -->
+<section id="graphiques">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 1 bis</p>
+    <h2>Bien lire un graphique</h2>
+    <p class="lede">Un graphique raconte la bataille entre acheteurs et vendeurs. Voici comment le lire, pièce par pièce. Les graphiques de ce chapitre sont des exemples construits pour l'apprentissage, pas de vraies cotations.</p>
+  </div>
+
+  <div class="card">
+    <p class="term">ANATOMIE D'UNE BOUGIE</p>
+    <h3>Quatre prix dans une seule forme</h3>
+    <canvas id="an-cv" height="250" style="height:250px"></canvas>
+    <p>Le <b>corps</b> relie l'ouverture et la clôture. Les <b>mèches</b> montrent jusqu'où le prix est allé avant de revenir. Une longue mèche basse veut dire : « les vendeurs ont poussé fort, mais les acheteurs ont repris le dessus ». Un grand corps sans mèche veut dire : un camp a dominé toute la période.</p>
+  </div>
+
+  <div class="card">
+    <p class="term">UNITÉS DE TEMPS</p>
+    <h3>Les mêmes prix, deux lectures</h3>
+    <div class="grid2">
+      <div style="display:grid;gap:6px"><p class="eyebrow">Journalier (D1) · 60 bougies</p><canvas id="tf-d" height="200" style="height:200px"></canvas></div>
+      <div style="display:grid;gap:6px"><p class="eyebrow">Hebdomadaire (W1) · 12 bougies</p><canvas id="tf-w" height="200" style="height:200px"></canvas></div>
+    </div>
+    <p>Chaque bougie hebdomadaire regroupe 5 bougies journalières. Le graphique journalier montre des hauts et des bas ; l'hebdomadaire montre surtout la direction de fond. Les unités courantes : M1 et M15 (minutes), H1 et H4 (heures), D1 (jour), W1 (semaine). <b>Commence par D1 et W1</b> : moins de bruit, moins de stress, moins de faux signaux. Les pros regardent toujours une unité plus grande que celle où ils tradent.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <p class="term">TENDANCE HAUSSIÈRE</p>
+      <h3>Des sommets et des creux de plus en plus hauts</h3>
+      <canvas id="ch-up" height="240" style="height:240px"></canvas>
+      <p>Chaque creux s'arrête plus haut que le précédent : les acheteurs interviennent de plus en plus tôt. La ligne pointillée qui relie les creux est une <b>ligne de tendance</b>. Tant qu'elle tient, la tendance est intacte.</p>
+    </div>
+    <div class="card">
+      <p class="term">TENDANCE BAISSIÈRE</p>
+      <h3>Des sommets et des creux de plus en plus bas</h3>
+      <canvas id="ch-down" height="240" style="height:240px"></canvas>
+      <p>Chaque rebond s'arrête plus bas que le précédent : les vendeurs dominent. Acheter dans ce contexte, c'est « attraper un couteau qui tombe ». Un débutant évite de parier contre la tendance.</p>
+    </div>
+    <div class="card">
+      <p class="term">RANGE (MARCHÉ SANS TENDANCE)</p>
+      <h3>Le prix rebondit entre deux murs</h3>
+      <canvas id="ch-range" height="240" style="height:240px"></canvas>
+      <p>Le prix fait des allers-retours entre un <b>support</b> (plancher) et une <b>résistance</b> (plafond). Ce sont des <b>zones</b> plutôt que des lignes exactes. Au milieu du range, il n'y a en général rien d'intéressant à faire.</p>
+    </div>
+    <div class="card">
+      <p class="term">CASSURE ET VOLUME</p>
+      <h3>Quand le plafond cède</h3>
+      <canvas id="ch-break" height="260" style="height:260px"></canvas>
+      <p>Le prix casse la résistance avec un <b>volume</b> (nombre d'échanges) nettement plus fort : beaucoup de participants y croient. Souvent, il revient ensuite tester l'ancienne résistance, qui devient un support. Une cassure sans volume échoue plus souvent : on parle de <b>fausse cassure</b>.</p>
+    </div>
+  </div>
+
+  <div class="sec-head"><h3>Ta routine de lecture en 7 étapes</h3></div>
+  <ol class="plan steps">
+    <li><div><b>Choisis l'unité de temps</b><p>Commence par le journalier (D1).</p></div></li>
+    <li><div><b>Dézoome</b><p>Regarde 6 à 12 mois de données. Tendance haussière, baissière ou range ?</p></div></li>
+    <li><div><b>Trace les niveaux évidents</b><p>2 ou 3 supports et résistances maximum, là où le prix a réagi plusieurs fois.</p></div></li>
+    <li><div><b>Ajoute les moyennes mobiles</b><p>MM20 et MM50 (ou MM200 pour le long terme). Le prix est-il au-dessus ou en dessous ?</p></div></li>
+    <li><div><b>Regarde le volume</b><p>Les grands mouvements sont-ils accompagnés de volume ? Sinon, prudence.</p></div></li>
+    <li><div><b>Lis les dernières bougies</b><p>Y a-t-il une figure de retournement (marteau, avalement…) sur un niveau important ?</p></div></li>
+    <li><div><b>Décide avec trois prix</b><p>Où j'entre, où est mon stop, où est mon objectif. Si l'un des trois n'est pas clair, tu ne trades pas.</p></div></li>
+  </ol>
+
+  <div class="sec-head">
+    <h3>Chaque marché a son caractère</h3>
+    <p style="color:var(--muted);font-size:.95rem">Les courbes ci-dessous sont des simulations sur 6 mois, sur la <b>même échelle</b>, avec la volatilité typique de chaque marché (ordres de grandeur). Elles montrent à quel point certains marchés bougent plus que d'autres.</p>
+  </div>
+  <div class="grid2" id="markets"></div>
+</section>
+
+<!-- ============ RISQUE ============ -->
+<section id="risque">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 2</p>
+    <h2>La gestion du risque, le vrai secret</h2>
+    <p class="lede">Les traders qui durent ne sont pas ceux qui devinent le mieux. Ce sont ceux qui perdent petit quand ils ont tort. Trois règles à connaître par cœur.</p>
+  </div>
+  <div class="grid2">
+    <div class="card"><p class="term">RÈGLE 1</p><h3>Ne risque jamais plus de 1 % par trade</h3><p>Avec 10 000 DH, tu acceptes de perdre au maximum 100 DH sur un trade. Même 10 pertes d'affilée ne te coûtent alors qu'environ 10 % du capital.</p></div>
+    <div class="card"><p class="term">RÈGLE 2</p><h3>Vise au moins 2 fois ce que tu risques</h3><p>C'est le ratio <b>risque/rendement 1:2</b>. Tu risques 100 DH pour en viser 200. Avec ce ratio, tu peux avoir tort 2 fois sur 3 et rester à l'équilibre (hors frais).</p></div>
+    <div class="card"><p class="term">RÈGLE 3</p><h3>Pose ton stop-loss avant d'entrer, et ne le recule jamais</h3><p>L'erreur classique : déplacer son stop plus loin quand le trade va mal. Ça transforme une petite perte prévue en grosse perte imprévue.</p></div>
+  </div>
+
+  <div class="game" id="expect">
+    <div class="game-head"><h3>Calculateur : ta stratégie est-elle gagnante ?</h3><span class="badge">OUTIL</span></div>
+    <div class="grid2">
+      <label class="fld" for="wr">Pourcentage de trades gagnants : <b class="mono" id="wrv">40 %</b><input id="wr" type="range" min="10" max="80" value="40"></label>
+      <label class="fld" for="rr">Ratio risque/rendement
+        <select id="rr"><option value="1">1:1 (je vise autant que je risque)</option><option value="1.5">1:1,5</option><option value="2" selected>1:2</option><option value="3">1:3</option></select></label>
+    </div>
+    <div class="stats">
+      <div class="stat"><small>Gain moyen par trade</small><b id="ev">+0,20 R</b></div>
+      <div class="stat"><small>Taux de réussite minimum</small><b id="be">33,3 %</b></div>
+      <div class="stat"><small>Après 100 trades à 1 %</small><b id="h100">+20 %</b></div>
+    </div>
+    <p class="explain" id="evtxt"></p>
+  </div>
+
+  <div class="tbl"><table>
+    <thead><tr><th>Si tu perds…</th><th style="text-align:right">…il faut regagner</th><th>Ce que ça veut dire</th></tr></thead>
+    <tbody>
+      <tr><td class="num" style="text-align:left">−10 %</td><td class="num">+11 %</td><td>Facile à rattraper.</td></tr>
+      <tr><td class="num" style="text-align:left">−25 %</td><td class="num">+33 %</td><td>Déjà difficile.</td></tr>
+      <tr><td class="num" style="text-align:left">−50 %</td><td class="num">+100 %</td><td>Il faut doubler ce qui reste.</td></tr>
+      <tr><td class="num" style="text-align:left">−75 %</td><td class="num">+300 %</td><td>Quasiment impossible.</td></tr>
+      <tr><td class="num" style="text-align:left">−90 %</td><td class="num">+900 %</td><td>Compte détruit.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- ============ ASTUCES ============ -->
+<section id="astuces">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 3</p>
+    <h2>12 astuces pour bien apprendre</h2>
+  </div>
+  <ul class="tips">
+    <li><b>Commence en démo pendant au moins 3 mois</b><span>Argent virtuel, vrais prix. Ne passe au réel que si tu es rentable en démo sur 50 trades ou plus.</span></li>
+    <li><b>Tiens un journal de trading</b><span>Pour chaque trade : pourquoi tu es entré, stop, objectif, résultat, émotion ressentie. C'est l'outil n°1 pour progresser.</span></li>
+    <li><b>Une seule stratégie, un seul marché</b><span>Maîtrise une méthode simple sur un seul actif avant d'en essayer d'autres.</span></li>
+    <li><b>Écris tes règles avant d'ouvrir le graphique</b><span>Quand entrer, où mettre le stop, quand sortir. Si le trade ne coche pas tout, tu ne le prends pas.</span></li>
+    <li><b>Préfère le swing trading au day trading</b><span>Moins de trades, moins de frais, moins de stress. Les études montrent que le day trading est le style le plus perdant.</span></li>
+    <li><b>Méfie-toi du levier</b><span>Au début, levier ×1 ou pas de levier du tout. Le levier multiplie tes erreurs autant que tes gains.</span></li>
+    <li><b>Compte les frais</b><span>Spread, commissions, frais de nuit sur les CFD. Une stratégie « gagnante » peut devenir perdante une fois les frais déduits.</span></li>
+    <li><b>Ne te venge jamais du marché</b><span>Après une perte, l'envie de « se refaire » pousse à doubler la mise. Fixe-toi une perte maximale par jour et arrête-toi quand elle est atteinte.</span></li>
+    <li><b>Ignore les promesses de gains rapides</b><span>Groupes Telegram, « signaux VIP », robots miracles : c'est le terrain des arnaques. Un vrai professionnel ne garantit jamais de gains.</span></li>
+    <li><b>N'utilise que de l'argent que tu peux perdre</b><span>Jamais l'argent du loyer, d'un prêt ou des études.</span></li>
+    <li><b>Apprends le calendrier économique</b><span>Les annonces de taux d'intérêt ou d'inflation font bouger les marchés violemment. Évite de trader pendant ces minutes-là au début.</span></li>
+    <li><b>Mesure-toi sur des mois, pas sur une journée</b><span>Un bon trade peut perdre et un mauvais trade peut gagner. Seule une série de trades dit si ta méthode fonctionne.</span></li>
+  </ul>
+</section>
+
+<!-- ============ JEUX ============ -->
+<section id="jeux">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 4 · Entraînement</p>
+    <h2>Cinq mini-jeux</h2>
+    <p class="lede">Joue-les dans l'ordre : vocabulaire, lecture de bougies, simulateur, levier, puis détection d'arnaques. Tout est virtuel.</p>
+  </div>
+
+  <!-- JEU 1 -->
+  <div class="game" id="g1">
+    <div class="game-head"><h3>Jeu 1 · Le quiz du vocabulaire</h3><span class="badge mono" id="g1-score">0 / 0</span></div>
+    <div class="progress"><i id="g1-bar"></i></div>
+    <div id="g1-body"></div>
+  </div>
+
+  <!-- JEU 2 -->
+  <div class="game" id="g2">
+    <div class="game-head"><h3>Jeu 2 · Lis la bougie</h3><span class="badge mono" id="g2-score">0 / 0</span></div>
+    <p style="color:var(--muted);font-size:.95rem">Regarde la bougie et réponds. Rappel : sur une bougie verte, l'ouverture est en bas du corps ; sur une rouge, en haut.</p>
+    <canvas id="g2-cv" height="260" style="height:260px"></canvas>
+    <p class="q" id="g2-q"></p>
+    <div class="opts" id="g2-opts"></div>
+    <div class="explain" id="g2-ex" hidden></div>
+    <div class="row"><button class="btn primary" id="g2-next" hidden>Bougie suivante</button></div>
+  </div>
+
+  <!-- JEU 3 -->
+  <div class="game" id="g3">
+    <div class="game-head"><h3>Jeu 3 · Le simulateur « hausse ou baisse »</h3><span class="badge">10 000 DH VIRTUELS</span></div>
+    <p style="color:var(--muted);font-size:.95rem">Choisis combien tu risques par trade, puis parie sur la hausse ou la baisse. Le stop-loss et l'objectif (ratio 1:2) sont placés automatiquement. Fais 10 trades et regarde le bilan : il compare ton résultat à ce qu'auraient donné d'autres niveaux de risque sur les mêmes trades.</p>
+    <canvas id="g3-cv" height="300" style="height:300px"></canvas>
+    <div class="row">
+      <label class="fld" for="g3-risk" style="flex-direction:row">Risque par trade
+        <select id="g3-risk"><option value="0.01">1 % (recommandé)</option><option value="0.02">2 %</option><option value="0.1">10 %</option><option value="0.25">25 %</option></select></label>
+    </div>
+    <div class="row">
+      <button class="btn up" id="g3-buy">Acheter · je parie hausse</button>
+      <button class="btn down" id="g3-sell">Vendre · je parie baisse</button>
+      <button class="btn" id="g3-skip">Attendre une bougie</button>
+      <button class="btn" id="g3-reset">Recommencer</button>
+    </div>
+    <div class="stats">
+      <div class="stat"><small>Capital</small><b id="g3-cap">10 000 DH</b></div>
+      <div class="stat"><small>Trades</small><b id="g3-n">0 / 10</b></div>
+      <div class="stat"><small>Gagnants</small><b id="g3-w">0</b></div>
+      <div class="stat"><small>Statut</small><b id="g3-st" style="font-size:1rem">Prêt</b></div>
+    </div>
+    <ul class="log" id="g3-log"><li>Journal des trades : vide pour l'instant.</li></ul>
+    <div id="g3-sum" hidden></div>
+  </div>
+
+  <!-- JEU 4 -->
+  <div class="game" id="g4">
+    <div class="game-head"><h3>Jeu 4 · Le piège du levier</h3><span class="badge">1 000 DH DE MISE</span></div>
+    <div class="grid2">
+      <label class="fld" for="g4-lev">Effet de levier : <b class="mono" id="g4-levv">×10</b><input id="g4-lev" type="range" min="1" max="100" value="10"></label>
+      <label class="fld" for="g4-mv">Le prix bouge de : <b class="mono" id="g4-mvv">−3 %</b><input id="g4-mv" type="range" min="-10" max="10" step="0.5" value="-3"></label>
+    </div>
+    <div class="stats">
+      <div class="stat"><small>Taille de la position</small><b id="g4-pos"></b></div>
+      <div class="stat"><small>Gain / perte</small><b id="g4-pnl"></b></div>
+      <div class="stat"><small>Il te reste</small><b id="g4-left"></b></div>
+      <div class="stat"><small>Baisse qui efface tout</small><b id="g4-liq"></b></div>
+    </div>
+    <div class="meter" aria-hidden="true"><i id="g4-meter"></i></div>
+    <p class="explain" id="g4-txt"></p>
+    <div class="card" style="background:var(--bg)">
+      <p class="q" id="g4-q">Défi : avec un levier ×50, quelle baisse du prix suffit à effacer ta mise ?</p>
+      <div class="opts" id="g4-opts"></div>
+      <p class="explain" id="g4-ex" hidden></p>
+    </div>
+  </div>
+
+  <!-- JEU 5 -->
+  <div class="game" id="g5">
+    <div class="game-head"><h3>Jeu 5 · Arnaque ou pas ?</h3><span class="badge mono" id="g5-score">0 / 0</span></div>
+    <div class="progress"><i id="g5-bar"></i></div>
+    <div id="g5-body"></div>
+  </div>
+</section>
+
+<!-- ============ AVANCÉS ============ -->
+<section id="avances">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 4 bis · Niveau 2</p>
+    <h2>Jeux avancés et défi final</h2>
+    <p class="lede">Une fois les cinq premiers jeux réussis, passe aux outils que les traders utilisent tous les jours, puis teste-toi avec le défi final. Chaque jeu commence par une courte explication.</p>
+  </div>
+
+  <!-- JEU 6 -->
+  <div class="game" id="g6">
+    <div class="game-head"><h3>Jeu 6 · Calcule la taille de ta position</h3><span class="badge mono" id="g6-score">0 / 0</span></div>
+    <div class="card" style="background:var(--bg)">
+      <p class="term">LA FORMULE</p>
+      <p><b>Nombre d'actions = montant risqué ÷ distance jusqu'au stop</b></p>
+      <p>Montant risqué = capital × % de risque. Distance jusqu'au stop = prix d'entrée − prix du stop. Exemple : capital 10 000 DH, risque 1 % = 100 DH. Entrée 200 DH, stop 190 DH : distance 10 DH. Tu achètes 100 ÷ 10 = <b>10 actions</b>. Si le stop est touché, tu perds bien 100 DH, pas plus. On arrondit toujours vers le bas.</p>
+    </div>
+    <div class="stats" id="g6-data"></div>
+    <p class="q">Combien d'actions dois-tu acheter ?</p>
+    <div class="opts" id="g6-opts"></div>
+    <p class="explain" id="g6-ex" hidden></p>
+    <div class="row"><button class="btn primary" id="g6-next" hidden>Exercice suivant</button></div>
+  </div>
+
+  <!-- JEU 7 -->
+  <div class="game" id="g7">
+    <div class="game-head"><h3>Jeu 7 · Trouve le support et la résistance</h3><span class="badge mono" id="g7-score">0 / 0</span></div>
+    <div class="card" style="background:var(--bg)">
+      <p class="term">À RETENIR</p>
+      <p>Un <b>support</b> est un niveau sous le prix où la baisse s'est arrêtée <b>plusieurs fois</b> : les acheteurs y reviennent. Une <b>résistance</b> est un niveau au-dessus où la hausse a bloqué plusieurs fois. Plus un niveau a été touché souvent, plus il compte. Cherche les mèches qui viennent buter sur la même ligne.</p>
+    </div>
+    <canvas id="g7-cv" height="300" style="height:300px"></canvas>
+    <p class="q" id="g7-q"></p>
+    <div class="opts" id="g7-opts"></div>
+    <p class="explain" id="g7-ex" hidden></p>
+    <div class="row"><button class="btn primary" id="g7-next" hidden>Graphique suivant</button></div>
+  </div>
+
+  <!-- JEU 8 -->
+  <div class="game" id="g8">
+    <div class="game-head"><h3>Jeu 8 · Lis la tendance avec les moyennes mobiles</h3><span class="badge mono" id="g8-score">0 / 0</span></div>
+    <div class="card" style="background:var(--bg)">
+      <p class="term">À RETENIR</p>
+      <p>Une <b>moyenne mobile</b> (MM) est la moyenne des derniers prix de clôture. Elle lisse le graphique pour montrer la direction. La <b style="color:var(--accent)">MM20</b> (20 bougies) réagit vite, la <b style="color:var(--warn)">MM50</b> (50 bougies) montre la tendance de fond.</p>
+      <ul>
+        <li><b>Haussière</b> : prix au-dessus de la MM20, MM20 au-dessus de la MM50, et la MM50 monte.</li>
+        <li><b>Baissière</b> : l'inverse, tout est en dessous et la MM50 descend.</li>
+        <li><b>Pas de tendance</b> : la MM50 est presque plate et le prix la traverse sans arrêt. Beaucoup de traders préfèrent alors ne rien faire.</li>
+      </ul>
+    </div>
+    <canvas id="g8-cv" height="300" style="height:300px"></canvas>
+    <p class="q">Quelle est la tendance actuelle ?</p>
+    <div class="opts" id="g8-opts"></div>
+    <p class="explain" id="g8-ex" hidden></p>
+    <div class="row"><button class="btn primary" id="g8-next" hidden>Graphique suivant</button></div>
+  </div>
+
+  <!-- JEU 9 -->
+  <div class="game" id="g9">
+    <div class="game-head"><h3>Jeu 9 · Reconnais la figure de bougies</h3><span class="badge mono" id="g9-score">0 / 0</span></div>
+    <div class="card" style="background:var(--bg)">
+      <p class="term">LES 9 FIGURES À CONNAÎTRE</p>
+      <p>Étudie-les d'abord, puis joue. Une figure n'a de sens que selon ce qui la précède : un marteau compte après une baisse, pas au milieu de nulle part.</p>
+      <div class="pat-grid" id="pat-grid"></div>
+      <p class="note" style="margin-top:6px">Selon une synthèse des travaux de Thomas Bulkowski (plus de 100 figures étudiées), une figure qui n'est pas suivie d'une <b>bougie de confirmation</b> échoue plus de 60 % du temps, contre environ 30 % avec confirmation. Attendre la bougie suivante coûte un peu de gain, mais divise les faux signaux par deux.</p>
+    </div>
+    <canvas id="g9-cv" height="260" style="height:260px"></canvas>
+    <p class="q">Quelle figure est surlignée ?</p>
+    <div class="opts" id="g9-opts"></div>
+    <p class="explain" id="g9-ex" hidden></p>
+    <div class="row"><button class="btn primary" id="g9-next" hidden>Figure suivante</button></div>
+  </div>
+
+  <!-- JEU 10 -->
+  <div class="game" id="g10">
+    <div class="game-head"><h3>Jeu 10 · Lis le RSI</h3><span class="badge mono" id="g10-score">0 / 0</span></div>
+    <div class="card" style="background:var(--bg)">
+      <p class="term">À RETENIR</p>
+      <p>Le <b>RSI</b> (Relative Strength Index, créé par J. Welles Wilder en 1978) compare la force des hausses récentes à celle des baisses, sur une échelle de 0 à 100, en général sur 14 bougies. Il s'affiche sous le graphique des prix.</p>
+      <ul>
+        <li><b>Au-dessus de 70 : surachat.</b> Le prix a beaucoup monté très vite, une pause ou un repli devient plus probable.</li>
+        <li><b>En dessous de 30 : survente.</b> Le prix a beaucoup baissé très vite, un rebond devient plus probable.</li>
+        <li><b>Divergence baissière</b> : le prix fait un sommet plus haut, mais le RSI fait un sommet plus bas. La hausse s'essouffle.</li>
+        <li><b>Divergence haussière</b> : le prix fait un creux plus bas, mais le RSI fait un creux plus haut. La baisse s'essouffle.</li>
+      </ul>
+      <p class="note">Piège classique : dans une forte tendance, le RSI peut rester en surachat pendant des semaines. Un RSI au-dessus de 70 n'est <b>pas</b> un ordre de vente automatique. Combine-le toujours avec la tendance et les supports/résistances.</p>
+    </div>
+    <canvas id="g10-cv" height="220" style="height:220px"></canvas>
+    <canvas id="g10-rsi" height="110" style="height:110px"></canvas>
+    <p class="q" id="g10-q"></p>
+    <div class="opts" id="g10-opts"></div>
+    <p class="explain" id="g10-ex" hidden></p>
+    <div class="row"><button class="btn primary" id="g10-next" hidden>Graphique suivant</button></div>
+  </div>
+
+  <!-- JEU 11 -->
+  <div class="game" id="g11" style="border-color:var(--accent);border-width:2px">
+    <div class="game-head"><h3>Jeu 11 · Le défi final</h3><span class="badge mono" id="g11-score">0 / 0</span></div>
+    <p style="color:var(--muted);font-size:.95rem">12 questions tirées au hasard parmi tout ce que tu as appris : bougies, tendances, RSI, taille de position, levier, gestion du risque, arnaques et stratégies. À la fin, tu obtiens ton niveau et la liste des jeux à refaire.</p>
+    <div class="progress"><i id="g11-bar"></i></div>
+    <p class="eyebrow" id="g11-step"></p>
+    <div id="g11-charts" hidden style="display:grid;gap:8px">
+      <canvas id="g11-cv" height="230" style="height:230px"></canvas>
+      <canvas id="g11-rsi" height="100" style="height:100px" hidden></canvas>
+    </div>
+    <div class="stats" id="g11-data" hidden></div>
+    <p class="q" id="g11-q"></p>
+    <div class="opts" id="g11-opts"></div>
+    <p class="explain" id="g11-ex" hidden></p>
+    <div class="row"><button class="btn primary" id="g11-next" hidden>Question suivante</button></div>
+    <div id="g11-end" hidden></div>
+  </div>
+</section>
+
+<!-- ============ STRATÉGIES ============ -->
+<section id="strategies">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 5</p>
+    <h2>Les stratégies des experts, et ce qu'en disent les preuves</h2>
+    <p class="lede">Internet regorge de stratégies « rentables ». Voici les plus connues, avec leurs règles et surtout ce que les études indépendantes en disent. Le verdict porte sur la solidité des preuves, pas sur une promesse de gain.</p>
+  </div>
+  <div class="note red"><b>Aucune stratégie n'est rentable à coup sûr.</b> Des chercheurs (McLean et Pontiff, <i>Journal of Finance</i>, 2016) ont suivi 97 « signaux gagnants » publiés par des universitaires : leurs rendements chutent de 26 % hors de la période testée et de 58 % une fois publiés, car tout le monde se met à les exploiter. Un bon résultat passé (un « backtest ») ne garantit rien. Ce qui rend une stratégie rentable, c'est l'ensemble : des règles claires, la gestion du risque, des frais bas et ta discipline pendant les mauvaises périodes.</div>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="chips"><span class="chip good">PREUVES SOLIDES</span><span class="chip">LONG TERME</span></div>
+      <h3>1. Investir régulièrement dans un indice</h3>
+      <p class="term">RECOMMANDÉE PAR WARREN BUFFETT</p>
+      <p><b>Règles :</b> chaque mois, acheter le même montant d'un ETF ou fonds indiciel (MASI, S&amp;P 500, MSCI World). Ne rien vendre pendant des années. On appelle ça l'investissement programmé (DCA).</p>
+      <p><b>Preuves :</b> selon le rapport SPIVA de S&amp;P (fin 2025), 79 % des fonds gérés activement en grandes capitales américaines ont fait moins bien que le S&amp;P 500 en 2025, et sur 15 ans, dans <b>aucune</b> catégorie la majorité des gérants professionnels ne bat son indice.</p>
+      <p><b>Pour toi :</b> ce n'est pas du trading, mais c'est la base la plus solide. Beaucoup de traders gardent un portefeuille de ce type à côté.</p>
+    </div>
+    <div class="card">
+      <div class="chips"><span class="chip good">PREUVES SOLIDES</span><span class="chip">SEMAINES À MOIS</span></div>
+      <h3>2. Le suivi de tendance (momentum)</h3>
+      <p class="term">MOSKOWITZ, OOI &amp; PEDERSEN, 2012</p>
+      <p><b>Règles :</b> si un actif a monté sur les 12 derniers mois, on l'achète ; s'il a baissé, on le vend (ou on reste dehors). On réévalue chaque mois.</p>
+      <p><b>Preuves :</b> étude sur 58 marchés (indices, devises, matières premières, obligations) sur plus de 25 ans : la performance des 12 derniers mois prédit celle du mois suivant, et c'était positif sur <b>chacun</b> des marchés étudiés. Critique : une autre étude (Kim et al., 2016) montre qu'une partie du résultat vient de la façon d'ajuster les positions à la volatilité.</p>
+      <p><b>Le piège :</b> de longues périodes de pertes quand les marchés sont sans tendance.</p>
+    </div>
+    <div class="card">
+      <div class="chips"><span class="chip mid">HISTORIQUE CÉLÈBRE</span><span class="chip">JOURS À SEMAINES</span></div>
+      <h3>3. Les « Tortues » : acheter les cassures</h3>
+      <p class="term">RICHARD DENNIS &amp; WILLIAM ECKHARDT, 1983</p>
+      <p><b>L'histoire :</b> Dennis a parié qu'on pouvait apprendre le trading avec un livre de règles. Il a formé 23 débutants en 2 semaines. Selon les récits, le groupe aurait gagné plus de 175 millions de dollars en 4 à 5 ans.</p>
+      <p><b>Règles :</b> acheter quand le prix fait un nouveau plus haut sur 20 jours (système 1) ou 55 jours (système 2) ; vendre à découvert sur un nouveau plus bas. Stop basé sur la volatilité, taille de position calculée à l'avance. Filtre : si la cassure précédente sur 20 jours a gagné, on saute la suivante.</p>
+      <p><b>Aujourd'hui :</b> les règles sont publiques depuis longtemps et fonctionnent moins bien qu'à l'époque. La vraie leçon : des règles strictes appliquées sans émotion.</p>
+    </div>
+    <div class="card">
+      <div class="chips"><span class="chip mid">PREUVES MITIGÉES</span><span class="chip">QUELQUES JOURS</span></div>
+      <h3>4. Le retour à la moyenne RSI(2)</h3>
+      <p class="term">LARRY CONNORS</p>
+      <p><b>Règles :</b> le RSI mesure si un prix a trop monté ou trop baissé (de 0 à 100). Uniquement si le prix est <b>au-dessus de sa MM200</b> (tendance de fond haussière), acheter quand le RSI sur 2 jours passe sous 10 (encore mieux sous 5). Revendre quand le prix repasse au-dessus de sa moyenne mobile 5 jours.</p>
+      <p><b>Preuves :</b> des backtests sur plus de 10 ans affichent 75 à 79 % de trades gagnants sur les indices d'actions.</p>
+      <p><b>Le piège :</b> ces tests viennent surtout de sites qui vendent des stratégies. Beaucoup de petits gains, et parfois une grosse perte qui efface plusieurs semaines.</p>
+    </div>
+    <div class="card">
+      <div class="chips"><span class="chip mid">PREUVES MITIGÉES</span><span class="chip">SEMAINES À MOIS</span></div>
+      <h3>5. Le croisement de moyennes mobiles</h3>
+      <p class="term">GOLDEN CROSS / DEATH CROSS</p>
+      <p><b>Règles :</b> acheter quand la MM50 passe au-dessus de la MM200 (golden cross), sortir quand elle repasse en dessous (death cross).</p>
+      <p><b>Ce qu'il faut savoir :</b> c'est une forme simple de suivi de tendance. Elle évite en général une partie des grosses chutes, mais donne beaucoup de faux signaux dans les marchés sans tendance, et entre toujours en retard. Tu l'as pratiquée dans le jeu 8.</p>
+    </div>
+    <div class="card">
+      <div class="chips"><span class="chip bad">PREUVES FAIBLES SEULES</span><span class="chip">COURT TERME</span></div>
+      <h3>6. Trader les figures de bougies</h3>
+      <p class="term">THOMAS BULKOWSKI (ÉTUDES STATISTIQUES)</p>
+      <p><b>Preuves :</b> le marteau annonce un retournement haussier environ 60 % du temps, l'avalement haussier environ 63 %. Mais le marteau n'est classé que 65<sup>e</sup> sur 103 figures pour l'ampleur du mouvement qui suit.</p>
+      <p><b>Conseil :</b> ne jamais trader une figure seule. Elle devient intéressante sur un support ou une résistance, dans le sens de la tendance, et après une bougie de confirmation.</p>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:var(--down)">
+    <p class="term" style="color:var(--down)">À FUIR</p>
+    <h3>Les « stratégies » qui détruisent les comptes</h3>
+    <ul>
+      <li><b>La martingale</b> : doubler la mise après chaque perte pour « se refaire ». Une série de 7 pertes demande une mise 128 fois plus grosse que la première.</li>
+      <li><b>Pas de stop-loss « parce que ça finira par remonter »</b> : parfois ça ne remonte jamais, surtout avec du levier.</li>
+      <li><b>Les signaux payants et les robots « 90 % de réussite »</b> : résultats invérifiables, souvent des captures truquées.</li>
+      <li><b>Changer de stratégie après 3 pertes</b> : toute stratégie a des séries perdantes. Il faut au moins 50 à 100 trades pour la juger.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ METHODES PRO ============ -->
+<section id="pro">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 5 bis · Niveau 3</p>
+    <h2>Méthodes d'un trader pro</h2>
+    <p class="lede">Les idées et résultats les plus utiles de <i>L'Art du trading</i> de Thami Kabbaj (Eyrolles, 3e édition, 2015), reformulés et mis en graphiques. Les graphiques de prix sont des exemples construits pour l'apprentissage, pas des reproductions du livre.</p>
+  </div>
+
+  <div class="card">
+    <p class="term">LA PSYCHOLOGIE DES FOULES</p>
+    <h3>Les 3 phases d'un grand mouvement (théorie de Dow)</h3>
+    <canvas id="pro-dow" height="260" style="height:260px"></canvas>
+    <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+      <p style="font-size:.93rem"><b style="color:var(--accent)">Accumulation.</b> Les nouvelles sont mauvaises et le public est découragé. Les investisseurs informés achètent discrètement.</p>
+      <p style="font-size:.93rem"><b style="color:var(--up)">Participation.</b> Les bonnes nouvelles arrivent, les pros suivent la tendance. C'est la phase la plus rentable.</p>
+      <p style="font-size:.93rem"><b style="color:var(--down)">Distribution.</b> Euphorie : les journaux sont enthousiastes et le grand public achète. Les pros revendent, puis la baisse commence.</p>
+    </div>
+    <p class="note">Le but est d'acheter la panique et de vendre l'euphorie. Les débutants font l'inverse : ils entrent en phase 3 et vendent en phase 1.</p>
+  </div>
+
+  <div class="card">
+    <p class="term">SUPPORTS ET RÉSISTANCES</p>
+    <h3>Les 4 réactions possibles face à une résistance</h3>
+    <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(210px,1fr))">
+      <div style="display:grid;gap:4px"><canvas id="pro-r1" height="140" style="height:140px"></canvas><p style="font-size:.9rem"><b>1. Rejet.</b> Le prix bute et chute : c'est un sommet.</p></div>
+      <div style="display:grid;gap:4px"><canvas id="pro-r2" height="140" style="height:140px"></canvas><p style="font-size:.9rem"><b>2. Pause puis hausse.</b> On prend une partie des bénéfices, on ne vend pas à découvert.</p></div>
+      <div style="display:grid;gap:4px"><canvas id="pro-r3" height="140" style="height:140px"></canvas><p style="font-size:.9rem"><b>3. Fausse cassure.</b> Le prix passe au-dessus puis retombe. Ceux qui ont acheté la cassure sont piégés.</p></div>
+      <div style="display:grid;gap:4px"><canvas id="pro-r4" height="140" style="height:140px"></canvas><p style="font-size:.9rem"><b>4. Va-et-vient.</b> Le marché épuise les nerfs. On prend du recul et on attend que les signaux convergent.</p></div>
+    </div>
+    <p class="note">Anticiper ces 4 cas avant d'entrer évite d'être surpris. Dans une tendance haussière, une résistance sert à prendre des bénéfices. Dans une tendance baissière, un support sert à racheter ses ventes, pas à acheter.</p>
+  </div>
+
+  <div class="card">
+    <p class="term">LA MÉTHODE CENTRALE DU LIVRE</p>
+    <h3>Trader avec la zone des 50 du RSI</h3>
+    <canvas id="pro-rsi-p" height="220" style="height:220px"></canvas>
+    <canvas id="pro-rsi-i" height="110" style="height:110px"></canvas>
+    <ul>
+      <li><b>RSI au-dessus de 50</b> : les acheteurs dominent. On ne cherche que des achats.</li>
+      <li><b>Point d'achat</b> : pendant une correction, le RSI redescend vers 50 sans le casser (points verts). On achète avec un stop sous le dernier creux.</li>
+      <li><b>Fin de tendance</b> : quand le RSI casse franchement 50 vers le bas (point rouge), on sort. Selon l'auteur, c'est ce signal qui a annoncé le krach du Nasdaq en mars 2000 et la crise de 2007 sur le CAC 40.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <p class="term">LES TROUS DANS LE GRAPHIQUE</p>
+    <h3>Les 4 types de gaps</h3>
+    <canvas id="pro-gaps" height="250" style="height:250px"></canvas>
+    <div class="tbl"><table>
+      <thead><tr><th>Gap</th><th>Où ?</th><th>Que faire ?</th></tr></thead>
+      <tbody>
+        <tr><td><b>Commun</b></td><td>Dans un range, souvent vite comblé</td><td>L'ignorer, ou jouer dans le sens inverse. Les novices se font piéger en le suivant.</td></tr>
+        <tr><td><b>De rupture</b></td><td>Au début d'un nouveau mouvement</td><td>Le suivre, avec un stop sous l'origine du gap.</td></tr>
+        <tr><td><b>De continuation</b></td><td>Au milieu du mouvement</td><td>Rester positionné. Il aide à estimer le chemin restant.</td></tr>
+        <tr><td><b>D'épuisement</b></td><td>En fin de mouvement</td><td>Prudence. S'il est suivi d'un gap en sens inverse (« île »), c'est un retournement puissant.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <p class="term">POURQUOI PERDRE PEU EST VITAL</p>
+      <h3>Le gain nécessaire pour revenir à zéro</h3>
+      <canvas id="pro-asym" height="230" style="height:230px"></canvas>
+      <p style="font-size:.9rem;color:var(--muted)">Échelle logarithmique. Après −50 %, il faut +100 %. Après −90 %, il faut +900 %.</p>
+    </div>
+    <div class="card">
+      <p class="term">EXEMPLE DU LIVRE · 10 TRADES</p>
+      <h3>Avoir souvent raison ne suffit pas</h3>
+      <canvas id="pro-ab" height="230" style="height:230px"></canvas>
+      <p style="font-size:.9rem;color:var(--muted)"><b style="color:var(--warn)">Trader A</b> : 70 % de réussite, gagne 500, perd 1 000. <b style="color:var(--accent)">Trader B</b> : 40 % de réussite, gagne 3 000, perd 1 000.</p>
+    </div>
+  </div>
+
+  <div class="game" id="ruin">
+    <div class="game-head"><h3>Risque de ruine : combien miser par position ?</h3><span class="badge">FORMULE DE BAILEY · GAIN = 2× PERTE</span></div>
+    <label class="fld" for="ruin-p">Ton taux de trades gagnants : <b class="mono" id="ruin-pv">50 %</b><input id="ruin-p" type="range" min="34" max="70" value="50"></label>
+    <canvas id="ruin-cv" height="230" style="height:230px"></canvas>
+    <div class="stats">
+      <div class="stat"><small>En misant 50 % par position</small><b id="ruin-50"></b></div>
+      <div class="stat"><small>En misant 20 %</small><b id="ruin-20"></b></div>
+      <div class="stat"><small>En misant 10 %</small><b id="ruin-10"></b></div>
+      <div class="stat"><small>En misant 5 %</small><b id="ruin-5"></b></div>
+    </div>
+    <p class="explain">Probabilité de finir ruiné selon la part du capital engagée à chaque position, pour un système où le gain moyen vaut 2 fois la perte moyenne. Réduire la mise fait chuter le risque de ruine bien plus vite que proportionnellement. Sous 34 % de réussite, un tel système perd à coup sûr à long terme.</p>
+  </div>
+
+  <div class="card">
+    <p class="term">RÉSULTAT CHIFFRÉ DU LIVRE</p>
+    <h3>Méthode de Livermore contre « tout investir d'un coup »</h3>
+    <canvas id="pro-liv" height="240" style="height:240px"></canvas>
+    <p>Même plan de trade (21 000 €, achat à 100, objectif 130). <b style="color:var(--accent)">Livermore</b> : on achète la moitié, puis on renforce seulement si le prix monte, en remontant le stop. <b style="color:var(--warn)">Classique</b> : tout est acheté au départ. Avec la méthode de Livermore, le résultat reste positif même quand on ne gagne qu'1 trade sur 5, car les pertes sont plus petites.</p>
+    <p class="note red">L'erreur inverse, « moyenner à la baisse » (racheter une position qui perd), est selon l'auteur une faute souvent fatale.</p>
+  </div>
+
+  <!-- JEU 12 -->
+  <div class="game" id="g12">
+    <div class="game-head"><h3>Jeu 12 · Lis la réaction du marché</h3><span class="badge mono" id="g12-score">0 / 0</span></div>
+    <p style="color:var(--muted);font-size:.95rem">Selon le livre, la réaction du prix à une nouvelle compte plus que la nouvelle elle-même. Regarde la tendance, la nouvelle et la réaction, puis choisis la bonne interprétation.</p>
+    <canvas id="g12-cv" height="220" style="height:220px"></canvas>
+    <p class="q" id="g12-q"></p>
+    <div class="opts" id="g12-opts"></div>
+    <p class="explain" id="g12-ex" hidden></p>
+    <div class="row"><button class="btn primary" id="g12-next" hidden>Situation suivante</button></div>
+  </div>
+
+  <!-- JEU 13 -->
+  <div class="game" id="g13">
+    <div class="game-head"><h3>Jeu 13 · Prendre ou passer ?</h3><span class="badge mono" id="g13-score">0 / 0</span></div>
+    <p style="color:var(--muted);font-size:.95rem">Applique les règles du livre. On prend un achat seulement si trois conditions sont réunies : 1) la tendance est haussière, 2) le RSI est au-dessus de 50, 3) le gain possible vaut au moins 3 fois le risque. Sinon, on passe.</p>
+    <div class="stats" id="g13-data"></div>
+    <p class="q">Tu prends ce trade ?</p>
+    <div class="opts" id="g13-opts"></div>
+    <p class="explain" id="g13-ex" hidden></p>
+    <div class="row"><button class="btn primary" id="g13-next" hidden>Setup suivant</button></div>
+  </div>
+</section>
+
+<!-- ============ ROMAIN BAILLEUL ============ -->
+<section id="live">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 5 ter · Niveau 3</p>
+    <h2>Les règles d'un trader en direct : Romain Bailleul</h2>
+    <p class="lede">Romain Bailleul est un trader français basé à Miami. Il revendique plus de 10 ans de marché et trade en direct devant sa communauté. Voici ce qu'il enseigne publiquement, ce qu'il faut en retenir et les points de vigilance.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card"><p class="term">QUI EST-IL ?</p>
+      <ul>
+        <li>Il fonde un service de signaux (Lanalyste.com) en 2016, puis l'école <b>Livestream Traders (LST)</b> en 2018.</li>
+        <li>Il trade en direct les <b>futures sur indices américains et les actions US</b>, chaque jour, devant plusieurs centaines de personnes.</li>
+        <li>Il a reçu le prix de « Meilleur Trader Pro » au salon BTF 2026 et figure, selon sa présentation, dans le top 100 des traders de la prop firm TopStep.</li>
+        <li>Il dit gérer plus d'un million de dollars de capital financé par des prop firms. C'est une déclaration de sa part, que l'on ne peut pas vérifier publiquement.</li>
+      </ul></div>
+    <div class="card"><p class="term">SA PHILOSOPHIE</p>
+      <ul>
+        <li><b>Le trading n'est pas de la prédiction</b>, c'est de la gestion de l'incertitude.</li>
+        <li>L'analyse technique ne sert pas à deviner l'avenir, mais à transformer le chaos en <b>niveaux, scénarios, invalidations et probabilités</b>.</li>
+        <li><b>La préparation du dimanche</b> : chaque semaine, il repère à l'avance les zones importantes, les scénarios possibles et les conditions d'entrée, pour ne pas improviser une fois le marché ouvert.</li>
+        <li>Discipline, gestion du risque stricte, journal de trading, débrief de chaque trade.</li>
+      </ul></div>
+  </div>
+
+  <div class="card">
+    <p class="term">SA RÈGLE DE RISQUE (RAPPORTÉE PAR SES ÉLÈVES)</p>
+    <h3>Risquer très peu, viser 3 fois plus</h3>
+    <div class="stats">
+      <div class="stat"><small>Risque par trade</small><b>0,33 à 0,5 %</b></div>
+      <div class="stat"><small>Stop</small><b>1 R</b></div>
+      <div class="stat"><small>Objectif</small><b>3 R</b></div>
+      <div class="stat"><small>Réussite pour être à l'équilibre</small><b>25 %</b></div>
+    </div>
+    <p>« R » est le montant risqué sur un trade. Avec un objectif à 3 R, un gain rembourse 3 pertes. C'est encore plus prudent que la règle de 1 % vue au chapitre 2, et cohérent avec <i>L'Art du trading</i> (ratio d'au moins 3).</p>
+    <p class="note green">Un exemple parlant : dans un avis en ligne, un trader critique un taux de réussite de 29 %. Pourtant, avec un objectif à 3 R, 29 % suffisent pour gagner : 0,29 × 3 − 0,71 = <b>+0,16 R par trade</b> en moyenne (avant frais). Avoir tort 7 fois sur 10 n'empêche pas d'être rentable.</p>
+  </div>
+
+  <div class="game" id="mc">
+    <div class="game-head"><h3>Simulateur : 30 traders, 200 trades chacun</h3><span class="badge">MÊME MÉTHODE, HASARD DIFFÉRENT</span></div>
+    <p style="color:var(--muted);font-size:.95rem">Chaque ligne est un trader qui applique exactement la même méthode. Seul l'ordre des gains et des pertes change. Compare 0,5 % de risque et 5 % de risque par trade.</p>
+    <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr))">
+      <label class="fld" for="mc-risk">Risque par trade
+        <select id="mc-risk"><option value="0.0033">0,33 %</option><option value="0.005" selected>0,5 %</option><option value="0.01">1 %</option><option value="0.02">2 %</option><option value="0.05">5 %</option></select></label>
+      <label class="fld" for="mc-rr">Objectif
+        <select id="mc-rr"><option value="2">2 R</option><option value="3" selected>3 R</option></select></label>
+      <label class="fld" for="mc-wr">Taux de réussite : <b class="mono" id="mc-wrv">30 %</b><input id="mc-wr" type="range" min="20" max="50" value="30"></label>
+    </div>
+    <canvas id="mc-cv" height="280" style="height:280px"></canvas>
+    <div class="row"><button class="btn primary" id="mc-go">Relancer 30 traders</button></div>
+    <div class="stats">
+      <div class="stat"><small>Capital final médian (départ 10 000)</small><b id="mc-med"></b></div>
+      <div class="stat"><small>Traders finissant en perte</small><b id="mc-lose"></b></div>
+      <div class="stat"><small>Pire baisse moyenne (drawdown)</small><b id="mc-dd"></b></div>
+      <div class="stat"><small>Plus longue série de pertes (moyenne)</small><b id="mc-streak"></b></div>
+    </div>
+    <p class="explain" id="mc-txt"></p>
+  </div>
+
+  <div class="card">
+    <p class="term">SA JOURNÉE TYPE (HEURE DE PARIS)</p>
+    <h3>Le rythme d'un day trader des indices américains</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Heure (Paris)</th><th>Moment</th><th>À quoi ça sert</th></tr></thead>
+      <tbody>
+        <tr><td class="num">Dimanche</td><td>Préparation de la semaine</td><td>Zones clés, scénarios, conditions d'entrée écrites à l'avance</td></tr>
+        <tr><td class="num">09:00</td><td>Point du matin</td><td>Contexte, nouvelles du jour, calendrier économique</td></tr>
+        <tr><td class="num">14:30</td><td>Préparation US</td><td>Revoir les niveaux juste avant l'ouverture américaine</td></tr>
+        <tr><td class="num">15:30 – 18:00</td><td>Trading en direct</td><td>L'ouverture de Wall Street, la période la plus volatile</td></tr>
+        <tr><td class="num">Vendredi</td><td>Débrief de la semaine</td><td>Relire le journal, corriger les erreurs</td></tr>
+      </tbody>
+    </table></div>
+    <p style="font-size:.9rem;color:var(--muted)">Au Maroc : 1 heure de moins que Paris en été, la même heure en hiver (hors Ramadan). L'ouverture américaine tombe donc en début d'après-midi, un créneau compatible avec des études ou un travail du matin.</p>
+  </div>
+
+  <div class="card" style="border-color:var(--warn)">
+    <p class="term" style="color:var(--warn)">À COMPRENDRE AVANT D'Y PENSER</p>
+    <h3>Les prop firms : du capital « prêté », mais un vrai filtre</h3>
+    <p>Une prop firm te vend un <b>challenge</b> (souvent entre 50 et 600 $). Tu dois atteindre un objectif de gain sans dépasser une perte maximale par jour et au total. Si tu réussis, elle te confie un compte financé et te reverse une partie des gains. C'est au cœur de l'enseignement de Romain Bailleul.</p>
+    <div class="stats">
+      <div class="stat"><small>Challenges réussis</small><b class="neg">5 à 14 %</b></div>
+      <div class="stat"><small>Acheteurs de challenge payés un jour</small><b class="neg">≈ 7 %</b></div>
+      <div class="stat"><small>Cause d'échec n°1</small><b style="font-size:1rem">Perte max du jour, dès la 1re semaine</b></div>
+    </div>
+    <ul>
+      <li>Le prix du challenge est une <b>dépense</b>. Ce n'est pas de l'argent « gratuit », et la plupart des acheteurs le perdent.</li>
+      <li>Pour réussir, il faut exactement les règles de ce chapitre : un risque minuscule par trade pour ne jamais toucher la limite du jour.</li>
+      <li>N'y pense qu'après plusieurs mois de résultats réguliers en démo. Beaucoup de prop firms ne sont pas régulées : vérifie leur réputation et ne crois pas les promesses de revenus.</li>
+    </ul>
+    <p style="font-size:.85rem;color:var(--muted)">Sources des statistiques : <a href="https://www.track360.io/blog/prop-trading-industry-statistics-2026" target="_blank" rel="noopener">Track360</a>, <a href="https://www.quantvps.com/blog/prop-firm-statistics" target="_blank" rel="noopener">QuantVPS</a>, <a href="https://traderssecondbrain.com/guides/prop-firm-pass-rate" target="_blank" rel="noopener">Traders Second Brain</a>.</p>
+  </div>
+
+  <!-- JEU 14 -->
+  <div class="game" id="g14">
+    <div class="game-head"><h3>Jeu 14 · Invalidation et objectif</h3><span class="badge mono" id="g14-score">0 / 0</span></div>
+    <p style="color:var(--muted);font-size:.95rem">La méthode en action : un niveau, un scénario, une invalidation, un objectif à au moins 3 R. Tu achètes près d'un support. Choisis le bon stop, ou vérifie si l'objectif vaut le coup.</p>
+    <canvas id="g14-cv" height="250" style="height:250px"></canvas>
+    <p class="q" id="g14-q"></p>
+    <div class="opts" id="g14-opts"></div>
+    <p class="explain" id="g14-ex" hidden></p>
+    <div class="row"><button class="btn primary" id="g14-next" hidden>Setup suivant</button></div>
+  </div>
+
+  <div class="note red"><b>Points de vigilance.</b> Romain Bailleul vend des formations et un abonnement (environ 199 €/mois ou 997 € la formation, selon son site). Sa note Trustpilot sur l'ancien site est de 2,6/5, sur très peu d'avis. Ses résultats personnels ne sont pas vérifiables publiquement. Tu n'as pas besoin de payer pour apprendre les bases : ses vidéos YouTube gratuites, cette page et un compte démo suffisent pour les premiers mois. Ce n'est pas un conseil d'investissement.</div>
+  <p style="font-size:.85rem;color:var(--muted)">Sources : <a href="https://www.youtube.com/@romainbailleul" target="_blank" rel="noopener">chaîne YouTube de Romain Bailleul</a>, <a href="https://x.com/romain_trader" target="_blank" rel="noopener">son compte X</a>, <a href="https://romainbailleul.live" target="_blank" rel="noopener">son site LST</a>, <a href="https://fr.trustpilot.com/review/www.livestream-traders.com" target="_blank" rel="noopener">avis Trustpilot</a>, <a href="https://top-avis-formations.fr/formations-trading/romain-bailleul-avis-commencer-le-trading/" target="_blank" rel="noopener">Top Avis Formation</a>. Recherches faites en septembre 2026.</p>
+</section>
+
+<!-- ============ SMC / LIQUIDITÉ ============ -->
+<section id="smc">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 5 quater · Niveau 4</p>
+    <h2>Liquidité, structure et « Smart Money »</h2>
+    <p class="lede">Ce chapitre résume, avec mes propres mots et mes propres graphiques, les cours que tu m'as envoyés : structure du marché, liquidité, order blocks, FVG, sessions, AMD et ICT. Ce sont des outils de lecture du graphique. Ce ne sont pas des méthodes prouvées.</p>
+  </div>
+
+  <div class="note red"><b>À savoir avant de commencer.</b> Les méthodes « SMC » et « ICT » sont très populaires sur les réseaux, mais aucune étude publique ni aucun résultat audité ne prouve qu'elles gagnent plus que l'analyse technique classique. Beaucoup de leurs idées existent depuis longtemps sous d'autres noms : fausse cassure, supports et résistances, gaps, phases de Wyckoff. Et l'idée que les banques « manipulent » le prix ou suivent un algorithme secret (« IPDA ») n'est pas prouvée. Utilise ce vocabulaire pour mieux lire un graphique, puis teste tout en démo.</div>
+
+  <div class="grid2">
+    <div class="card"><p class="term">1 · STRUCTURE</p>
+      <h3>Qui contrôle le marché ?</h3>
+      <ul>
+        <li><b>Tendance haussière</b> : plus hauts de plus en plus hauts (HH) et plus bas de plus en plus hauts (HL). En baisse : LH et LL.</li>
+        <li><b>BOS</b> (cassure de structure) : le prix dépasse le dernier sommet dans le sens de la tendance, qui continue.</li>
+        <li><b>CHoCH / MSS</b> (changement de structure) : le prix casse le dernier creux « protégé » d'une hausse, ou le dernier sommet d'une baisse. C'est la première alerte de retournement.</li>
+        <li><b>Un repli compte</b> comme vrai creux s'il reprend au moins <b>30 à 40 %</b> de la hausse, ou s'il dure au moins <b>la moitié</b> de ses bougies (règle distance/temps du cours).</li>
+      </ul></div>
+    <div class="card"><p class="term">2 · LIQUIDITÉ</p>
+      <h3>Où sont les ordres en attente ?</h3>
+      <ul>
+        <li>Les petits traders placent leurs stops aux mêmes endroits : <b>sous les supports</b>, <b>au-dessus des résistances</b>, derrière les trendlines et les figures.</li>
+        <li><b>Sommets égaux (EQH)</b> et <b>creux égaux (EQL)</b> : le prix revient plusieurs fois au même niveau, et beaucoup de stops s'y accumulent.</li>
+        <li>BSL = liquidité au-dessus des sommets (stops des vendeurs). SSL = liquidité sous les creux (stops des acheteurs).</li>
+        <li>Les gros acteurs ont besoin de ces ordres pour remplir leurs positions sans faire glisser le prix. D'où les <b>balayages</b> (« sweeps ») : une mèche passe le niveau, puis le prix repart.</li>
+      </ul></div>
+    <div class="card"><p class="term">3 · ORDER BLOCK</p>
+      <h3>La zone de départ d'un fort mouvement</h3>
+      <ul>
+        <li><b>Order block haussier</b> : la dernière bougie (ou petite zone) baissière avant une forte impulsion qui casse la structure. Order block baissier : l'inverse.</li>
+        <li>L'idée : une institution découpe un gros ordre en blocs, et le prix revient souvent tester cette zone.</li>
+        <li>Entrée du cours : ordre limite quelques pips au-dessus de la zone, stop quelques pips en dessous.</li>
+        <li>On cherche uniquement des order blocks <b>dans le sens de la structure</b>, alignés avec le H4 et le D1.</li>
+      </ul></div>
+    <div class="card"><p class="term">4 · FVG (FAIR VALUE GAP)</p>
+      <h3>Le trou laissé par une bougie rapide</h3>
+      <ul>
+        <li>Trois bougies. Celle du milieu est grande. Le FVG est l'espace entre la <b>mèche de la bougie 1</b> et la <b>mèche de la bougie 3</b>, que le prix n'a pas couvert.</li>
+        <li>Aussi appelé <b>imbalance</b>. Quand le prix revient le toucher, même d'une mèche, on dit qu'il est « mitigé ».</li>
+        <li>Deux usages : une <b>zone d'entrée</b> (retour dans le FVG dans le sens de la tendance) ou une <b>cible</b> (FVG non comblé en face).</li>
+        <li>Nuance : « le prix revient toujours combler » est faux. Beaucoup de FVG restent ouverts longtemps.</li>
+      </ul></div>
+  </div>
+
+  <div class="card">
+    <p class="term">GRAPHIQUE 1 · LE SCÉNARIO TYPE DU COURS</p>
+    <h3>Balayage, changement de structure, retour dans le FVG</h3>
+    <canvas id="smc-a" height="300" style="height:300px"></canvas>
+    <ol>
+      <li><b>Balayage</b> : le prix passe sous les creux égaux, déclenche les stops des acheteurs, puis remonte aussitôt.</li>
+      <li><b>MSS</b> : une grande bougie casse le dernier sommet de la baisse et laisse un FVG derrière elle.</li>
+      <li><b>Entrée</b> au retour dans le FVG. <b>Stop</b> sous la mèche du balayage. <b>Cible</b> : la liquidité d'en face (ancien sommet).</li>
+    </ol>
+    <p style="font-size:.9rem;color:var(--muted)">Graphique recréé pour l'exemple. Sur un vrai marché, ce scénario échoue souvent : le stop est là pour ça.</p>
+  </div>
+
+  <div class="card">
+    <p class="term">GRAPHIQUE 2 · LES SESSIONS (AMD / POWER OF 3)</p>
+    <h3>Accumulation, manipulation, distribution sur une journée</h3>
+    <canvas id="smc-b" height="280" style="height:280px"></canvas>
+    <div class="tbl"><table>
+      <thead><tr><th>Moment (heure du Maroc, environ)</th><th>Phase selon le cours</th><th>Ce qu'on observe</th></tr></thead>
+      <tbody>
+        <tr><td class="num">01 h – 09 h · Asie</td><td>Accumulation</td><td>Petit range calme. Des stops s'accumulent au-dessus et en dessous.</td></tr>
+        <tr><td class="num">08 h – 11 h · Londres</td><td>Manipulation</td><td>Faux départ : le prix sort d'un côté du range asiatique, balaie les stops, puis revient dedans.</td></tr>
+        <tr><td class="num">13 h 30 – 16 h 30 · New York</td><td>Distribution</td><td>Le vrai mouvement de la journée, souvent dans le sens de la tendance de fond.</td></tr>
+      </tbody>
+    </table></div>
+    <p style="font-size:.9rem;color:var(--muted)">Les heures bougent d'environ 1 heure selon l'heure d'été en Europe et aux États-Unis, et pendant le Ramadan au Maroc. Sur TradingView, un indicateur « sessions » ou « kill zones » affiche ces créneaux automatiquement. Méthode du cours : tendance de fond → range asiatique → fausse cassure contre la tendance à Londres ou New York → entrée dans le sens de la tendance.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card"><p class="term">5 · CORPS ET MÈCHES</p>
+      <ul>
+        <li>Le <b>corps</b> montre l'intention, la <b>mèche</b> montre la liquidité prise.</li>
+        <li>Une petite mèche sans vrai mouvement n'est pas un nouveau sommet ou creux. Ne place pas ton stop suiveur derrière : tu risques d'être sorti bêtement.</li>
+        <li>Une mèche dans une unité de temps devient un corps dans une plus petite.</li>
+      </ul></div>
+    <div class="card"><p class="term">6 · FRACTALES ET UNITÉS DE TEMPS</p>
+      <ul>
+        <li>Il y a des tendances dans les tendances : le H4 peut baisser pendant que le M15 monte.</li>
+        <li>Méthode : tendance en <b>D1</b>, zone en <b>H4</b>, entrée en <b>H1</b> ou <b>M15</b>. On vise une cible de la grande unité de temps pour obtenir un meilleur ratio.</li>
+        <li>Ratio conseillé par le cours : scalping 1:1, day trading 1:2, swing 1:3, position 1:5.</li>
+      </ul></div>
+    <div class="card"><p class="term">7 · GESTION DE L'ARGENT (COURS)</p>
+      <ul>
+        <li>Le stop se place sur un <b>niveau de marché</b>. Ensuite, on adapte la taille de la position, jamais le stop.</li>
+        <li>Fixe une <b>perte maximale par jour</b>. Une fois atteinte, tu arrêtes : après une grosse perte, on devient irrationnel.</li>
+        <li>Limite le nombre de positions ouvertes en même temps. Imagine toujours le cas où tout part dans le mauvais sens.</li>
+        <li>Forex : la plus petite taille est 0,01 lot. Sous 500 €, le cours déconseille le Forex. Le premier dépôt teste surtout ta psychologie.</li>
+      </ul></div>
+    <div class="card"><p class="term">8 · FIGURES ET FAUSSES CASSURES</p>
+      <ul>
+        <li>Une <b>fausse cassure</b> sous un support invite à l'achat, au-dessus d'une résistance à la vente, une fois que le prix est revenu dans la zone.</li>
+        <li>Figures chartistes : attendre le retour sur la cassure, stop au-delà de l'extrême, ignorer les figures dont l'objectif est trop petit.</li>
+        <li>Les pourcentages de réussite cités dans le cours (par exemple 95 % pour l'épaule-tête-épaule) ne sont pas sourcés et sont trop optimistes.</li>
+      </ul></div>
+  </div>
+
+  <div class="card">
+    <p class="term">LES FIGURES DE BOUGIES DU COURS</p>
+    <h3>Entrée et stop pour chaque figure haussière</h3>
+    <div class="tbl"><table>
+      <thead><tr><th>Figure (après une baisse)</th><th>Ce qu'il faut voir</th><th>Confirmation</th><th>Stop</th></tr></thead>
+      <tbody>
+        <tr><td>Marteau</td><td>Petit corps en haut, mèche basse d'au moins 2 fois le corps</td><td>Clôture suivante au-dessus du marteau, avec du volume</td><td>Sous le plus bas de la mèche</td></tr>
+        <tr><td>Marteau inversé</td><td>Petit corps en bas, mèche haute d'au moins 2 fois le corps</td><td>Ouverture suivante au-dessus du corps</td><td>Sous le plus bas</td></tr>
+        <tr><td>Avalement haussier</td><td>Le corps vert englobe entièrement le corps rouge précédent</td><td>Prix au-dessus de la clôture verte, volume en hausse</td><td>Sous le plus bas de la 2e bougie</td></tr>
+        <tr><td>Ligne perçante</td><td>Ouvre sous la bougie rouge et clôture au-dessus de son milieu</td><td>Prix au-dessus de la clôture de la 2e bougie</td><td>Sous le plus bas de la 2e bougie</td></tr>
+        <tr><td>Harami, harami en croix</td><td>Petit corps (ou doji) contenu dans le grand corps rouge</td><td>Prix au-dessus du milieu de la grande bougie</td><td>Sous le plus bas des deux</td></tr>
+        <tr><td>Étoile du matin, bébé abandonné</td><td>3 bougies : rouge, petite (avec des gaps pour le bébé), grande verte au-dessus du milieu de la 1re</td><td>Prix au-dessus de la clôture de la 3e</td><td>Sous le plus bas des deux dernières</td></tr>
+      </tbody>
+    </table></div>
+    <p style="font-size:.9rem;color:var(--muted)">Les figures baissières sont les mêmes à l'envers, après une hausse : pendu, étoile filante, avalement baissier, ciel couvert, harami baissier, étoile du soir. Règle commune : une figure n'a de sens que sur une zone importante, dans le bon contexte, et une fois confirmée. Seule, elle prédit peu (Bulkowski).</p>
+  </div>
+
+  <!-- JEU 15 -->
+  <div class="game" id="g15">
+    <div class="game-head"><h3>Jeu 15 · Lecture « Smart Money »</h3><span class="badge mono" id="g15-score">0 / 0</span></div>
+    <p style="color:var(--muted);font-size:.95rem">Trois types de questions tirées au hasard : trouver un FVG, repérer la liquidité, valider une structure.</p>
+    <canvas id="g15-cv" height="260" style="height:260px"></canvas>
+    <p class="q" id="g15-q"></p>
+    <div class="opts" id="g15-opts"></div>
+    <p class="explain" id="g15-ex" hidden></p>
+    <div class="row"><button class="btn primary" id="g15-next" hidden>Question suivante</button></div>
+  </div>
+</section>
+
+<!-- ============ CHECKLIST ============ -->
+<section id="check">
+  <div class="sec-head">
+    <p class="eyebrow">Outil · Avant chaque trade</p>
+    <h2>La grille de vérification</h2>
+    <p class="lede">Remplis-la avant d'entrer, même en démo. Elle regroupe les règles des cours, du livre de Thami Kabbaj et de la méthode 1R / 3R. Quand tu veux qu'on analyse un trade ensemble, copie le résumé et colle-le dans la conversation avec une capture de ton graphique.</p>
+  </div>
+
+  <div class="game">
+    <div class="grid2" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
+      <label class="fld" for="ck-mkt">Marché<input class="inp" id="ck-mkt" type="text" placeholder="ex. EUR/USD, or, Nasdaq"></label>
+      <label class="fld" for="ck-dir">Sens<select id="ck-dir"><option value="buy">Achat</option><option value="sell">Vente</option></select></label>
+      <label class="fld" for="ck-tf">Unité d'entrée<select id="ck-tf"><option>M5</option><option selected>M15</option><option>H1</option><option>H4</option><option>D1</option></select></label>
+      <label class="fld" for="ck-cap">Capital<input class="inp mono" id="ck-cap" type="number" min="0" step="any" value="10000"></label>
+      <label class="fld" for="ck-risk">Risque par trade (%)<input class="inp mono" id="ck-risk" type="number" min="0" max="5" step="0.1" value="1"></label>
+      <label class="fld" for="ck-e">Prix d'entrée<input class="inp mono" id="ck-e" type="number" step="any"></label>
+      <label class="fld" for="ck-s">Stop<input class="inp mono" id="ck-s" type="number" step="any"></label>
+      <label class="fld" for="ck-t">Cible<input class="inp mono" id="ck-t" type="number" step="any"></label>
+    </div>
+
+    <div class="cklist" id="ck-items"></div>
+
+    <div class="stats">
+      <div class="stat"><small>Montant risqué</small><b id="ck-amt">–</b></div>
+      <div class="stat"><small>Taille de position</small><b id="ck-size">–</b></div>
+      <div class="stat"><small>Ratio gain / risque</small><b id="ck-rr">–</b></div>
+      <div class="stat"><small>Points cochés</small><b id="ck-n">0 / 8</b></div>
+    </div>
+    <p class="explain" id="ck-verdict"></p>
+    <div class="row"><button class="btn primary" id="ck-copy" type="button">Copier le résumé</button><button class="btn" id="ck-reset" type="button">Tout effacer</button><span id="ck-msg" style="font-size:.9rem;color:var(--muted)"></span></div>
+    <p style="font-size:.85rem;color:var(--muted)">Taille de position = montant risqué ÷ distance entre l'entrée et le stop. Le résultat est en unités (actions, onces, contrats). Sur le Forex, convertis en lots avec le calculateur de ton courtier. Le feu vert veut dire que le trade respecte tes règles, pas qu'il va gagner. Ce n'est pas un conseil d'investissement.</p>
+  </div>
+</section>
+
+<!-- ============ SITES ============ -->
+<section id="sites">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 6</p>
+    <h2>Où apprendre et s'entraîner gratuitement</h2>
+    <p class="lede">Tous ces outils fonctionnent avec de l'argent virtuel ou des cours gratuits. Une adresse email suffit en général, sans carte bancaire.</p>
+  </div>
+  <div class="grid2">
+    <div class="site"><div class="chips"><span class="chip ma">MAROC</span><span class="chip">SIMULATEUR</span></div><a href="https://www.e-bourse.ma" target="_blank" rel="noopener">E-Bourse (Bourse de Casablanca)</a><p>Simulateur officiel lancé en 2024 avec TradingView. Tu gères un portefeuille virtuel sur les vraies actions marocaines. Un « championnat de la Bourse » te confie 1 000 000 DH fictifs.</p></div>
+    <div class="site"><div class="chips"><span class="chip ma">MAROC</span><span class="chip">COURS</span></div><a href="https://www.casablanca-bourse.com/investisseurs/se-former" target="_blank" rel="noopener">École de la Bourse (BVC)</a><p>Formations de la Bourse de Casablanca pour comprendre le marché marocain. Voir aussi <a href="https://www.ecole-bourse.ma/" target="_blank" rel="noopener" style="font:inherit">ecole-bourse.ma</a>.</p></div>
+    <div class="site"><div class="chips"><span class="chip">SIMULATEUR</span><span class="chip">GRAPHIQUES</span></div><a href="https://www.tradingview.com" target="_blank" rel="noopener">TradingView · Paper Trading</a><p>Gratuit même sur l'offre de base, avec 100 000 $ virtuels. Actions, forex, crypto, indices. Le meilleur endroit pour apprendre à lire des graphiques.</p></div>
+    <div class="site"><div class="chips"><span class="chip">COURS</span><span class="chip">FOREX</span></div><a href="https://www.babypips.com/learn" target="_blank" rel="noopener">Babypips · School of Pipsology</a><p>Plus de 500 leçons gratuites, de la maternelle à l'université, avec quiz. En anglais simple. Les principes valent aussi pour les actions.</p></div>
+    <div class="site"><div class="chips"><span class="chip">SIMULATEUR</span><span class="chip">ACTIONS US</span></div><a href="https://www.investopedia.com/simulator/" target="_blank" rel="noopener">Investopedia Simulator</a><p>Achète et vends des actions et ETF américains avec de l'argent virtuel. Investopedia est aussi un excellent dictionnaire financier.</p></div>
+    <div class="site"><div class="chips"><span class="chip">JEU</span><span class="chip">FRANÇAIS</span></div><a href="https://www.goldenboys.fr/" target="_blank" rel="noopener">Golden Boys</a><p>Jeu de simulation boursière en français, gratuit, avec classements entre joueurs.</p></div>
+    <div class="site"><div class="chips"><span class="chip">ÉTUDE</span><span class="chip">À LIRE</span></div><a href="https://www.amf-france.org/sites/institutionnel/files/contenu_simple/rapport_etude_analyse/epargne_prestataire/Etude%20des%20resultats%20des%20investisseurs%20particuliers%20sur%20le%20trading%20de%20CFD%20et%20de%20Forex%20en%20France.pdf" target="_blank" rel="noopener">Étude AMF sur les CFD et le Forex</a><p>Le régulateur français a analysé les résultats réels des particuliers. Lecture qui vaccine contre les promesses faciles.</p></div>
+    <div class="site"><div class="chips"><span class="chip">COMPARATIF</span></div><a href="https://www.nerdwallet.com/investing/best/brokers-paper-trading" target="_blank" rel="noopener">Comparatif des comptes démo (NerdWallet)</a><p>Présente les simulateurs de courtiers (thinkorswim, Webull, Interactive Brokers). Plusieurs sont réservés à certains pays : vérifie la disponibilité au Maroc.</p></div>
+  </div>
+</section>
+
+<!-- ============ MAROC ============ -->
+<section id="maroc">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 7</p>
+    <h2>Trader depuis le Maroc : ce qu'il faut savoir</h2>
+  </div>
+  <div class="note red"><b>Alerte de l'AMMC (décembre 2025).</b> L'Autorité Marocaine du Marché des Capitaux met en garde contre les conseils en investissement non autorisés sur les réseaux sociais et les plateformes de trading frauduleuses. Le schéma est toujours le même : promesses de gros gains, petit dépôt de départ, gains affichés à l'écran, demandes de redéposer, puis retrait bloqué et disparition. <a href="https://www.ammc.ma/fr/actualites/communique-presse/conseil-en-investissement-non-autorise-plateformes-de-trading" target="_blank" rel="noopener">Lire le communiqué</a>.</div>
+  <div class="grid2">
+    <div class="card"><h3>Actions marocaines</h3><p>Pour acheter en vrai des actions de la Bourse de Casablanca, on passe par une <b>société de bourse agréée</b> ou sa banque. La liste des intermédiaires agréés est publiée sur <a href="https://www.ammc.ma" target="_blank" rel="noopener">ammc.ma</a>.</p></div>
+    <div class="card"><h3>Forex et CFD étrangers</h3><p>Ces plateformes sont souvent basées à l'étranger et ne sont pas contrôlées par l'AMMC. Les transferts d'argent vers l'étranger relèvent aussi des règles de l'<b>Office des Changes</b>. Renseigne-toi avant d'envoyer le moindre dirham.</p></div>
+    <div class="card"><h3>Recommandations sur Telegram ou WhatsApp</h3><p>Selon l'AMMC, donner des recommandations d'achat ou de vente sans agrément est une activité réglementée par la loi n°19.14. Les « coachs » qui vendent des signaux n'ont en général aucun agrément.</p></div>
+  </div>
+</section>
+
+<!-- ============ PLAN ============ -->
+<section id="plan">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 8</p>
+    <h2>Ton plan sur 4 semaines</h2>
+    <p class="lede">Environ 30 minutes par jour. À la fin, tu sauras lire un graphique, placer un stop et tenir un journal, sans avoir risqué d'argent réel.</p>
+  </div>
+  <ol class="plan">
+    <li><div><h3>Vocabulaire et lecture des bougies</h3><p>Relis les chapitres 1 et 2. Refais les jeux 1 et 2 jusqu'à 100 %. Commence la « Preschool » et la « Kindergarten » de Babypips.</p></div></li>
+    <li><div><h3>Prise en main des graphiques</h3><p>Crée un compte gratuit TradingView. Observe chaque jour une action marocaine et un indice (MASI). Repère les tendances, supports et résistances sans trader.</p></div></li>
+    <li><div><h3>Premiers trades virtuels</h3><p>Inscris-toi sur E-Bourse. Passe 1 à 2 trades virtuels par jour avec la règle du 1 % et un stop posé à l'avance. Note tout dans ton journal.</p></div></li>
+    <li><div><h3>Bilan et règles personnelles</h3><p>Relis ton journal : taux de réussite, ratio moyen, erreurs répétées. Enchaîne les jeux 6 à 10 jusqu'à les réussir sans erreur, puis travaille le chapitre « Méthodes pro » (jeux 12 et 13), réussis le défi final (jeu 11) avec au moins 11/12 et écris tes règles de trading sur une page. Continue en démo encore au moins deux mois.</p></div></li>
+  </ol>
+</section>
+
+<footer>
+  <p><b>À savoir :</b> cette page est un support pédagogique, pas un conseil en investissement. Je ne suis pas un conseiller financier agréé. Avant d'investir de l'argent réel, renseigne-toi auprès d'un professionnel agréé par l'AMMC.</p>
+  <p>Sources : ESMA/AMF via CentralCharts et AMF ; Barber, Lee, Liu &amp; Odean (UC Berkeley) ; AMMC ; Bourse de Casablanca ; TradingView, Babypips, Investopedia. Recherches effectuées en septembre 2026.</p>
+</footer>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const fmt=(n,d=0)=>n.toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+function randn(){let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+
+/* ---------- Expectancy calculator ---------- */
+function calcEV(){
+  const w=+$('#wr').value/100, rr=+$('#rr').value;
+  const ev=w*rr-(1-w), be=1/(1+rr);
+  $('#wrv').textContent=Math.round(w*100)+' %';
+  $('#ev').textContent=(ev>=0?'+':'')+fmt(ev,2)+' R';
+  $('#ev').className=ev>=0?'pos':'neg';
+  $('#be').textContent=fmt(be*100,1)+' %';
+  const h=ev*100;
+  $('#h100').textContent=(h>=0?'+':'')+fmt(h,0)+' %';
+  $('#h100').className=h>=0?'pos':'neg';
+  $('#evtxt').textContent=`« R » = le montant que tu risques par trade. En gagnant ${Math.round(w*100)} % du temps avec un ratio 1:${String(rr).replace('.',',')}, chaque trade te rapporte en moyenne ${fmt(ev,2)} R. `+(ev>=0?`La stratégie est gagnante avant frais. Il te faut au moins ${fmt(be*100,1)} % de trades gagnants.`:`La stratégie perd de l'argent à long terme : il te faudrait au moins ${fmt(be*100,1)} % de trades gagnants.`)+` Estimation sur 100 trades à 1 % de risque, sans intérêts composés ni frais.`;
+}
+$('#wr').addEventListener('input',calcEV);$('#rr').addEventListener('change',calcEV);calcEV();
+
+/* ---------- Generic quiz engine ---------- */
+function makeQuiz(prefix,items,labels){
+  let order=shuffle(items),i=0,score=0;
+  const body=$('#'+prefix+'-body');
+  function render(){
+    $('#'+prefix+'-bar').style.width=(i/order.length*100)+'%';
+    $('#'+prefix+'-score').textContent=score+' / '+i;
+    if(i>=order.length){
+      const pct=Math.round(score/order.length*100);
+      body.innerHTML=`<div style="display:grid;gap:12px"><p class="q">Terminé : ${score} / ${order.length} (${pct} %)</p><p class="explain">${pct>=80?'Excellent, tu maîtrises ces notions.':pct>=50?'Bonne base. Relis les explications des questions ratées et recommence.':'Relis les chapitres 1 et 2, puis recommence : ça rentre vite.'}</p><div class="row"><button class="btn primary" type="button">Rejouer</button></div></div>`;
+      body.querySelector('button').onclick=()=>{order=shuffle(items);i=0;score=0;render();};
+      return;
+    }
+    const it=order[i];
+    const opts=labels?labels.map((l,k)=>({t:l,k})):shuffle(it.o.map((t,k)=>({t,k})));
+    body.innerHTML=`<div style="display:grid;gap:12px"><p class="eyebrow">Question ${i+1} sur ${order.length}</p><p class="q"></p><div class="opts"></div><p class="explain" hidden></p><div class="row"><button class="btn primary" type="button" hidden>Question suivante</button></div></div>`;
+    body.querySelector('.q').textContent=it.q;
+    const box=body.querySelector('.opts'),ex=body.querySelector('.explain'),nx=body.querySelector('.btn');
+    opts.forEach(o=>{
+      const b=document.createElement('button');b.type='button';b.className='opt';b.textContent=o.t;
+      b.onclick=()=>{
+        const ok=o.k===it.a; if(ok)score++;
+        box.querySelectorAll('.opt').forEach((x,idx)=>{x.disabled=true;if(opts[idx].k===it.a)x.classList.add('ok');});
+        if(!ok)b.classList.add('ko');
+        ex.hidden=false;ex.textContent=(ok?'Correct. ':'Raté. ')+it.e;
+        nx.hidden=false;i++;$('#'+prefix+'-score').textContent=score+' / '+i;nx.focus();
+      };
+      box.appendChild(b);
+    });
+    nx.onclick=render;
+  }
+  render();
+}
+
+makeQuiz('g1',[
+  {q:"Que signifie « être long » sur une action ?",o:["L'avoir achetée en pariant sur la hausse","La garder plus d'un an","L'avoir vendue à découvert","Avoir un ordre en attente"],a:0,e:"Être long, c'est acheter : tu gagnes si le prix monte. Être short, c'est parier sur la baisse."},
+  {q:"Qu'est-ce que le spread ?",o:["L'écart entre le prix d'achat (ask) et le prix de vente (bid)","Le bénéfice d'une entreprise","La commission de l'État","Le nombre d'actions échangées"],a:0,e:"Le spread est un coût payé à chaque trade. Plus tu trades souvent, plus il réduit tes gains."},
+  {q:"À quoi sert un stop-loss ?",o:["Fermer automatiquement une position perdante à un niveau choisi","Bloquer le compte pendant une journée","Acheter plus quand le prix baisse","Payer moins de frais"],a:0,e:"Le stop-loss limite ta perte à un montant décidé à l'avance. Pose-le avant d'entrer."},
+  {q:"Un marché « baissier » se dit en anglais…",o:["Bear market","Bull market","Flat market","Swing market"],a:0,e:"Bear (l'ours frappe vers le bas) = baissier. Bull (le taureau charge vers le haut) = haussier."},
+  {q:"Tu as 10 000 DH et tu appliques la règle du 1 %. Combien peux-tu perdre au maximum sur un trade ?",o:["100 DH","1 000 DH","10 DH","500 DH"],a:0,e:"1 % de 10 000 DH = 100 DH. C'est la perte maximale acceptée si le stop-loss est touché."},
+  {q:"Ton compte a perdu 50 %. Quel gain faut-il pour revenir au départ ?",o:["+100 %","+50 %","+75 %","+25 %"],a:0,e:"De 10 000 à 5 000 DH, il faut gagner 5 000 DH sur 5 000 : +100 %. Les pertes se rattrapent toujours plus difficilement qu'elles ne se font."},
+  {q:"Qu'est-ce qu'un ordre limite ?",o:["Un ordre exécuté seulement à ton prix ou à un meilleur prix","Un ordre exécuté immédiatement au prix du marché","Un ordre qui limite le nombre de trades","Un ordre qui ferme le compte"],a:0,e:"L'ordre limite contrôle le prix, mais il peut ne jamais être exécuté. L'ordre au marché, lui, est immédiat mais le prix peut glisser."},
+  {q:"Qu'est-ce qu'un ETF ?",o:["Un fonds coté qui réplique un indice ou un panier d'actifs","Une crypto-monnaie","Un type de stop-loss","Une taxe sur les transactions"],a:0,e:"Un ETF permet d'acheter tout un indice en une seule fois. C'est l'outil préféré des investisseurs long terme."},
+  {q:"Un support, c'est…",o:["Un niveau de prix où la baisse a souvent tendance à s'arrêter","Le service client du courtier","Un indicateur de volume","Le prix le plus haut de l'année"],a:0,e:"Un support est une zone où les acheteurs reviennent souvent. La résistance est l'inverse : une zone où la hausse bloque."},
+  {q:"Avec un ratio risque/rendement de 1:2, quel taux de réussite minimum faut-il pour être à l'équilibre (hors frais) ?",o:["Environ 33 %","50 %","66 %","90 %"],a:0,e:"Tu gagnes 2 R une fois et perds 1 R deux fois : 2 − 2 = 0. Donc 1 trade gagnant sur 3 suffit à l'équilibre."},
+  {q:"Qu'est-ce que la volatilité ?",o:["L'ampleur et la vitesse des variations de prix","Le nombre d'actionnaires","La taille d'une entreprise","Le taux d'intérêt"],a:0,e:"Un actif très volatil (crypto par exemple) bouge fort et vite : plus d'opportunités, mais aussi plus de risque."},
+  {q:"Qu'est-ce que la liquidité d'un marché ?",o:["La facilité à acheter ou vendre rapidement sans faire bouger le prix","L'argent liquide disponible sur ton compte","Le nombre de jours d'ouverture","Le montant des dividendes"],a:0,e:"Sur un marché peu liquide, les spreads sont larges et il peut être difficile de sortir d'une position."}
+]);
+
+makeQuiz('g5',[
+  {q:"Un « mentor » sur Instagram promet 30 % de gain par mois garanti si tu déposes 2 000 DH sur la plateforme qu'il recommande.",a:0,e:"Gain garanti + rendement énorme + plateforme imposée : trois signaux d'arnaque classiques cités par l'AMMC."},
+  {q:"Ton compte sur une plateforme affiche +300 %, mais pour retirer tu dois d'abord payer des « frais de déblocage » ou « taxes ».",a:0,e:"Schéma décrit par l'AMMC : gains affichés à l'écran, demande de redéposer, puis blocage des retraits. Les gains n'existent souvent pas."},
+  {q:"La Bourse de Casablanca propose un simulateur gratuit avec de l'argent virtuel pour apprendre.",a:1,e:"E-Bourse est un outil officiel de la Bourse de Casablanca, sans argent réel. C'est une ressource d'apprentissage fiable."},
+  {q:"Un groupe Telegram vend des « signaux VIP » à 500 DH par mois avec des captures de gains énormes.",a:0,e:"Les captures d'écran se falsifient facilement. Selon l'AMMC, ces recommandations sans agrément sont une activité réglementée par la loi n°19.14."},
+  {q:"Un courtier affiche en permanence : « 74 % des comptes de particuliers perdent de l'argent en tradant des CFD avec ce fournisseur ».",a:1,e:"C'est une obligation imposée par l'ESMA aux courtiers régulés en Europe. Afficher ce chiffre est un signe de régulation, pas d'arnaque."},
+  {q:"Quelqu'un te contacte sur WhatsApp sans que tu l'aies demandé et te presse d'investir « avant ce soir, les places sont limitées ».",a:0,e:"Contact non sollicité + urgence artificielle = technique de manipulation. Un vrai professionnel ne te met jamais la pression."},
+  {q:"Avant d'ouvrir un compte, tu vérifies que la société de bourse figure sur la liste des intermédiaires agréés publiée par l'AMMC.",a:1,e:"C'est exactement le bon réflexe. Vérifie toujours l'agrément sur le site officiel du régulateur."},
+  {q:"Un « robot de trading IA » promet de faire fructifier ton argent automatiquement sans aucune perte possible.",a:0,e:"Aucun système ne peut garantir l'absence de pertes. « Sans risque » associé à « gros gains » est toujours un mensonge."}
+],["Arnaque ou signal d'alerte","Plutôt fiable"]);
+
+/* ---------- Chart drawing ---------- */
+function drawCandles(cv,candles,opt={}){
+  const dpr=window.devicePixelRatio||1,w=cv.clientWidth,h=cv.clientHeight;
+  cv.width=w*dpr;cv.height=h*dpr;const c=cv.getContext('2d');c.scale(dpr,dpr);
+  const axisW=opt.axisW||58,padT=opt.padT||14,volH=opt.volume?Math.round(h*0.2):0,padB=14+volH;
+  let lo=Infinity,hi=-Infinity;
+  candles.forEach(k=>{lo=Math.min(lo,k.l);hi=Math.max(hi,k.h);});
+  (opt.lines||[]).forEach(L=>{lo=Math.min(lo,L.y);hi=Math.max(hi,L.y);});
+  (opt.series||[]).forEach(S=>S.vals.forEach(v=>{if(v!=null){lo=Math.min(lo,v);hi=Math.max(hi,v);}}));
+  (opt.zones||[]).forEach(Z=>{lo=Math.min(lo,Z.y0);hi=Math.max(hi,Z.y1);});
+  const pad=(hi-lo)*(opt.padFrac||0.08)||1;lo-=pad;hi+=pad;
+  const Y=v=>padT+(hi-v)/(hi-lo)*(h-padT-padB);
+  const plotW=w-axisW,n=Math.max(candles.length,opt.slots||0),step=plotW/n,bw=Math.max(2,Math.min(step*0.64,opt.maxBody||40));
+  const X=i=>step*i+step/2;
+  c.font='11px "IBM Plex Mono", Consolas, monospace';c.textBaseline='middle';
+  const muted=css('--muted'),line=css('--line');
+  if(!opt.noGrid){
+    for(let g=0;g<=4;g++){const v=lo+(hi-lo)*g/4,y=Y(v);c.strokeStyle=line;c.lineWidth=1;c.beginPath();c.moveTo(0,y);c.lineTo(plotW,y);c.stroke();c.fillStyle=muted;c.fillText(fmt(v,1),plotW+6,y);}
+  }
+  if(opt.highlight){const H=opt.highlight;c.fillStyle=css('--sunk');c.fillRect(X(H.from)-step/2,padT-10,(H.to-H.from+1)*step,h-padT-padB+20);}
+  (opt.bands||[]).forEach(B=>{c.globalAlpha=.12;c.fillStyle=B.color;c.fillRect(X(B.from)-step/2,0,(B.to-B.from+1)*step,h-padB+8);c.globalAlpha=1;
+    c.fillStyle=B.color;c.font='600 12px "IBM Plex Sans", system-ui, sans-serif';c.fillText(B.label,X(B.from)-step/2+6,12);c.font='11px "IBM Plex Mono", Consolas, monospace';});
+  (opt.zones||[]).forEach(Z=>{c.globalAlpha=.16;c.fillStyle=Z.color;c.fillRect(0,Y(Z.y1),plotW,Y(Z.y0)-Y(Z.y1));c.globalAlpha=1;
+    c.fillStyle=Z.color;c.fillText(Z.label,plotW+6,(Y(Z.y1)+Y(Z.y0))/2);});
+  if(opt.volume){
+    const mv=Math.max(...opt.volume),base=h-8;
+    c.fillStyle=muted;c.fillText('volume',plotW+6,base-volH/2);
+    opt.volume.forEach((v,i)=>{const k=candles[i];c.globalAlpha=.55;c.fillStyle=k&&k.c>=k.o?css('--up'):css('--down');const bh=v/mv*(volH-10);c.fillRect(X(i)-bw/2,base-bh,bw,bh);});
+    c.globalAlpha=1;
+  }
+  candles.forEach((k,idx)=>{
+    const x=(opt.center?plotW/2:step*idx+step/2),col=k.c>=k.o?css('--up'):css('--down');
+    c.strokeStyle=col;c.fillStyle=col;c.lineWidth=opt.center?3:1.2;
+    c.beginPath();c.moveTo(x,Y(k.h));c.lineTo(x,Y(k.l));c.stroke();
+    const y1=Y(Math.max(k.o,k.c)),y2=Y(Math.min(k.o,k.c));c.fillRect(x-bw/2,y1,bw,Math.max(1.5,y2-y1));
+  });
+  (opt.series||[]).forEach(S=>{
+    c.strokeStyle=S.color;c.lineWidth=2.2;c.beginPath();let started=false;
+    S.vals.forEach((v,idx)=>{if(v==null)return;const x=step*idx+step/2,y=Y(v);if(!started){c.moveTo(x,y);started=true;}else c.lineTo(x,y);});
+    c.stroke();
+  });
+  (opt.lines||[]).forEach(L=>{
+    const y=Y(L.y);c.strokeStyle=L.color;c.lineWidth=1.5;c.setLineDash(L.dash?[5,4]:[]);
+    c.beginPath();c.moveTo(L.x0||0,y);c.lineTo(plotW,y);c.stroke();c.setLineDash([]);
+    c.fillStyle=L.color;c.fillText(L.label,plotW+6,y);
+    if(L.tag){c.textAlign='right';c.fillText(L.tag,plotW-6,y-9);c.textAlign='left';}
+  });
+  (opt.segs||[]).forEach(S=>{c.strokeStyle=S.color;c.lineWidth=S.width||2;c.setLineDash(S.dash?[6,4]:[]);c.beginPath();c.moveTo(X(S.i0),Y(S.y0));c.lineTo(X(S.i1),Y(S.y1));c.stroke();c.setLineDash([]);});
+  (opt.marks||[]).forEach(M=>{
+    const x=X(M.i),y=Y(M.y),dy=M.below?16:-16;
+    c.fillStyle=M.color;c.beginPath();c.arc(x,y,4,0,Math.PI*2);c.fill();
+    c.font='600 12px "IBM Plex Sans", system-ui, sans-serif';
+    const tw=c.measureText(M.label).width;let tx=Math.min(Math.max(x-tw/2,2),plotW-tw-2);
+    c.lineWidth=4;c.strokeStyle=css('--bg');c.strokeText(M.label,tx,y+dy);c.fillText(M.label,tx,y+dy);
+    c.font='11px "IBM Plex Mono", Consolas, monospace';
+  });
+}
+
+/* seeded random + candle path from waypoints (for the fixed teaching charts) */
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function pathCandles(wps,noise,seed){
+  const r=rng(seed),nrm=()=>{let u=r()||1e-9,v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+  const n=wps[wps.length-1][0]+1,out=[];let prev=wps[0][1];
+  for(let i=0;i<n;i++){
+    let j=0;while(j<wps.length-2&&wps[j+1][0]<i)j++;
+    const [i0,p0]=wps[j],[i1,p1]=wps[j+1],t=(i-i0)/((i1-i0)||1),tgt=p0+(p1-p0)*Math.min(1,Math.max(0,t));
+    const isWp=wps.some(w=>w[0]===i);
+    const c=isWp?tgt:tgt+nrm()*noise,o=i===0?c-noise:prev;
+    out.push({o,c,h:Math.max(o,c)+Math.abs(nrm())*noise*0.6,l:Math.min(o,c)-Math.abs(nrm())*noise*0.6});prev=c;
+  }
+  return out;
+}
+
+/* ---------- Game 2: read the candle ---------- */
+(function(){
+  const cv=$('#g2-cv');let cur,score=0,n=0;
+  const Qs=[
+    {k:'o',t:"Quel est le prix d'ouverture ?"},
+    {k:'c',t:"Quel est le prix de clôture ?"},
+    {k:'h',t:"Quel est le plus haut atteint ?"},
+    {k:'l',t:"Quel est le plus bas atteint ?"},
+    {k:'dir',t:"Cette bougie est-elle haussière ou baissière ?"}
+  ];
+  function newRound(){
+    const base=100+Math.round(Math.random()*80);
+    const up=Math.random()<0.5,body=4+Math.round(Math.random()*10);
+    const o=up?base:base+body,c=up?base+body:base;
+    const h=Math.max(o,c)+2+Math.round(Math.random()*7),l=Math.min(o,c)-2-Math.round(Math.random()*7);
+    cur={k:{o,h,l,c},q:Qs[Math.floor(Math.random()*Qs.length)]};
+    draw();
+    $('#g2-q').textContent=cur.q.t;$('#g2-ex').hidden=true;$('#g2-next').hidden=true;
+    const box=$('#g2-opts');box.innerHTML='';
+    let opts;
+    if(cur.q.k==='dir') opts=[{t:'Haussière (verte)',v:'up'},{t:'Baissière (rouge)',v:'down'}];
+    else opts=shuffle([{t:fmt(o)+' DH',v:'o'},{t:fmt(c)+' DH',v:'c'},{t:fmt(h)+' DH',v:'h'},{t:fmt(l)+' DH',v:'l'}]);
+    const answer=cur.q.k==='dir'?(up?'up':'down'):cur.q.k;
+    opts.forEach(op=>{
+      const b=document.createElement('button');b.type='button';b.className='opt mono';b.textContent=op.t;
+      b.onclick=()=>{
+        n++;const ok=op.v===answer;if(ok)score++;
+        box.querySelectorAll('.opt').forEach((x,i)=>{x.disabled=true;if(opts[i].v===answer)x.classList.add('ok');});
+        if(!ok)b.classList.add('ko');
+        const k=cur.k;
+        $('#g2-ex').hidden=false;
+        $('#g2-ex').textContent=(ok?'Correct. ':'Raté. ')+(up
+          ?`Bougie verte : le prix a ouvert en bas du corps (${k.o}) et clôturé en haut (${k.c}). Mèche haute = plus haut (${k.h}), mèche basse = plus bas (${k.l}).`
+          :`Bougie rouge : le prix a ouvert en haut du corps (${k.o}) et clôturé en bas (${k.c}). Mèche haute = plus haut (${k.h}), mèche basse = plus bas (${k.l}).`);
+        $('#g2-score').textContent=score+' / '+n;$('#g2-next').hidden=false;$('#g2-next').focus();
+      };box.appendChild(b);
+    });
+  }
+  function draw(){
+    if(!cur)return;const k=cur.k,m=css('--muted');
+    drawCandles(cv,[k],{center:true,noGrid:true,maxBody:70,axisW:80,lines:[k.o,k.c,k.h,k.l].map(v=>({y:v,color:m,dash:true,label:fmt(v)+' DH'}))});
+  }
+  $('#g2-next').onclick=newRound;
+  window.addEventListener('resize',draw);
+  window.__g2draw=draw;
+  newRound();
+})();
+
+/* ---------- Game 3: simulator ---------- */
+(function(){
+  const cv=$('#g3-cv');const START=10000,MAXT=10,VIEW=60;
+  let candles,cap,trades,busy,active,timer;
+  function genNext(prev){const vol=0.012;const o=prev,c=o*(1+randn()*vol);return{o,c,h:Math.max(o,c)*(1+Math.abs(randn())*vol*0.45),l:Math.min(o,c)*(1-Math.abs(randn())*vol*0.45)};}
+  function atr(){const s=candles.slice(-14);return s.reduce((a,k)=>a+(k.h-k.l),0)/s.length;}
+  function reset(){
+    clearInterval(timer);candles=[];let p=250;for(let i=0;i<VIEW;i++){const k=genNext(p);candles.push(k);p=k.c;}
+    cap=START;trades=[];busy=false;active=null;
+    $('#g3-log').innerHTML='<li>Journal des trades : vide pour l\'instant.</li>';$('#g3-sum').hidden=true;$('#g3-risk').disabled=false;
+    update('Prêt');draw();
+  }
+  function draw(){
+    const view=candles.slice(-VIEW),lines=[];
+    if(active){lines.push({y:active.entry,color:css('--muted'),label:'entrée',dash:true},{y:active.stop,color:css('--down'),label:'stop',dash:true},{y:active.target,color:css('--up'),label:'objectif',dash:true});}
+    drawCandles(cv,view,{lines,slots:VIEW});
+  }
+  function update(st){
+    $('#g3-cap').textContent=fmt(cap)+' DH';$('#g3-cap').className=cap>=START?'pos':'neg';
+    $('#g3-n').textContent=trades.length+' / '+MAXT;$('#g3-w').textContent=trades.filter(r=>r>0).length;
+    $('#g3-st').textContent=st;
+    const done=trades.length>=MAXT;
+    ['#g3-buy','#g3-sell','#g3-skip'].forEach(s=>$(s).disabled=busy||done);
+  }
+  function log(txt,cls){const L=$('#g3-log');if(trades.length===1&&L.children.length===1&&!L.children[0].className)L.innerHTML='';const li=document.createElement('li');li.className=cls;li.textContent=txt;L.appendChild(li);L.scrollTop=L.scrollHeight;}
+  function trade(dir){
+    if(busy)return;busy=true;$('#g3-risk').disabled=true;
+    const r=+$('#g3-risk').value,entry=candles[candles.length-1].c,d=atr()*1.5;
+    active={dir,entry,stop:entry-dir*d,target:entry+dir*2*d,risk:cap*r,r};
+    update(dir>0?'Achat en cours…':'Vente en cours…');draw();
+    let count=0;const speed=matchMedia('(prefers-reduced-motion: reduce)').matches?40:140;
+    timer=setInterval(()=>{
+      const k=genNext(candles[candles.length-1].c);candles.push(k);count++;
+      let R=null;
+      if(dir>0){if(k.l<=active.stop)R=-1;else if(k.h>=active.target)R=2;}
+      else{if(k.h>=active.stop)R=-1;else if(k.l<=active.target)R=2;}
+      if(R===null&&count>=40)R=dir*(k.c-entry)/d;
+      draw();
+      if(R!==null){
+        clearInterval(timer);
+        const pnl=active.risk*R;cap+=pnl;trades.push(R);
+        log(`#${trades.length} ${dir>0?'Achat':'Vente'} · risque ${fmt(r*100)} % · ${R>0?'objectif touché':R===-1?'stop touché':'clôturé après 40 bougies'} · ${pnl>=0?'+':''}${fmt(pnl)} DH`,pnl>=0?'pos':'neg');
+        busy=false;active=null;
+        if(trades.length>=MAXT){update('Terminé');summary();}
+        else update(R>0?'Gagné':'Perdu');
+        setTimeout(draw,0);
+      }
+    },speed);
+  }
+  function summary(){
+    const wins=trades.filter(r=>r>0).length;
+    const rows=[0.01,0.02,0.1,0.25].map(r=>{let c=START;trades.forEach(R=>{c=Math.max(0,c*(1+r*R));});return{r,c};});
+    const el=$('#g3-sum');el.hidden=false;
+    el.innerHTML=`<div style="display:grid;gap:12px"><h3>Bilan de tes 10 trades</h3>
+    <p>Tu as gagné <b>${wins} trades sur 10</b>. Ces bougies sont générées au hasard : aucune analyse ne permet de prédire la suivante. Sur les vrais marchés, deviner la direction est aussi très difficile à court terme. Ce qui change tout, c'est <b>combien tu risques</b>.</p>
+    <div class="tbl"><table><thead><tr><th>Risque par trade</th><th style="text-align:right">Capital final avec les mêmes trades</th></tr></thead><tbody>
+    ${rows.map(x=>`<tr><td>${fmt(x.r*100)} %</td><td class="num ${x.c>=START?'pos':'neg'}">${fmt(x.c)} DH</td></tr>`).join('')}
+    </tbody></table></div>
+    <p class="explain">Avec 1 %, une mauvaise série ne te coûte presque rien. Avec 25 %, quelques pertes d'affilée suffisent à détruire le compte. Clique sur « Recommencer » pour une nouvelle série.</p></div>`;
+  }
+  $('#g3-buy').onclick=()=>trade(1);$('#g3-sell').onclick=()=>trade(-1);
+  $('#g3-skip').onclick=()=>{if(busy)return;candles.push(genNext(candles[candles.length-1].c));draw();};
+  $('#g3-reset').onclick=reset;
+  window.addEventListener('resize',draw);window.__g3draw=draw;
+  reset();
+})();
+
+/* ---------- Game 4: leverage ---------- */
+(function(){
+  const CAP=1000;
+  function upd(){
+    const lev=+$('#g4-lev').value,mv=+$('#g4-mv').value/100;
+    const pos=CAP*lev,pnl=Math.max(-CAP,pos*mv),left=CAP+pnl,liq=100/lev;
+    $('#g4-levv').textContent='×'+lev;$('#g4-mvv').textContent=(mv>0?'+':mv<0?'−':'')+fmt(Math.abs(mv*100),1)+' %';
+    $('#g4-pos').textContent=fmt(pos)+' DH';
+    $('#g4-pnl').textContent=(pnl>=0?'+':'')+fmt(pnl)+' DH';$('#g4-pnl').className=pnl>=0?'pos':'neg';
+    $('#g4-left').textContent=fmt(left)+' DH';$('#g4-left').className=left>=CAP?'pos':'neg';
+    $('#g4-liq').textContent='−'+fmt(liq,liq<10?1:0)+' %';
+    const pct=Math.min(100,left/(CAP*2)*100);
+    const m=$('#g4-meter');m.style.width=pct+'%';m.style.background=left<=0?css('--down'):left<CAP?css('--warn'):css('--up');
+    $('#g4-txt').textContent=left<=0
+      ?`Compte liquidé. Avec un levier ×${lev}, une variation de seulement ${fmt(liq,1)} % contre toi efface toute ta mise. En pratique, le courtier ferme souvent ta position encore plus tôt (appel de marge).`
+      :`Tu contrôles ${fmt(pos)} DH avec seulement ${fmt(CAP)} DH. Une variation de ${fmt(Math.abs(mv*100),1)} % du prix devient ${fmt(Math.abs(pnl/CAP*100),0)} % de ta mise. Le levier multiplie les gains ET les pertes par le même chiffre.`;
+  }
+  $('#g4-lev').addEventListener('input',upd);$('#g4-mv').addEventListener('input',upd);upd();
+  const opts=[{t:'−50 %',ok:false},{t:'−20 %',ok:false},{t:'−10 %',ok:false},{t:'−2 %',ok:true}],box=$('#g4-opts');
+  opts.forEach(o=>{const b=document.createElement('button');b.type='button';b.className='opt mono';b.textContent=o.t;
+    b.onclick=()=>{box.querySelectorAll('.opt').forEach((x,i)=>{x.disabled=true;if(opts[i].ok)x.classList.add('ok');});if(!o.ok)b.classList.add('ko');
+      $('#g4-ex').hidden=false;$('#g4-ex').textContent=(o.ok?'Correct. ':'Raté. ')+'100 % ÷ 50 = 2 %. Avec ×50, une baisse de 2 % suffit à perdre toute ta mise. Sur le forex ou la crypto, un mouvement de 2 % peut arriver en quelques minutes.';};
+    box.appendChild(b);});
+})();
+
+/* ---------- shared: one-answer round helper ---------- */
+function answerRound(boxSel,opts,isOk,onDone){
+  const box=$(boxSel);box.innerHTML='';
+  opts.forEach(o=>{
+    const b=document.createElement('button');b.type='button';b.className='opt mono';b.textContent=o.t;
+    b.onclick=()=>{
+      const ok=isOk(o);
+      box.querySelectorAll('.opt').forEach((x,i)=>{x.disabled=true;if(isOk(opts[i]))x.classList.add('ok');});
+      if(!ok)b.classList.add('ko');
+      onDone(ok);
+    };
+    box.appendChild(b);
+  });
+}
+
+/* ---------- Game 6: position size ---------- */
+(function(){
+  let score=0,n=0;
+  function round(){
+    const capital=[5000,8000,10000,15000,20000,25000,40000,50000][Math.floor(Math.random()*8)];
+    const risk=[0.5,1,1,2][Math.floor(Math.random()*4)];
+    const entry=Math.round(80+Math.random()*420);
+    const dist=[2,4,5,8,10,12,15,20,25][Math.floor(Math.random()*9)];
+    const stop=entry-dist,riskAmt=capital*risk/100,good=Math.floor(riskAmt/dist);
+    if(good<1)return round();
+    $('#g6-data').innerHTML=[['Capital',fmt(capital)+' DH'],['Risque par trade',fmt(risk,risk%1?1:0)+' %'],["Prix d'entrée",fmt(entry)+' DH'],['Stop-loss',fmt(stop)+' DH']]
+      .map(([k,v])=>`<div class="stat"><small>${k}</small><b>${v}</b></div>`).join('');
+    const cand=[good,Math.floor(riskAmt/entry),Math.floor(capital/entry),good*10,Math.floor(riskAmt/stop),good*2,Math.max(1,Math.round(good/2))];
+    const set=[good];cand.slice(1).forEach(v=>{if(v>0&&!set.includes(v)&&set.length<4)set.push(v);});
+    let extra=good+3;while(set.length<4){if(!set.includes(extra))set.push(extra);extra+=7;}
+    const opts=shuffle(set).map(v=>({t:fmt(v)+' actions',v}));
+    $('#g6-ex').hidden=true;$('#g6-next').hidden=true;
+    answerRound('#g6-opts',opts,o=>o.v===good,ok=>{
+      n++;if(ok)score++;$('#g6-score').textContent=score+' / '+n;
+      const loss=good*dist;
+      $('#g6-ex').hidden=false;
+      $('#g6-ex').textContent=(ok?'Correct. ':'Raté. ')+`Montant risqué : ${fmt(capital)} × ${fmt(risk,risk%1?1:0)} % = ${fmt(riskAmt)} DH. Distance jusqu'au stop : ${fmt(entry)} − ${fmt(stop)} = ${dist} DH. ${fmt(riskAmt)} ÷ ${dist} = ${fmt(riskAmt/dist,2)}, arrondi vers le bas : ${fmt(good)} actions. Si le stop est touché, tu perds ${fmt(loss)} DH. Cette position coûte ${fmt(good*entry)} DH`+(good*entry>capital?`, plus que ton capital : il faudrait alors acheter moins, ou choisir un stop plus éloigné.`:'.');
+      $('#g6-next').hidden=false;$('#g6-next').focus();
+    });
+  }
+  $('#g6-next').onclick=round;round();
+})();
+
+/* ---------- Game 7: support / resistance ---------- */
+(function(){
+  const cv=$('#g7-cv');let st=null,score=0,n=0;
+  function gen(){
+    const S=100,R=S+14+Math.random()*12,mid=(S+R)/2,amp=(R-S)/2;
+    const freq=0.22+Math.random()*0.12,ph=Math.random()*6;const out=[];let prev=mid;
+    for(let i=0;i<55;i++){
+      let tgt=mid+amp*1.08*Math.sin(i*freq+ph)+randn()*amp*0.12;
+      let c=Math.min(R-amp*0.04,Math.max(S+amp*0.04,tgt));
+      const o=prev;let h=Math.max(o,c)+Math.abs(randn())*amp*0.1,l=Math.min(o,c)-Math.abs(randn())*amp*0.1;
+      if(tgt>R-amp*0.15)h=R-Math.random()*amp*0.03;
+      if(tgt<S+amp*0.15)l=S+Math.random()*amp*0.03;
+      h=Math.min(h,R);l=Math.max(l,S);h=Math.max(h,o,c);l=Math.min(l,o,c);
+      out.push({o,h,l,c});prev=c;
+    }
+    return{S,R,candles:out,amp};
+  }
+  function round(){
+    const g=gen(),a=g.amp;
+    const levels=[{v:g.S,role:'S'},{v:g.R,role:'R'},{v:(g.S+g.R)/2+a*0.25*(Math.random()-0.5),role:'M'},
+      Math.random()<0.5?{v:g.R+a*0.55,role:'X'}:{v:g.S-a*0.55,role:'X'}];
+    const letters=['A','B','C','D'];
+    const sorted=shuffle(levels).map((L,i)=>({...L,name:letters[i]}));
+    const ask=Math.random()<0.5?'S':'R';
+    st={g,lines:sorted,ask,revealed:false};
+    $('#g7-q').textContent=ask==='S'?'Quelle ligne marque le support ?':'Quelle ligne marque la résistance ?';
+    $('#g7-ex').hidden=true;$('#g7-next').hidden=true;draw();
+    const opts=sorted.slice().sort((x,y)=>x.name.localeCompare(y.name)).map(L=>({t:'Ligne '+L.name,L}));
+    answerRound('#g7-opts',opts,o=>o.L.role===ask,ok=>{
+      n++;if(ok)score++;$('#g7-score').textContent=score+' / '+n;st.revealed=true;draw();
+      const right=sorted.find(L=>L.role===ask);
+      $('#g7-ex').hidden=false;
+      $('#g7-ex').textContent=(ok?'Correct. ':'Raté. ')+(ask==='S'
+        ?`Le support est la ligne ${right.name} : les mèches basses viennent s'y arrêter plusieurs fois avant que le prix remonte. `
+        :`La résistance est la ligne ${right.name} : les mèches hautes viennent y buter plusieurs fois avant que le prix redescende. `)
+        +`Les autres lignes traversent le milieu des bougies ou ne sont jamais touchées. Idée de trade classique : acheter près du support avec un stop juste en dessous, et viser la résistance.`;
+      $('#g7-next').hidden=false;$('#g7-next').focus();
+    });
+  }
+  function draw(){
+    if(!st)return;const m=css('--muted');
+    const lines=st.lines.map(L=>{
+      let color=m;if(st.revealed){if(L.role==='S')color=css('--up');else if(L.role==='R')color=css('--down');}
+      return{y:L.v,color,dash:true,label:L.name+(st.revealed&&L.role==='S'?' support':st.revealed&&L.role==='R'?' résist.':'')};
+    });
+    drawCandles(cv,st.g.candles,{lines,noGrid:true,axisW:78});
+  }
+  $('#g7-next').onclick=round;window.addEventListener('resize',draw);window.__g7draw=draw;round();
+})();
+
+/* ---------- Game 8: moving averages ---------- */
+(function(){
+  const cv=$('#g8-cv');let st=null,score=0,n=0;
+  const sma=(arr,p)=>arr.map((_,i)=>i<p-1?null:arr.slice(i-p+1,i+1).reduce((a,b)=>a+b,0)/p);
+  function gen(kind){
+    for(let tries=0;tries<200;tries++){
+      const out=[];let p=200,anchor=200;const drift=kind==='up'?0.0035:kind==='down'?-0.0035:0,vol=0.011;
+      for(let i=0;i<110;i++){
+        const o=p;let r=drift+randn()*vol;
+        if(kind==='flat')r+=(anchor-o)/o*0.12;
+        const c=o*(1+r);out.push({o,c,h:Math.max(o,c)*(1+Math.abs(randn())*vol*0.4),l:Math.min(o,c)*(1-Math.abs(randn())*vol*0.4)});p=c;
+      }
+      const closes=out.map(k=>k.c),m20=sma(closes,20),m50=sma(closes,50),L=closes.length-1;
+      const slope=(m50[L]-m50[L-10])/m50[L-10];
+      const ok=kind==='up'?(closes[L]>m20[L]&&m20[L]>m50[L]&&slope>0.01)
+        :kind==='down'?(closes[L]<m20[L]&&m20[L]<m50[L]&&slope<-0.01)
+        :(Math.abs(slope)<0.006&&Math.abs(m20[L]-m50[L])/m50[L]<0.015);
+      if(ok){const cut=50;return{candles:out.slice(cut),m20:m20.slice(cut),m50:m50.slice(cut),slope,last:closes[L],v20:m20[L],v50:m50[L]};}
+    }
+    return null;
+  }
+  function round(){
+    const kind=['up','down','flat'][Math.floor(Math.random()*3)];
+    const g=gen(kind);if(!g)return round();
+    st={g,kind};draw();$('#g8-ex').hidden=true;$('#g8-next').hidden=true;
+    const opts=[{t:'Haussière',v:'up'},{t:'Baissière',v:'down'},{t:'Pas de tendance claire',v:'flat'}];
+    answerRound('#g8-opts',opts,o=>o.v===kind,ok=>{
+      n++;if(ok)score++;$('#g8-score').textContent=score+' / '+n;
+      const pos=(a,b)=>a>b?'au-dessus de':'en dessous de';
+      const slopeTxt=g.slope>0.006?'monte':g.slope<-0.006?'descend':'est presque plate';
+      $('#g8-ex').hidden=false;
+      $('#g8-ex').textContent=(ok?'Correct. ':'Raté. ')+(kind==='flat'
+        ?`La MM50 ${slopeTxt} et la MM20 reste collée à elle : le prix va et vient sans direction. Dans ce cas, mieux vaut attendre qu'une tendance apparaisse.`
+        :`Le dernier prix (${fmt(g.last,1)}) est ${pos(g.last,g.v20)} la MM20 (${fmt(g.v20,1)}), qui est elle-même ${pos(g.v20,g.v50)} la MM50 (${fmt(g.v50,1)}), et la MM50 ${slopeTxt}. `+(kind==='up'?`Tendance haussière : on cherche plutôt des achats, par exemple quand le prix revient toucher la MM20.`:`Tendance baissière : acheter ici, c'est aller contre le marché.`))
+        +` Quand la MM20 passe au-dessus de la MM50, on parle de « golden cross » (signal haussier) ; en dessous, de « death cross » (signal baissier).`;
+      $('#g8-next').hidden=false;$('#g8-next').focus();
+    });
+  }
+  function draw(){if(!st)return;drawCandles(cv,st.g.candles,{series:[{vals:st.g.m50,color:css('--warn')},{vals:st.g.m20,color:css('--accent')}]});}
+  window.__genTrend=gen;
+  $('#g8-next').onclick=round;window.addEventListener('resize',draw);window.__g8draw=draw;round();
+})();
+
+/* ---------- Chapter 1 bis: teaching charts ---------- */
+function setupCanvas(cv){const dpr=window.devicePixelRatio||1,w=cv.clientWidth,h=cv.clientHeight;cv.width=w*dpr;cv.height=h*dpr;const c=cv.getContext('2d');c.scale(dpr,dpr);return{c,w,h};}
+function drawAnatomy(cv){
+  const {c,w,h}=setupCanvas(cv),bw=Math.min(44,w*0.09);
+  const Yh=32,Yt=86,Yb=160,Yl=h-22;
+  [{x:w*0.14,up:true,t:'Bougie haussière'},{x:w*0.6,up:false,t:'Bougie baissière'}].forEach(C=>{
+    const col=C.up?css('--up'):css('--down');
+    c.strokeStyle=col;c.fillStyle=col;c.lineWidth=3;c.beginPath();c.moveTo(C.x,Yh);c.lineTo(C.x,Yl);c.stroke();c.fillRect(C.x-bw/2,Yt,bw,Yb-Yt);
+    c.font='600 12px "IBM Plex Sans", system-ui, sans-serif';c.textBaseline='middle';c.fillStyle=css('--ink');
+    c.textAlign='center';c.fillText(C.t,C.x+bw,12);c.textAlign='left';
+    const labels=[[Yh,'Plus haut'],[(Yh+Yt)/2,'Mèche haute'],[Yt,C.up?'Clôture':'Ouverture'],[(Yt+Yb)/2,'Corps'],[Yb,C.up?'Ouverture':'Clôture'],[(Yb+Yl)/2,'Mèche basse'],[Yl,'Plus bas']];
+    labels.forEach(([y,t])=>{c.strokeStyle=css('--muted');c.lineWidth=1;c.beginPath();c.moveTo(C.x+bw/2+3,y);c.lineTo(C.x+bw/2+14,y);c.stroke();c.fillStyle=css('--ink');c.font=(t==='Corps'||t.startsWith('Mèche')?'400 ':'600 ')+'12px "IBM Plex Sans", system-ui, sans-serif';c.fillText(t,C.x+bw/2+18,y);});
+  });
+}
+const TEACH={};
+(function(){
+  TEACH.tf=pathCandles([[0,100],[12,108],[20,103],[33,115],[40,110],[52,122],[59,120]],1.6,7);
+  TEACH.tfw=[];for(let i=0;i<TEACH.tf.length;i+=5){const g=TEACH.tf.slice(i,i+5);TEACH.tfw.push({o:g[0].o,c:g[g.length-1].c,h:Math.max(...g.map(k=>k.h)),l:Math.min(...g.map(k=>k.l))});}
+  TEACH.up=pathCandles([[0,100],[8,110],[13,105],[22,117],[27,111],[36,124],[41,118],[50,130],[55,127]],1.0,11);
+  TEACH.down=pathCandles([[0,130],[8,120],[13,125],[22,113],[27,119],[36,106],[41,112],[50,100],[55,103]],1.0,12);
+  TEACH.range=pathCandles([[0,108],[6,115],[13,101],[20,114.5],[27,100.5],[34,115.2],[41,101],[48,114],[55,108]],0.9,13);
+  TEACH.brk=pathCandles([[0,104],[5,109],[10,101],[16,109.5],[22,101.5],[28,109.3],[32,105],[36,109.6],[38,117],[43,110.8],[50,120],[57,126]],0.8,14);
+  const r=rng(99);TEACH.vol=TEACH.brk.map((k,i)=>i===37||i===38?100+r()*15:i===39?75:i>=41&&i<=43?28+r()*8:38+r()*22);
+})();
+function trendMarks(k,hiIdx,loIdx){
+  return hiIdx.map(i=>({i,y:k[i].h,label:'sommet',color:css('--muted')})).concat(loIdx.map(i=>({i,y:k[i].l,label:'creux',color:css('--accent'),below:true})));
+}
+function trendLine(k,a,b,field,end){const ya=k[a][field],yb=k[b][field];return{i0:a,y0:ya,i1:end,y1:ya+(yb-ya)*(end-a)/(b-a),color:css('--accent'),dash:true};}
+function drawTeaching(){
+  drawAnatomy($('#an-cv'));
+  drawCandles($('#tf-d'),TEACH.tf,{});
+  drawCandles($('#tf-w'),TEACH.tfw,{});
+  const T=TEACH;
+  drawCandles($('#ch-up'),T.up,{noGrid:true,axisW:12,marks:trendMarks(T.up,[8,22,36,50],[13,27,41]),segs:[trendLine(T.up,13,41,'l',55)]});
+  drawCandles($('#ch-down'),T.down,{noGrid:true,axisW:12,marks:trendMarks(T.down,[13,27,41],[8,22,36,50]),segs:[trendLine(T.down,13,41,'h',55)]});
+  drawCandles($('#ch-range'),T.range,{noGrid:true,axisW:80,zones:[{y0:99.2,y1:101.6,color:css('--up'),label:'support'},{y0:114.2,y1:116.4,color:css('--down'),label:'résistance'}]});
+  drawCandles($('#ch-break'),T.brk,{noGrid:true,axisW:80,volume:T.vol,zones:[{y0:108.8,y1:110.6,color:css('--warn'),label:'ancienne résist.'}],
+    marks:[{i:38,y:T.brk[38].h,label:'cassure',color:css('--up')},{i:43,y:T.brk[43].l,label:'retest',color:css('--accent'),below:true}]});
+}
+
+/* markets: small multiples on a shared scale */
+const MARKETS=[
+  {n:'Actions marocaines (MASI)',vol:.12,vl:'10–15 %',hrs:'Lun–ven, en journée',seed:21,what:"Résultats des entreprises, dividendes, croissance et taux d'intérêt au Maroc.",tip:"Idéal pour débuter avec E-Bourse. Certaines petites valeurs s'échangent peu : les prix y sont moins fluides."},
+  {n:'Indices US (S&P 500)',vol:.17,vl:'15–20 %',hrs:"Lun–ven, après-midi et soir (heure du Maroc)",seed:22,what:"Résultats des grandes entreprises américaines, décisions de la Fed, inflation.",tip:"Très liquide, énormément de tutoriels et de données. Bon terrain d'entraînement sur TradingView."},
+  {n:'Forex (EUR/USD)',vol:.07,vl:'6–9 %',hrs:'24 h/24, du lundi au vendredi',seed:23,what:"Écart de taux entre la BCE et la Fed, inflation, emploi, discours des banques centrales.",tip:"Bouge peu, d'où l'usage massif du levier… et des pertes. Uniquement en démo au début."},
+  {n:'Or (XAU/USD)',vol:.15,vl:'environ 15 %',hrs:'Presque 24 h/24 en semaine',seed:24,what:"Taux d'intérêt réels, force du dollar, crises et peur sur les marchés (valeur refuge).",tip:"Réagit fortement aux chiffres économiques américains."},
+  {n:'Pétrole (Brent)',vol:.32,vl:'25–40 %',hrs:'Presque 24 h/24 en semaine',seed:25,what:"Décisions de l'OPEP+, niveau des stocks, géopolitique, croissance mondiale.",tip:"Très sensible à l'actualité internationale : des écarts brutaux sont fréquents."},
+  {n:'Crypto (Bitcoin)',vol:.55,vl:'40–70 %',hrs:'24 h/24, 7 j/7',seed:26,what:"Sentiment, flux d'argent, régulation, annonces. Peu lié à des résultats d'entreprise.",tip:"Des mouvements de 10 % en une journée arrivent. Le marché le plus dangereux avec du levier."}
+];
+MARKETS.forEach(m=>{const r=rng(m.seed),nrm=()=>{let u=r()||1e-9,v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};let p=1;m.path=[0];for(let i=1;i<126;i++){p*=1+nrm()*m.vol/Math.sqrt(252);m.path.push((p-1)*100);}});
+const MKMAX=Math.ceil(Math.max(...MARKETS.flatMap(m=>m.path.map(Math.abs)))/10)*10;
+$('#markets').innerHTML=MARKETS.map((m,i)=>`<div class="card mk"><h3>${m.n}</h3><div class="chips"><span class="chip">${m.hrs}</span><span class="chip">Volatilité/an : ${m.vl}</span></div><canvas id="mk-${i}" height="120" style="height:120px"></canvas><p><b>Ce qui fait bouger le prix :</b> ${m.what}</p><p style="color:var(--muted)">${m.tip}</p></div>`).join('');
+function drawSpark(cv,vals){
+  const {c,w,h}=setupCanvas(cv),axisW=46,pad=10,plotW=w-axisW,Y=v=>pad+(MKMAX-v)/(2*MKMAX)*(h-2*pad),X=i=>i/(vals.length-1)*plotW;
+  c.font='11px "IBM Plex Mono", Consolas, monospace';c.textBaseline='middle';c.fillStyle=css('--muted');
+  [MKMAX,0,-MKMAX].forEach(v=>{c.strokeStyle=css('--line');c.lineWidth=1;c.setLineDash(v===0?[4,4]:[]);c.beginPath();c.moveTo(0,Y(v));c.lineTo(plotW,Y(v));c.stroke();c.setLineDash([]);c.fillText((v>0?'+':v<0?'−':'')+Math.abs(v)+' %',plotW+6,Y(v));});
+  c.strokeStyle=css('--accent');c.lineWidth=2;c.beginPath();vals.forEach((v,i)=>i?c.lineTo(X(i),Y(v)):c.moveTo(X(i),Y(v)));c.stroke();
+  const last=vals[vals.length-1];c.fillStyle=css('--accent');c.beginPath();c.arc(X(vals.length-1),Y(last),3.5,0,Math.PI*2);c.fill();
+}
+function drawMarkets(){MARKETS.forEach((m,i)=>drawSpark($('#mk-'+i),m.path));}
+
+/* ---------- candle patterns ---------- */
+function K(o,c,h,l){return{o,c,h:Math.max(h,o,c),l:Math.min(l,o,c)};}
+const PATTERNS={
+  hammer:{name:'Marteau',bias:-1,short:'Longue mèche basse après une baisse : les acheteurs reprennent la main.',
+    long:"Marteau : après une baisse, le prix a plongé pendant la séance puis les acheteurs l'ont ramené près de l'ouverture. Longue mèche basse (au moins 2 fois le corps), petit corps en haut. Signal possible de retournement haussier. Bulkowski mesure un retournement haussier environ 60 % du temps, mais une hausse qui suit souvent modeste.",
+    make:(p,u)=>{const o=p-0.3*u,c=o+0.45*u;return[K(o,c,c+0.08*u,o-2*u)];}},
+  star:{name:'Étoile filante',bias:1,short:'Longue mèche haute après une hausse : les vendeurs reprennent la main.',
+    long:"Étoile filante : après une hausse, le prix a grimpé pendant la séance puis les vendeurs l'ont fait retomber près de l'ouverture. Longue mèche haute, petit corps en bas. Signal possible de retournement baissier. C'est le miroir du marteau.",
+    make:(p,u)=>{const o=p+0.3*u,c=o-0.45*u;return[K(o,c,o+2*u,c-0.08*u)];}},
+  bullEng:{name:'Avalement haussier',bias:-1,short:'Une grande bougie verte recouvre la rouge précédente.',
+    long:"Avalement haussier : après une baisse, une petite bougie rouge est suivie d'une grande bougie verte dont le corps recouvre entièrement le corps de la rouge. Les acheteurs ont renversé la situation. Bulkowski mesure un retournement haussier environ 63 % du temps.",
+    make:(p,u)=>{const a=K(p,p-0.7*u,p+0.15*u,p-0.85*u),o=a.c-0.15*u,c=a.o+0.6*u;return[a,K(o,c,c+0.1*u,o-0.15*u)];}},
+  bearEng:{name:'Avalement baissier',bias:1,short:'Une grande bougie rouge recouvre la verte précédente.',
+    long:"Avalement baissier : après une hausse, une petite bougie verte est suivie d'une grande bougie rouge dont le corps recouvre entièrement le corps de la verte. Les vendeurs ont pris le contrôle. Signal possible de retournement baissier.",
+    make:(p,u)=>{const a=K(p,p+0.7*u,p+0.85*u,p-0.15*u),o=a.c+0.15*u,c=a.o-0.6*u;return[a,K(o,c,o+0.15*u,c-0.1*u)];}},
+  doji:{name:'Doji',bias:0,short:'Ouverture et clôture presque égales : indécision.',
+    long:"Doji : l'ouverture et la clôture sont presque au même prix, avec des mèches des deux côtés. Acheteurs et vendeurs se neutralisent. Seul, il ne donne pas de direction ; après une longue tendance, il peut signaler qu'elle s'essouffle.",
+    make:(p,u)=>[K(p,p+0.03*u,p+1.1*u,p-1.1*u)]},
+  morning:{name:'Étoile du matin',bias:-1,short:'Grande rouge, petite bougie, grande verte : retournement haussier en 3 temps.',
+    long:"Étoile du matin : figure en 3 bougies après une baisse. Une grande rouge, puis une petite bougie plus bas (hésitation), puis une grande verte qui clôture au-dessus du milieu de la première. Le passage de la peur à l'espoir, en trois séances.",
+    make:(p,u)=>{const a=K(p,p-1.8*u,p+0.1*u,p-2*u),bo=a.c-0.35*u,b=K(bo,bo-0.12*u,bo+0.25*u,bo-0.4*u),co=b.c+0.15*u,c=a.o-0.5*u;return[a,b,K(co,c,c+0.1*u,co-0.1*u)];}},
+  evening:{name:'Étoile du soir',bias:1,short:'Grande verte, petite bougie, grande rouge : retournement baissier en 3 temps.',
+    long:"Étoile du soir : figure en 3 bougies après une hausse. Une grande verte, puis une petite bougie plus haut, puis une grande rouge qui clôture sous le milieu de la première. C'est le miroir de l'étoile du matin.",
+    make:(p,u)=>{const a=K(p,p+1.8*u,p+2*u,p-0.1*u),bo=a.c+0.35*u,b=K(bo,bo+0.12*u,bo+0.4*u,bo-0.25*u),co=b.c-0.15*u,c=a.o+0.5*u;return[a,b,K(co,c,co+0.1*u,c-0.1*u)];}},
+  soldiers:{name:'Trois soldats blancs',bias:-1,short:'Trois grandes vertes qui clôturent de plus en plus haut.',
+    long:"Trois soldats blancs : trois grandes bougies vertes d'affilée, chacune ouvrant dans le corps de la précédente et clôturant plus haut, avec de petites mèches. Les acheteurs contrôlent le marché, souvent en sortie de baisse.",
+    make:(p,u)=>{let o=p-0.1*u;const out=[];for(let i=0;i<3;i++){const c=o+1.3*u;out.push(K(o,c,c+0.1*u,o-0.1*u));o=c-0.4*u;}return out;}},
+  crows:{name:'Trois corbeaux noirs',bias:1,short:'Trois grandes rouges qui clôturent de plus en plus bas.',
+    long:"Trois corbeaux noirs : trois grandes bougies rouges d'affilée, chacune clôturant plus bas que la précédente, avec de petites mèches. Les vendeurs contrôlent le marché, souvent en sortie de hausse.",
+    make:(p,u)=>{let o=p+0.1*u;const out=[];for(let i=0;i<3;i++){const c=o-1.3*u;out.push(K(o,c,o+0.1*u,c-0.1*u));o=c+0.4*u;}return out;}}
+};
+function buildPattern(key,n,noisy){
+  const P=PATTERNS[key],u=2,dir=P.bias===0?(Math.random()<0.5?1:-1):P.bias;
+  const ctx=[];let p=100;
+  for(let i=0;i<n;i++){
+    const counter=noisy&&Math.random()<0.2,m=(noisy?0.7+Math.random()*0.6:1)*u*(counter?-0.5:1)*dir;
+    const o=p,c=p+m,wk=noisy?Math.random()*0.3*u:0.15*u;ctx.push(K(o,c,Math.max(o,c)+wk,Math.min(o,c)-wk));p=c;
+  }
+  const pat=P.make(p,u);return{candles:ctx.concat(pat),from:ctx.length,to:ctx.length+pat.length-1};
+}
+$('#pat-grid').innerHTML=Object.entries(PATTERNS).map(([k,P])=>`<div class="pat"><canvas id="pat-${k}" height="120" style="height:120px"></canvas><b>${P.name}</b><span>${P.short}</span></div>`).join('');
+const GALLERY={};Object.keys(PATTERNS).forEach(k=>{const save=Math.random;Math.random=()=>0.3;GALLERY[k]=buildPattern(k,4,false);Math.random=save;});
+function drawGallery(){Object.entries(GALLERY).forEach(([k,g])=>drawCandles($('#pat-'+k),g.candles,{noGrid:true,axisW:6,slots:7,highlight:{from:g.from,to:g.to}}));}
+
+(function(){
+  const cv=$('#g9-cv'),keys=Object.keys(PATTERNS);let st=null,score=0,n=0;
+  function round(){
+    const key=keys[Math.floor(Math.random()*keys.length)],g=buildPattern(key,7,true);
+    st={key,g};draw();$('#g9-ex').hidden=true;$('#g9-next').hidden=true;
+    const others=shuffle(keys.filter(k=>k!==key)).slice(0,3);
+    const opts=shuffle([key,...others]).map(k=>({t:PATTERNS[k].name,k}));
+    answerRound('#g9-opts',opts,o=>o.k===key,ok=>{
+      n++;if(ok)score++;$('#g9-score').textContent=score+' / '+n;
+      $('#g9-ex').hidden=false;$('#g9-ex').textContent=(ok?'Correct. ':'Raté. ')+PATTERNS[key].long+' Rappel : attends une bougie de confirmation avant d\'agir.';
+      $('#g9-next').hidden=false;$('#g9-next').focus();
+    });
+  }
+  function draw(){if(!st)return;drawCandles(cv,st.g.candles,{noGrid:true,axisW:10,slots:12,maxBody:30,highlight:{from:st.g.from,to:st.g.to}});}
+  $('#g9-next').onclick=round;window.addEventListener('resize',draw);window.__g9draw=draw;round();
+})();
+
+/* ---------- RSI helpers ---------- */
+function rsiCalc(closes,p=14){
+  const out=closes.map(()=>null);if(closes.length<=p)return out;let g=0,l=0;
+  for(let i=1;i<=p;i++){const d=closes[i]-closes[i-1];g+=Math.max(d,0);l+=Math.max(-d,0);}
+  g/=p;l/=p;out[p]=l===0?100:100-100/(1+g/l);
+  for(let i=p+1;i<closes.length;i++){const d=closes[i]-closes[i-1];g=(g*(p-1)+Math.max(d,0))/p;l=(l*(p-1)+Math.max(-d,0))/p;out[i]=l===0?100:100-100/(1+g/l);}
+  return out;
+}
+function drawRSI(cv,vals,opt={}){
+  const {c,w,h}=setupCanvas(cv),axisW=opt.axisW||58,padT=8,padB=8,plotW=w-axisW,n=opt.slots||vals.length,step=plotW/n;
+  const Y=v=>padT+(100-v)/100*(h-padT-padB),X=i=>step*i+step/2;
+  c.fillStyle=css('--sunk');c.fillRect(0,Y(70),plotW,Y(30)-Y(70));
+  c.font='11px "IBM Plex Mono", Consolas, monospace';c.textBaseline='middle';
+  [[70,css('--down')],[30,css('--up')]].forEach(([v,col])=>{c.strokeStyle=col;c.lineWidth=1;c.setLineDash([4,4]);c.beginPath();c.moveTo(0,Y(v));c.lineTo(plotW,Y(v));c.stroke();c.setLineDash([]);c.fillStyle=col;c.fillText(String(v),plotW+6,Y(v));});
+  if(opt.mid50){c.strokeStyle=css('--accent');c.lineWidth=1.5;c.beginPath();c.moveTo(0,Y(50));c.lineTo(plotW,Y(50));c.stroke();c.fillStyle=css('--accent');c.fillText('50',plotW+6,Y(50));}
+  else{c.fillStyle=css('--muted');c.fillText('RSI 14',plotW+6,Y(50));}
+  c.strokeStyle=css('--accent');c.lineWidth=2;c.beginPath();let st=false;
+  vals.forEach((v,i)=>{if(v==null)return;if(!st){c.moveTo(X(i),Y(v));st=true;}else c.lineTo(X(i),Y(v));});c.stroke();
+  (opt.segs||[]).forEach(S=>{c.strokeStyle=S.color;c.lineWidth=2;c.setLineDash([6,4]);c.beginPath();c.moveTo(X(S.i0),Y(S.y0));c.lineTo(X(S.i1),Y(S.y1));c.stroke();c.setLineDash([]);});
+  (opt.marks||[]).forEach(M=>{c.fillStyle=M.color;c.beginPath();c.arc(X(M.i),Y(M.y),4,0,Math.PI*2);c.fill();});
+  const last=vals[vals.length-1];
+  if(last!=null&&!opt.noLast){c.fillStyle=css('--ink');c.font='600 12px "IBM Plex Mono", Consolas, monospace';const t=fmt(last,0),tw=c.measureText(t).width;c.fillText(t,Math.min(X(vals.length-1)+8,plotW-tw-2),Math.max(12,Math.min(h-12,Y(last)-12)));}
+}
+function genRSIZone(kind){
+  for(let t=0;t<300;t++){
+    const out=[];let p=100;
+    for(let i=0;i<60;i++){
+      const tail=i>=48,dr=tail?(kind==='up'?0.012:kind==='down'?-0.012:0):0;
+      let r=dr+randn()*(tail&&kind!=='flat'?0.006:0.01);if(kind==='flat')r+=(100-p)/p*0.08;
+      const o=p,c=o*(1+r);out.push({o,c,h:Math.max(o,c)*(1+Math.abs(randn())*0.004),l:Math.min(o,c)*(1-Math.abs(randn())*0.004)});p=c;
+    }
+    const rsi=rsiCalc(out.map(k=>k.c)),last=rsi[rsi.length-1];
+    if((kind==='up'&&last>72)||(kind==='down'&&last<28)||(kind==='flat'&&last>42&&last<58))
+      return{candles:out.slice(15),rsi:rsi.slice(15),last,kind};
+  }
+  return null;
+}
+function genDiv(kind){
+  for(let t=0;t<400;t++){
+    const a=16+Math.random()*8,b=6+Math.random()*3,cc=2+Math.random()*3,s=kind==='bear'?1:-1;
+    const w=[[0,100],[16,100+s*1],[30,100+s*a],[38,100+s*(a-b)],[56,100+s*(a+cc)],[59,100+s*(a+cc-1.5)]];
+    const k=pathCandles(w,0.5+Math.random()*0.4,Math.floor(Math.random()*1e9));
+    const rsi=rsiCalc(k.map(x=>x.c));
+    const f=kind==='bear'?(x=>x.h):(x=>-x.l);
+    let p1=24;for(let i=24;i<=36;i++)if(f(k[i])>f(k[p1]))p1=i;
+    let p2=48;for(let i=48;i<=59;i++)if(f(k[i])>f(k[p2]))p2=i;
+    const priceOk=f(k[p2])>f(k[p1]),rsiOk=kind==='bear'?rsi[p2]<rsi[p1]-5:rsi[p2]>rsi[p1]+5;
+    if(priceOk&&rsiOk&&rsi[p1]!=null)return{candles:k,rsi,p1,p2,kind};
+  }
+  return null;
+}
+function divCharts(g){
+  const hi=g.kind==='bear',pv=i=>hi?g.candles[i].h:g.candles[i].l,col=css('--warn'),lbl=hi?'sommet':'creux';
+  return{
+    price:{marks:[{i:g.p1,y:pv(g.p1),label:lbl+' 1',color:col,below:!hi},{i:g.p2,y:pv(g.p2),label:lbl+' 2',color:col,below:!hi}],segs:[{i0:g.p1,y0:pv(g.p1),i1:g.p2,y1:pv(g.p2),color:col,dash:true}]},
+    rsi:{marks:[{i:g.p1,y:g.rsi[g.p1],color:col},{i:g.p2,y:g.rsi[g.p2],color:col}],segs:[{i0:g.p1,y0:g.rsi[g.p1],i1:g.p2,y1:g.rsi[g.p2],color:col}],noLast:true}
+  };
+}
+const ZONE_EX={
+  up:l=>`Le RSI est à ${fmt(l,0)}, au-dessus de 70 : zone de surachat. Le prix a monté fort et vite. Un repli devient plus probable, mais dans une tendance puissante le RSI peut rester au-dessus de 70 longtemps. Ce n'est pas un signal de vente à lui seul.`,
+  down:l=>`Le RSI est à ${fmt(l,0)}, en dessous de 30 : zone de survente. Le prix a baissé fort et vite. Un rebond devient plus probable, mais « pas cher » peut devenir « encore moins cher ». Attends un signal de confirmation.`,
+  flat:l=>`Le RSI est à ${fmt(l,0)}, entre 30 et 70 : zone neutre. Il ne donne pas de signal particulier. La plupart du temps, le RSI est dans cette zone.`
+};
+const DIV_EX={
+  bear:"Divergence baissière : le prix fait un sommet plus haut (sommet 2 au-dessus du sommet 1), mais le RSI fait un sommet plus bas. La deuxième hausse a moins de force que la première : la tendance s'essouffle. Signal d'alerte pour ceux qui sont acheteurs, pas une vente automatique.",
+  bull:"Divergence haussière : le prix fait un creux plus bas (creux 2 sous le creux 1), mais le RSI fait un creux plus haut. La deuxième baisse a moins de force : les vendeurs fatiguent. Un rebond devient possible, à confirmer par le prix."
+};
+
+/* ---------- Game 10: RSI ---------- */
+(function(){
+  const cv=$('#g10-cv'),rv=$('#g10-rsi');let st=null,score=0,n=0;
+  function round(){
+    const div=Math.random()<0.45;
+    if(div){
+      const kind=Math.random()<0.5?'bear':'bull',g=genDiv(kind);if(!g)return round();
+      st={type:'div',g};$('#g10-q').textContent=kind==='bear'?'Compare les deux sommets du prix et du RSI. Que vois-tu ?':'Compare les deux creux du prix et du RSI. Que vois-tu ?';
+      var opts=[{t:'Divergence baissière',v:'bear'},{t:'Divergence haussière',v:'bull'},{t:'Pas de divergence',v:'none'}],ans=kind,ex=()=>DIV_EX[kind];
+    }else{
+      const kind=['up','down','flat'][Math.floor(Math.random()*3)],g=genRSIZone(kind);if(!g)return round();
+      st={type:'zone',g};$('#g10-q').textContent='Dans quelle zone se trouve le RSI sur la dernière bougie ?';
+      var opts=[{t:'Surachat (au-dessus de 70)',v:'up'},{t:'Survente (en dessous de 30)',v:'down'},{t:'Zone neutre (30 à 70)',v:'flat'}],ans=kind,ex=()=>ZONE_EX[kind](g.last);
+    }
+    draw();$('#g10-ex').hidden=true;$('#g10-next').hidden=true;
+    answerRound('#g10-opts',opts,o=>o.v===ans,ok=>{
+      n++;if(ok)score++;$('#g10-score').textContent=score+' / '+n;
+      $('#g10-ex').hidden=false;$('#g10-ex').textContent=(ok?'Correct. ':'Raté. ')+ex();
+      $('#g10-next').hidden=false;$('#g10-next').focus();
+    });
+  }
+  function draw(){
+    if(!st)return;const g=st.g,n=g.candles.length;
+    if(st.type==='div'){const d=divCharts(g);drawCandles(cv,g.candles,{...d.price,slots:n});drawRSI(rv,g.rsi,{...d.rsi,slots:n});}
+    else{drawCandles(cv,g.candles,{slots:n});drawRSI(rv,g.rsi,{slots:n});}
+  }
+  $('#g10-next').onclick=round;window.addEventListener('resize',draw);window.__g10draw=draw;round();
+})();
+
+/* ---------- News-reaction scenarios (book, chapter 4) — shared by game 12 and the final challenge ---------- */
+const NEWS_MEANINGS=[
+  "Normal : la tendance est saine, rien ne change",
+  "Alerte : les acheteurs s'épuisent, retournement à la baisse possible",
+  "Simple correction dans la hausse : chercher un point d'achat",
+  "Tendance haussière très puissante : acheter dans son sens",
+  "Normal dans une baisse : attendre un rebond pour vendre",
+  "Signal de retournement à la hausse : les vendeurs perdent la main",
+  "Simple rebond dans une baisse : ne pas s'emballer",
+  "Baisse très forte : surtout ne pas acheter"
+];
+const NEWS=[
+  {trend:'up',news:'bonne',react:'up',m:0,e:"En tendance haussière, une bonne nouvelle qui fait monter le prix est la réaction attendue. La tendance est saine."},
+  {trend:'up',news:'bonne',react:'down',m:1,e:"C'est l'un des signaux les plus forts du livre : le prix aurait dû monter et il baisse. Les acheteurs n'ont plus de force. On arrête d'acheter et on surveille un retournement."},
+  {trend:'up',news:'mauvaise',react:'down',m:2,e:"Une baisse après une mauvaise nouvelle, dans une tendance haussière, est souvent une simple correction. Elle peut offrir un bon point d'achat si la tendance tient."},
+  {trend:'up',news:'mauvaise',react:'up',m:3,e:"Même une mauvaise nouvelle ne fait pas baisser le prix : la tendance est très puissante. On achète dans son sens, avec un stop sous la dernière consolidation."},
+  {trend:'down',news:'mauvaise',react:'down',m:4,e:"Réaction normale dans une tendance baissière. Pour vendre, mieux vaut attendre un rebond plutôt que de vendre au plus bas."},
+  {trend:'down',news:'mauvaise',react:'up',m:5,e:"Signal précurseur majeur : malgré la mauvaise nouvelle, le prix monte. Les vendeurs perdent la main, un courant acheteur est en train de naître."},
+  {trend:'down',news:'bonne',react:'up',m:6,e:"Un rebond après une bonne nouvelle dans une tendance baissière est classique. Il ne signifie pas que la baisse est finie."},
+  {trend:'down',news:'bonne',react:'down',m:7,e:"Même une bonne nouvelle ne fait pas monter le prix : les vendeurs dominent totalement. Acheter ici serait aller contre un courant très fort."}
+];
+function newsCandles(sc,seed){
+  const s=sc.trend==='up'?1:-1,end=100+s*18,react=sc.react==='up'?end+6:end-6;
+  return pathCandles([[0,100],[9,100+s*7],[13,100+s*4],[22,100+s*13],[26,100+s*10],[32,end],[37,react]],0.7,seed||Math.floor(Math.random()*1e9));
+}
+function newsChartOpt(sc,k){return{noGrid:true,axisW:10,highlight:{from:33,to:37},marks:[{i:32,y:sc.trend==='up'?k[32].h:k[32].l,label:'nouvelle '+sc.news,color:sc.news==='bonne'?css('--up'):css('--down'),below:sc.trend!=='up'}]};}
+
+/* ---------- Game 11: final challenge ---------- */
+(function(){
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  const TYPE_LABEL={pattern:'Figures de bougies (jeu 9)',trend:'Tendance et moyennes mobiles (jeu 8)',rsi:'RSI (jeu 10)',size:'Taille de position (jeu 6)',lev:'Levier (jeu 4)',rr:'Ratio risque/rendement (chapitre 2)',dd:'Rattraper une perte (chapitre 2)',scam:'Arnaques (jeu 5)',strat:'Stratégies (chapitre 5)',news:'Réaction aux nouvelles (jeu 12)'};
+  const SCAMS=[
+    {q:"Un inconnu sur Telegram garantit 5 % de gain par semaine avec son « robot IA ».",s:true,e:"Gain garanti + rendement énorme + contact non sollicité : arnaque typique selon les alertes de l'AMMC."},
+    {q:"Un courtier affiche : « 72 % des comptes de particuliers perdent de l'argent avec des CFD chez ce fournisseur ».",s:false,e:"Cet avertissement est obligatoire chez les courtiers régulés en Europe. C'est plutôt un signe de sérieux."},
+    {q:"Pour retirer tes gains, la plateforme exige d'abord de payer des « frais de déblocage ».",s:true,e:"Schéma classique : gains affichés, puis demandes de redéposer, puis retrait impossible."},
+    {q:"Tu t'entraînes sur E-Bourse, le simulateur de la Bourse de Casablanca, avec de l'argent virtuel.",s:false,e:"Outil officiel et gratuit, sans argent réel : aucun risque."},
+    {q:"Un « coach » vend l'accès à son groupe VIP en montrant des captures d'écran de gains énormes.",s:true,e:"Les captures se falsifient facilement, et ces recommandations sans agrément sont encadrées par la loi n°19.14."}
+  ];
+  const STRATS=[
+    {q:"Selon le rapport SPIVA, sur 15 ans, les gérants professionnels battent-ils leur indice ?",o:["Non : dans aucune catégorie la majorité ne bat son indice","Oui, environ 80 % d'entre eux","Oui, environ la moitié","Seulement les fonds en actions"],e:"C'est pour cela que l'investissement régulier dans un indice est la stratégie la mieux prouvée."},
+    {q:"Quelle est la règle d'entrée du système 1 des Tortues de Richard Dennis ?",o:["Acheter un nouveau plus haut sur 20 jours","Acheter quand le RSI passe sous 30","Acheter chaque lundi matin","Acheter après 3 bougies rouges"],e:"Système 1 : cassure des 20 jours. Système 2 : cassure des 55 jours."},
+    {q:"Dans la stratégie RSI(2) de Larry Connors, on achète quand…",o:["Le RSI sur 2 jours passe sous 10 et le prix est au-dessus de sa MM200","Le RSI sur 2 jours dépasse 90","La MM50 passe sous la MM200","Le prix fait un nouveau plus bas sur 55 jours"],e:"On achète une baisse brutale, mais seulement dans une tendance de fond haussière."},
+    {q:"Qu'est-ce que la martingale ?",o:["Doubler la mise après chaque perte","Un indicateur de tendance","Une figure de 3 bougies","Un type d'ordre limite"],e:"Après 7 pertes d'affilée, la mise est 128 fois plus grosse que la première : le compte saute."},
+    {q:"Selon McLean et Pontiff, que devient le rendement d'une stratégie après sa publication ?",o:["Il baisse d'environ 58 %","Il double","Il ne change pas","Il devient garanti"],e:"Une fois connue, une stratégie est exploitée par beaucoup de monde et rapporte moins."},
+    {q:"Un « golden cross », c'est…",o:["La MM50 qui passe au-dessus de la MM200","Le prix de l'or qui monte","Le RSI au-dessus de 70","Une bougie verte sans mèche"],e:"Signal haussier de suivi de tendance. L'inverse s'appelle un « death cross »."},
+    {q:"La stratégie de momentum de Moskowitz, Ooi et Pedersen achète un actif quand…",o:["Il a monté sur les 12 derniers mois","Il a baissé sur les 12 derniers mois","Son RSI est sous 30","Il verse un dividende"],e:"La tendance des 12 derniers mois a eu tendance à se prolonger sur les 58 marchés étudiés."}
+  ];
+  const B={
+    pattern(){const keys=Object.keys(PATTERNS),key=pick(keys),g=buildPattern(key,7,true);
+      return{q:'Quelle figure de bougies est surlignée ?',opts:shuffle([key,...shuffle(keys.filter(k=>k!==key)).slice(0,3)]).map(k=>({t:PATTERNS[k].name,ok:k===key})),ex:PATTERNS[key].long,
+        chart:{candles:g.candles,opt:{noGrid:true,axisW:10,slots:12,maxBody:30,highlight:{from:g.from,to:g.to}}}};},
+    trend(){const kind=pick(['up','down','flat']),g=window.__genTrend&&window.__genTrend(kind);if(!g)return B.rr();
+      return{q:'Avec les moyennes mobiles (MM20 en vert, MM50 en orange), quelle est la tendance ?',opts:[{t:'Haussière',ok:kind==='up'},{t:'Baissière',ok:kind==='down'},{t:'Pas de tendance claire',ok:kind==='flat'}],
+        ex:kind==='up'?'Prix au-dessus de la MM20, MM20 au-dessus de la MM50, MM50 qui monte : tendance haussière.':kind==='down'?'Prix sous la MM20, MM20 sous la MM50, MM50 qui descend : tendance baissière.':'MM50 presque plate et MM20 collée à elle : pas de tendance claire, mieux vaut attendre.',
+        chart:{candles:g.candles,opt:{series:[{vals:g.m50,color:css('--warn')},{vals:g.m20,color:css('--accent')}]}}};},
+    rsi(){if(Math.random()<0.5){const kind=pick(['up','down','flat']),g=genRSIZone(kind);if(!g)return B.dd();
+        return{q:'Dans quelle zone se trouve le RSI sur la dernière bougie ?',opts:[{t:'Surachat (au-dessus de 70)',ok:kind==='up'},{t:'Survente (en dessous de 30)',ok:kind==='down'},{t:'Zone neutre (30 à 70)',ok:kind==='flat'}],ex:ZONE_EX[kind](g.last),
+          chart:{candles:g.candles,opt:{slots:g.candles.length}},rsi:{vals:g.rsi,opt:{slots:g.candles.length}}};}
+      const kind=pick(['bear','bull']),g=genDiv(kind);if(!g)return B.dd();const d=divCharts(g),n=g.candles.length;
+      return{q:'Compare le prix et le RSI aux deux points marqués. Que vois-tu ?',opts:[{t:'Divergence baissière',ok:kind==='bear'},{t:'Divergence haussière',ok:kind==='bull'},{t:'Pas de divergence',ok:false}],ex:DIV_EX[kind],
+        chart:{candles:g.candles,opt:{...d.price,slots:n}},rsi:{vals:g.rsi,opt:{...d.rsi,slots:n}}};},
+    size(){const capital=pick([5000,10000,20000,25000,40000]),risk=pick([1,1,2]),entry=Math.round(80+Math.random()*300),dist=pick([2,4,5,8,10,20]),ra=capital*risk/100,good=Math.floor(ra/dist);
+      const set=[good];[Math.floor(capital/entry),good*10,Math.max(1,Math.round(good/2)),good*2,Math.floor(ra/entry)].forEach(v=>{if(v>0&&!set.includes(v)&&set.length<4)set.push(v);});let x=good+3;while(set.length<4){if(!set.includes(x))set.push(x);x+=5;}
+      return{q:"Combien d'actions acheter pour respecter ton risque ?",data:[['Capital',fmt(capital)+' DH'],['Risque',risk+' %'],['Entrée',fmt(entry)+' DH'],['Stop',fmt(entry-dist)+' DH']],
+        opts:shuffle(set).map(v=>({t:fmt(v)+' actions',ok:v===good})),ex:`${fmt(capital)} × ${risk} % = ${fmt(ra)} DH risqués. Distance au stop : ${dist} DH. ${fmt(ra)} ÷ ${dist} = ${fmt(good)} actions (arrondi vers le bas).`};},
+    lev(){const L=pick([5,10,20,25,50]),ans=100/L,pool=[1,2,4,5,10,20,50].filter(v=>v!==ans);
+      return{q:`Avec un levier ×${L}, quelle baisse du prix suffit à effacer toute ta mise ?`,opts:shuffle([ans,...shuffle(pool).slice(0,3)]).map(v=>({t:'−'+v+' %',ok:v===ans})),ex:`100 % ÷ ${L} = ${ans} %. Plus le levier est grand, plus la baisse qui te ruine est petite.`};},
+    rr(){const r=pick([1,2,3]),m={1:50,2:33,3:25},ans=m[r];
+      return{q:`Avec un ratio risque/rendement de 1:${r}, quel pourcentage de trades gagnants faut-il au minimum pour être à l'équilibre (hors frais) ?`,opts:[25,33,50,66].map(v=>({t:v+' %',ok:v===ans})),ex:`Formule : 1 ÷ (1 + ${r}) = ${ans} % environ. Plus tu vises loin par rapport à ton stop, moins tu as besoin d'avoir raison souvent.`};},
+    dd(){const loss=pick([20,25,50,75]),m={20:25,25:33,50:100,75:300},ans=m[loss],pool=[loss,m[loss],...Object.values(m)].filter((v,i,a)=>a.indexOf(v)===i);
+      const opts=shuffle(pool).slice(0,4);if(!opts.includes(ans))opts[0]=ans;
+      return{q:`Ton compte a perdu ${loss} %. Quel gain faut-il pour revenir au capital de départ ?`,opts:shuffle(opts).map(v=>({t:'+'+v+' %',ok:v===ans})),ex:`Il reste ${100-loss} % du capital ; pour revenir à 100, il faut gagner ${loss} ÷ ${100-loss} = +${ans} %. D'où l'importance de perdre petit.`};},
+    scam(){const s=pick(SCAMS);return{q:s.q,opts:[{t:"Arnaque ou signal d'alerte",ok:s.s},{t:'Plutôt fiable',ok:!s.s}],ex:s.e};},
+    news(){const sc=pick(NEWS),k=newsCandles(sc),others=shuffle(NEWS_MEANINGS.map((t,i)=>i).filter(i=>i!==sc.m)).slice(0,3);
+      return{q:`Tendance ${sc.trend==='up'?'haussière':'baissière'}, puis une nouvelle ${sc.news}. Que signifie la réaction du prix (zone grisée) ?`,opts:shuffle([sc.m,...others]).map(i=>({t:NEWS_MEANINGS[i],ok:i===sc.m})),ex:sc.e,chart:{candles:k,opt:newsChartOpt(sc,k)}};},
+    strat(){const s=pick(STRATS);return{q:s.q,opts:shuffle(s.o.map((t,i)=>({t,ok:i===0}))),ex:s.e};}
+  };
+  const PLAN=['pattern','trend','rsi','size','lev','rr','dd','scam','strat','news','rsi','strat'];
+  let qs,i,score,missed,cur;
+  function start(){qs=shuffle(PLAN);i=0;score=0;missed={};$('#g11-end').hidden=true;$('#g11-end').innerHTML='';ask();}
+  function ask(){
+    $('#g11-bar').style.width=(i/qs.length*100)+'%';$('#g11-score').textContent=score+' / '+i;
+    if(i>=qs.length)return finish();
+    const type=qs[i];cur=B[type]();cur.type=type;
+    $('#g11-step').textContent=`Question ${i+1} sur ${qs.length} · ${TYPE_LABEL[type].replace(/ \(.*\)/,'')}`;
+    $('#g11-q').textContent=cur.q;$('#g11-ex').hidden=true;$('#g11-next').hidden=true;
+    const dat=$('#g11-data');if(cur.data){dat.hidden=false;dat.innerHTML=cur.data.map(([k,v])=>`<div class="stat"><small>${k}</small><b>${v}</b></div>`).join('');}else dat.hidden=true;
+    $('#g11-charts').hidden=!cur.chart;$('#g11-rsi').hidden=!cur.rsi;draw();
+    answerRound('#g11-opts',cur.opts,o=>o.ok,ok=>{
+      if(ok)score++;else missed[cur.type]=(missed[cur.type]||0)+1;i++;$('#g11-score').textContent=score+' / '+i;
+      $('#g11-ex').hidden=false;$('#g11-ex').textContent=(ok?'Correct. ':'Raté. ')+cur.ex;
+      $('#g11-next').hidden=false;$('#g11-next').textContent=i>=qs.length?'Voir mon résultat':'Question suivante';$('#g11-next').focus();
+    });
+  }
+  function draw(){
+    if(!cur)return;
+    if(cur.chart&&!$('#g11-charts').hidden)drawCandles($('#g11-cv'),cur.chart.candles,cur.chart.opt);
+    if(cur.rsi&&!$('#g11-rsi').hidden)drawRSI($('#g11-rsi'),cur.rsi.vals,cur.rsi.opt);
+  }
+  function finish(){
+    ['#g11-charts','#g11-data','#g11-ex','#g11-next'].forEach(s=>$(s).hidden=true);$('#g11-q').textContent='';$('#g11-opts').innerHTML='';$('#g11-step').textContent='Défi terminé';
+    const lvl=score>=11?['Prêt pour le compte démo','Tu maîtrises les bases. Passe à TradingView ou E-Bourse et applique tes règles pendant au moins 3 mois.','pos']
+      :score>=8?['Bon niveau','Encore quelques révisions ciblées et tu seras prêt pour la démo.','pos']
+      :score>=5?['En progression','Les bases sont là. Refais les jeux indiqués ci-dessous puis retente le défi.','']
+      :['Débutant','Relis les chapitres 1, 1 bis et 2, refais les jeux 1 à 5, puis reviens.','neg'];
+    const rev=Object.keys(missed).map(t=>`<li>${TYPE_LABEL[t]}</li>`).join('');
+    const el=$('#g11-end');el.hidden=false;
+    el.innerHTML=`<div style="display:grid;gap:12px"><p class="eyebrow">Ton niveau</p><h3 class="${lvl[2]}" style="font-size:1.6rem">${lvl[0]} · ${score} / ${qs.length}</h3><p>${lvl[1]}</p>`+
+      (rev?`<div class="explain"><b>À revoir :</b><ul style="margin:6px 0 0;padding-left:18px">${rev}</ul></div>`:`<p class="explain">Sans faute. Bravo.</p>`)+
+      `<div class="row"><button class="btn primary" type="button" id="g11-again">Nouveau défi</button></div></div>`;
+    $('#g11-again').onclick=start;$('#g11-bar').style.width='100%';
+  }
+  $('#g11-next').onclick=ask;window.addEventListener('resize',draw);window.__g11draw=draw;start();
+})();
+
+/* ---------- Chapter 5 bis: pro methods (from L'Art du trading) ---------- */
+const PRO={};
+(function(){
+  PRO.dow=pathCandles([[0,104],[6,97],[12,103],[18,96.5],[24,102],[30,99],[36,108],[42,104],[50,120],[55,116],[64,138],[70,146],[75,139],[80,147],[85,140],[90,145],[99,122]],1.1,31);
+  const R=[[[0,95],[12,109.5],[20,98],[26,92]],[[0,95],[12,109.5],[16,106],[20,109],[26,121]],[[0,95],[12,109.5],[15,113.5],[18,107],[26,96]],[[0,95],[10,109.5],[13,112.5],[16,105.5],[19,113],[22,106.5],[26,111]]];
+  PRO.res=R.map((w,i)=>pathCandles(w,0.7,60+i));
+  PRO.rk=pathCandles([[0,100],[15,100.5],[27,112],[33,109],[45,121],[51,118],[63,130],[70,127],[76,131],[86,116],[92,119],[100,106]],0.7,41);
+  PRO.rsi=rsiCalc(PRO.rk.map(k=>k.c));
+  const lowIn=(a,b)=>{let m=a;for(let i=a;i<=b;i++)if(PRO.rsi[i]!=null&&PRO.rsi[i]<PRO.rsi[m])m=i;return m;};
+  PRO.buys=[lowIn(30,37),lowIn(48,55),lowIn(66,73)];
+  PRO.sell=PRO.rsi.findIndex((v,i)=>i>76&&v!=null&&v<46);if(PRO.sell<0)PRO.sell=86;
+  const g=pathCandles([[0,100],[5,101.5],[10,100],[14,101],[30,109],[46,116],[56,118]],0.55,51);
+  [[6,2.2],[8,-2.2],[15,4],[31,3],[47,3],[51,-6]].forEach(([at,d])=>{for(let i=at;i<g.length;i++){g[i].o+=d;g[i].c+=d;g[i].h+=d;g[i].l+=d;}});
+  PRO.gaps=g;
+})();
+function drawPro(){
+  const up=css('--up'),down=css('--down'),acc=css('--accent'),warn=css('--warn'),mut=css('--muted');
+  drawCandles($('#pro-dow'),PRO.dow,{noGrid:true,axisW:10,padT:26,bands:[{from:0,to:31,label:'Accumulation',color:acc},{from:32,to:63,label:'Participation',color:up},{from:64,to:99,label:'Distribution',color:down}]});
+  PRO.res.forEach((k,i)=>drawCandles($('#pro-r'+(i+1)),k,{noGrid:true,axisW:10,lines:[{y:110,color:down,dash:true,label:''}]}));
+  const n=PRO.rk.length;
+  drawCandles($('#pro-rsi-p'),PRO.rk,{slots:n,marks:PRO.buys.map(i=>({i,y:PRO.rk[i].l,label:'achat',color:up,below:true})).concat([{i:PRO.sell,y:PRO.rk[PRO.sell].h,label:'sortie',color:down}])});
+  drawRSI($('#pro-rsi-i'),PRO.rsi,{slots:n,mid50:true,noLast:true,marks:PRO.buys.map(i=>({i,y:PRO.rsi[i],color:up})).concat([{i:PRO.sell,y:PRO.rsi[PRO.sell],color:down}])});
+  const G=PRO.gaps;
+  drawCandles($('#pro-gaps'),G,{noGrid:true,axisW:10,marks:[{i:6,y:G[6].h,label:'commun',color:mut},{i:15,y:G[15].l,label:'rupture',color:up,below:true},{i:31,y:G[31].l,label:'continuation',color:acc,below:true},{i:47,y:G[47].h,label:'épuisement',color:warn},{i:51,y:G[51].l,label:'île : retournement',color:down,below:true}]});
+  drawAsym();drawAB();drawRuin();drawLiv();
+}
+function axisFont(c){c.font='11px "IBM Plex Mono", Consolas, monospace';c.textBaseline='middle';}
+function drawAsym(){
+  const {c,w,h}=setupCanvas($('#pro-asym')),L=52,R=16,T=12,B=26,pw=w-L-R,ph=h-T-B;
+  const lo=Math.log10(10),hi=Math.log10(1000),Y=v=>T+(hi-Math.log10(v))/(hi-lo)*ph,X=l=>L+(l-5)/(92-5)*pw;
+  axisFont(c);c.fillStyle=css('--muted');c.textAlign='right';
+  [10,30,100,300,1000].forEach(v=>{c.strokeStyle=css('--line');c.lineWidth=1;c.beginPath();c.moveTo(L,Y(v));c.lineTo(w-R,Y(v));c.stroke();c.fillText('+'+fmt(v)+' %',L-6,Y(v));});
+  c.textAlign='center';const pts=[10,20,30,40,50,60,75,90];
+  pts.forEach(l=>c.fillText('−'+l+' %',X(l),h-10));
+  c.strokeStyle=css('--down');c.lineWidth=2.2;c.beginPath();
+  for(let l=8;l<=91;l+=1){const g=l/(100-l)*100;const x=X(l),y=Y(Math.max(10,g));l===8?c.moveTo(x,y):c.lineTo(x,y);}c.stroke();
+  pts.forEach(l=>{const g=l/(100-l)*100;c.fillStyle=css('--down');c.beginPath();c.arc(X(l),Y(Math.max(10,g)),3.5,0,Math.PI*2);c.fill();
+    if([10,50,90].includes(l)){c.fillStyle=css('--ink');c.font='600 11px "IBM Plex Mono", Consolas, monospace';c.fillText('+'+fmt(g,0)+' %',Math.min(X(l),w-R-30),Y(g)-12);axisFont(c);c.textAlign='center';}});
+  c.textAlign='left';
+}
+function drawAB(){
+  const {c,w,h}=setupCanvas($('#pro-ab')),L=58,R=62,T=14,B=24,pw=w-L-R,ph=h-T-B;
+  const A=[1,1,0,1,1,0,1,1,0,1].map(x=>x?500:-1000),Bs=[0,1,0,0,1,0,1,0,0,1].map(x=>x?3000:-1000);
+  const cum=a=>a.reduce((r,v)=>{r.push(r[r.length-1]+v);return r;},[0]);const ca=cum(A),cb=cum(Bs);
+  const lo=Math.min(...ca,...cb)-500,hi=Math.max(...ca,...cb)+500,Y=v=>T+(hi-v)/(hi-lo)*ph,X=i=>L+i/10*pw;
+  axisFont(c);c.textAlign='right';c.fillStyle=css('--muted');
+  for(let v=Math.ceil(lo/2000)*2000;v<=hi;v+=2000){c.strokeStyle=v===0?css('--muted'):css('--line');c.lineWidth=1;c.setLineDash(v===0?[4,4]:[]);c.beginPath();c.moveTo(L,Y(v));c.lineTo(L+pw,Y(v));c.stroke();c.setLineDash([]);c.fillText(fmt(v),L-6,Y(v));}
+  c.textAlign='center';[0,5,10].forEach(i=>c.fillText(i===0?'départ':'trade '+i,X(i),h-10));
+  [[ca,css('--warn'),'A'],[cb,css('--accent'),'B']].forEach(([s,col,name])=>{c.strokeStyle=col;c.lineWidth=2.2;c.beginPath();s.forEach((v,i)=>i?c.lineTo(X(i),Y(v)):c.moveTo(X(i),Y(v)));c.stroke();
+    s.forEach((v,i)=>{c.fillStyle=col;c.beginPath();c.arc(X(i),Y(v),2.8,0,Math.PI*2);c.fill();});
+    c.textAlign='left';c.font='600 12px "IBM Plex Mono", Consolas, monospace';c.fillText(name+' '+(s[10]>=0?'+':'')+fmt(s[10]),X(10)+6,Y(s[10]));axisFont(c);c.textAlign='center';});
+  c.textAlign='left';
+}
+function ruinProb(p,e){const q=1-p;if(q>=2*p)return 1;return Math.pow(Math.sqrt(0.25+q/p)-0.5,100/e);}
+function drawRuin(){
+  const p=+$('#ruin-p').value/100;$('#ruin-pv').textContent=Math.round(p*100)+' %';
+  [50,20,10,5].forEach(e=>{const r=ruinProb(p,e)*100;const el=$('#ruin-'+e);el.textContent=(r<0.01?'< 0,01':fmt(r,r<1?2:1))+' %';el.className=r>20?'neg':r>2?'mid':'pos';});
+  const {c,w,h}=setupCanvas($('#ruin-cv')),L=48,R=14,T=12,B=26,pw=w-L-R,ph=h-T-B,X=e=>L+(e-2)/(50-2)*pw,Y=v=>T+(1-v)*ph;
+  axisFont(c);c.textAlign='right';c.fillStyle=css('--muted');
+  [0,.25,.5,.75,1].forEach(v=>{c.strokeStyle=css('--line');c.lineWidth=1;c.beginPath();c.moveTo(L,Y(v));c.lineTo(L+pw,Y(v));c.stroke();c.fillText(fmt(v*100)+' %',L-6,Y(v));});
+  c.textAlign='center';[2,10,20,30,40,50].forEach(e=>c.fillText(e+' %',X(e),h-10));
+  c.fillStyle=css('--up');c.globalAlpha=.12;c.fillRect(X(2),T,X(10)-X(2),ph);c.globalAlpha=1;
+  c.fillStyle=css('--up');c.textAlign='left';c.fillText('zone 1-10 %',X(2)+4,T+10);
+  c.strokeStyle=css('--down');c.lineWidth=2.4;c.beginPath();for(let e=2;e<=50;e+=0.5){const y=Y(ruinProb(p,e));e===2?c.moveTo(X(e),y):c.lineTo(X(e),y);}c.stroke();
+  c.fillStyle=css('--muted');c.textAlign='right';c.fillText('part du capital engagée par position →',L+pw,T+10);c.textAlign='left';
+}
+function drawLiv(){
+  const {c,w,h}=setupCanvas($('#pro-liv')),L=44,R=10,T=18,B=30,pw=w-L-R,ph=h-T-B;
+  const cats=['1 sur 5','1 sur 4','1 sur 3','1 sur 2'],Lv=[11,14,18,21],Cv=[-5,3,10,18],lo=-10,hi=25,Y=v=>T+(hi-v)/(hi-lo)*ph;
+  axisFont(c);c.textAlign='right';c.fillStyle=css('--muted');
+  [-10,0,10,20].forEach(v=>{c.strokeStyle=v===0?css('--muted'):css('--line');c.lineWidth=1;c.beginPath();c.moveTo(L,Y(v));c.lineTo(L+pw,Y(v));c.stroke();c.fillText(v+' %',L-6,Y(v));});
+  const gw=pw/cats.length,bw=Math.min(40,gw*0.32);
+  cats.forEach((cat,i)=>{const cx=L+gw*i+gw/2;
+    [[Lv[i],css('--accent'),-1],[Cv[i],css('--warn'),1]].forEach(([v,col,side])=>{const x=cx+side*(bw/2+2)-bw/2,y0=Y(0),y1=Y(v);c.fillStyle=col;c.fillRect(x,Math.min(y0,y1),bw,Math.max(1.5,Math.abs(y1-y0)));
+      c.fillStyle=css('--ink');c.textAlign='center';c.font='600 11px "IBM Plex Mono", Consolas, monospace';c.fillText((v>0?'+':'')+v+' %',x+bw/2,v>=0?y1-8:y1+10);axisFont(c);});
+    c.fillStyle=css('--muted');c.textAlign='center';c.fillText('gagne '+cat,cx,h-10);});
+  c.textAlign='left';
+}
+$('#ruin-p').addEventListener('input',drawRuin);
+
+/* ---------- Game 12: news reaction ---------- */
+(function(){
+  const cv=$('#g12-cv');let st=null,score=0,n=0;
+  function round(){
+    const sc=NEWS[Math.floor(Math.random()*NEWS.length)],k=newsCandles(sc);st={sc,k};draw();
+    $('#g12-q').textContent=`Tendance ${sc.trend==='up'?'haussière':'baissière'}, puis une nouvelle ${sc.news}. Le prix ${sc.react==='up'?'monte':'baisse'} (zone grisée). Qu'est-ce que ça signifie ?`;
+    $('#g12-ex').hidden=true;$('#g12-next').hidden=true;
+    const others=shuffle(NEWS_MEANINGS.map((t,i)=>i).filter(i=>i!==sc.m)).slice(0,3);
+    const opts=shuffle([sc.m,...others]).map(i=>({t:NEWS_MEANINGS[i],i}));
+    answerRound('#g12-opts',opts,o=>o.i===sc.m,ok=>{n++;if(ok)score++;$('#g12-score').textContent=score+' / '+n;
+      $('#g12-ex').hidden=false;$('#g12-ex').textContent=(ok?'Correct. ':'Raté. ')+sc.e;$('#g12-next').hidden=false;$('#g12-next').focus();});
+    $('#g12-opts').querySelectorAll('.opt').forEach(b=>b.classList.remove('mono'));
+  }
+  function draw(){if(st)drawCandles(cv,st.k,newsChartOpt(st.sc,st.k));}
+  $('#g12-next').onclick=round;window.addEventListener('resize',draw);window.__g12draw=draw;round();
+})();
+
+/* ---------- Game 13: take or skip ---------- */
+(function(){
+  let score=0,n=0;const pick=a=>a[Math.floor(Math.random()*a.length)];
+  function round(){
+    const good=Math.random()<0.45;
+    const trendUp=good?true:Math.random()<0.6,rsi=good?52+Math.floor(Math.random()*16):35+Math.floor(Math.random()*31);
+    const rr=good?pick([3,3.5,4,5]):pick([1.2,1.5,2,2.5,3,4]);
+    const entry=Math.round(80+Math.random()*320),dist=pick([3,4,5,8,10,12]),stop=entry-dist,target=+(entry+dist*rr).toFixed(1);
+    const c1=trendUp,c2=rsi>50,c3=rr>=3,take=c1&&c2&&c3;
+    $('#g13-data').innerHTML=[['Tendance',trendUp?'Haussière':'Baissière'],['RSI',String(rsi)],['Entrée',fmt(entry)+' DH'],['Stop',fmt(stop)+' DH'],['Objectif',fmt(target,target%1?1:0)+' DH']]
+      .map(([k,v])=>`<div class="stat"><small>${k}</small><b>${v}</b></div>`).join('');
+    $('#g13-ex').hidden=true;$('#g13-next').hidden=true;
+    const opts=[{t:'Prendre le trade',v:true},{t:'Passer',v:false}];
+    answerRound('#g13-opts',opts,o=>o.v===take,ok=>{n++;if(ok)score++;$('#g13-score').textContent=score+' / '+n;
+      const yes=b=>b?'oui':'non',qty=Math.floor(200/dist);
+      $('#g13-ex').hidden=false;
+      $('#g13-ex').textContent=(ok?'Correct. ':'Raté. ')+`Tendance haussière : ${yes(c1)}. RSI au-dessus de 50 : ${yes(c2)} (${rsi}). Ratio : gain ${fmt(target-entry,1)} ÷ risque ${dist} = ${fmt(rr,1)}, donc au moins 3 : ${yes(c3)}. `+(take?`Les trois conditions sont réunies : on prend le trade. Avec 20 000 DH et 1 % de risque, tu achètes ${fmt(qty)} actions (200 ÷ ${dist}).`:`Au moins une condition manque : on passe et on attend un meilleur setup. Le livre insiste : les bonnes occasions reviennent toujours.`);
+      $('#g13-next').hidden=false;$('#g13-next').focus();});
+    $('#g13-opts').querySelectorAll('.opt').forEach(b=>b.classList.remove('mono'));
+  }
+  $('#g13-next').onclick=round;round();
+})();
+
+/* ---------- Chapter 5 ter: Monte Carlo of a 1R/3R method ---------- */
+(function(){
+  let runs=null;
+  function simulate(){
+    const r=+$('#mc-risk').value,R=+$('#mc-rr').value,w=+$('#mc-wr').value/100;
+    $('#mc-wrv').textContent=Math.round(w*100)+' %';
+    runs=[];
+    for(let t=0;t<30;t++){
+      let eq=10000,peak=10000,dd=0,streak=0,maxStreak=0;const path=[eq];
+      for(let i=0;i<200;i++){
+        if(Math.random()<w){eq*=1+r*R;streak=0;}else{eq*=1-r;streak++;maxStreak=Math.max(maxStreak,streak);}
+        peak=Math.max(peak,eq);dd=Math.max(dd,1-eq/peak);path.push(eq);
+      }
+      runs.push({path,dd,maxStreak,final:eq});
+    }
+    const finals=runs.map(x=>x.final).sort((a,b)=>a-b),med=finals[15];
+    const lose=runs.filter(x=>x.final<10000).length,dd=runs.reduce((a,x)=>a+x.dd,0)/30,st=runs.reduce((a,x)=>a+x.maxStreak,0)/30;
+    $('#mc-med').textContent=fmt(med)+' DH';$('#mc-med').className=med>=10000?'pos':'neg';
+    $('#mc-lose').textContent=lose+' sur 30';$('#mc-lose').className=lose>15?'neg':lose>5?'mid':'pos';
+    $('#mc-dd').textContent='−'+fmt(dd*100,1)+' %';$('#mc-dd').className=dd>0.3?'neg':dd>0.12?'mid':'pos';
+    $('#mc-streak').textContent=fmt(st,0)+' pertes';
+    const ev=w*R-(1-w);
+    $('#mc-txt').textContent=`Espérance : ${w.toFixed(2).replace('.',',')} × ${R} − ${(1-w).toFixed(2).replace('.',',')} = ${(ev>=0?'+':'')}${fmt(ev,2)} R par trade. `+
+      (ev<=0?"La méthode perd de l'argent à long terme : aucun réglage du risque ne peut la sauver. ":"La méthode gagne en moyenne, mais regarde les séries de pertes : même un bon système enchaîne régulièrement une dizaine de pertes d'affilée. ")+
+      (r>=0.02?"Avec un risque aussi élevé, ces séries creusent des baisses énormes : c'est ainsi qu'on échoue à un challenge de prop firm ou qu'on abandonne.":"Avec un risque aussi petit, les séries de pertes restent supportables : on survit assez longtemps pour que l'avantage statistique joue.");
+    draw();
+  }
+  function draw(){
+    if(!runs)return;
+    const {c,w,h}=setupCanvas($('#mc-cv')),L=58,R=12,T=12,B=24,pw=w-L-R,ph=h-T-B;
+    let lo=Infinity,hi=-Infinity;runs.forEach(x=>x.path.forEach(v=>{lo=Math.min(lo,v);hi=Math.max(hi,v);}));
+    lo=Math.min(lo,9000);hi=Math.max(hi,11000);const Y=v=>T+(Math.log(hi)-Math.log(v))/(Math.log(hi)-Math.log(lo))*ph,X=i=>L+i/200*pw;
+    axisFont(c);c.textAlign='right';c.fillStyle=css('--muted');
+    const ticks=[lo,10000,hi].concat([Math.sqrt(lo*10000),Math.sqrt(hi*10000)]).sort((a,b)=>a-b);
+    ticks.forEach(v=>{c.strokeStyle=Math.abs(v-10000)<1?css('--muted'):css('--line');c.lineWidth=1;c.setLineDash(Math.abs(v-10000)<1?[4,4]:[]);c.beginPath();c.moveTo(L,Y(v));c.lineTo(L+pw,Y(v));c.stroke();c.setLineDash([]);c.fillText(fmt(v),L-6,Y(v));});
+    c.textAlign='center';[0,50,100,150,200].forEach(i=>c.fillText(i===0?'départ':i+' trades',X(i),h-10));
+    runs.forEach(x=>{c.strokeStyle=x.final>=10000?css('--up'):css('--down');c.globalAlpha=.35;c.lineWidth=1.2;c.beginPath();x.path.forEach((v,i)=>i?c.lineTo(X(i),Y(v)):c.moveTo(X(i),Y(v)));c.stroke();});
+    c.globalAlpha=1;
+    const sorted=runs.slice().sort((a,b)=>a.final-b.final),m=sorted[15];
+    c.strokeStyle=css('--ink');c.lineWidth=2.4;c.beginPath();m.path.forEach((v,i)=>i?c.lineTo(X(i),Y(v)):c.moveTo(X(i),Y(v)));c.stroke();
+    c.fillStyle=css('--ink');c.textAlign='right';c.font='600 11px "IBM Plex Sans", system-ui, sans-serif';c.fillText('trader médian',L+pw-4,Y(m.final)-10);c.textAlign='left';
+  }
+  ['#mc-risk','#mc-rr'].forEach(s=>$(s).addEventListener('change',simulate));$('#mc-wr').addEventListener('input',simulate);$('#mc-go').onclick=simulate;
+  window.__mcdraw=draw;window.addEventListener('resize',draw);simulate();
+})();
+
+/* ---------- Game 14: invalidation & target ---------- */
+(function(){
+  const cv=$('#g14-cv');let st=null,score=0,n=0;
+  function round(){
+    const S=100,k=pathCandles([[0,112],[10,104],[16,109.5],[26,100.4],[31,103.2]],0.55,Math.floor(Math.random()*1e9));
+    k.forEach(x=>{x.o=Math.max(x.o,S-0.3);x.c=Math.max(x.c,S-0.3);x.l=Math.min(Math.max(x.l,S-0.35+Math.random()*0.2),x.o,x.c);x.h=Math.max(x.h,x.o,x.c);});
+    const E=k[k.length-1].c,stop=+(S-0.9).toFixed(1),risk=E-stop;
+    if(Math.random()<0.5){
+      const cands=shuffle([{v:stop,ok:true,why:"Juste sous le support, avec une petite marge : si le prix passe là, le scénario (« le support tient ») est vraiment invalidé."},
+        {v:+(E-0.25).toFixed(2),ok:false,why:"Trop serré : il est dans le bruit normal du marché, tu seras sorti avant même que le support soit testé."},
+        {v:+(S+1.1).toFixed(1),ok:false,why:"Au-dessus du support : un simple retour sur le support déclenche ton stop, alors que ton idée n'est pas encore fausse."},
+        {v:+(S-11).toFixed(1),ok:false,why:"Trop loin : ton risque par action devient énorme, ta position minuscule, et le ratio vers l'objectif devient mauvais."}]).map((x,i)=>({...x,name:'ABCD'[i]}));
+      st={k,type:'stop',cands,E,S};
+      $('#g14-q').textContent="Tu achètes près du support. Quelle ligne est le meilleur stop (ton invalidation) ?";
+      const opts=cands.map(x=>({t:'Ligne '+x.name,x}));
+      answerRound('#g14-opts',opts,o=>o.x.ok,ok=>{n++;if(ok)score++;$('#g14-score').textContent=score+' / '+n;st.revealed=true;draw();
+        const best=cands.find(x=>x.ok);$('#g14-ex').hidden=false;$('#g14-ex').textContent=(ok?'Correct. ':'Raté. ')+`La bonne invalidation est la ligne ${best.name}. `+cands.filter(x=>!x.ok).map(x=>`Ligne ${x.name} : ${x.why}`).join(' ');$('#g14-next').hidden=false;$('#g14-next').focus();});
+    }else{
+      const m=[1.4,2,2.6,3.2,4,5][Math.floor(Math.random()*6)],Rz=+(E+risk*m).toFixed(1),ok3=m>=3;
+      st={k,type:'target',E,stop,Rz,m,S};
+      $('#g14-q').textContent="Entrée, stop et prochaine résistance sont tracés. Le trade offre-t-il au moins 3 R avant la résistance ?";
+      const opts=[{t:'Oui, au moins 3 R : je peux le prendre',v:true},{t:'Non : la résistance est trop proche, je passe',v:false}];
+      answerRound('#g14-opts',opts,o=>o.v===ok3,ok=>{n++;if(ok)score++;$('#g14-score').textContent=score+' / '+n;
+        $('#g14-ex').hidden=false;$('#g14-ex').textContent=(ok?'Correct. ':'Raté. ')+`Risque = ${fmt(E,1)} − ${fmt(stop,1)} = ${fmt(risk,1)} (1 R). Gain jusqu'à la résistance = ${fmt(Rz-E,1)}, soit ${fmt(m,1)} R. `+(ok3?"C'est au moins 3 R : le trade respecte la règle.":"C'est moins de 3 R : la résistance risque de bloquer le prix avant que le gain compense le risque. On passe.");$('#g14-next').hidden=false;$('#g14-next').focus();});
+    }
+    $('#g14-opts').querySelectorAll('.opt').forEach(b=>b.classList.remove('mono'));
+    $('#g14-ex').hidden=true;$('#g14-next').hidden=true;draw();
+  }
+  function draw(){
+    if(!st)return;const up=css('--up'),down=css('--down'),mut=css('--muted');
+    const zones=[{y0:st.S-0.4,y1:st.S+0.4,color:up,label:'support'}];let lines=[];
+    if(st.type==='stop')lines=st.cands.map(x=>({y:x.v,color:st.revealed?(x.ok?up:down):mut,dash:true,label:x.name}));
+    else{lines=[{y:st.E,color:mut,dash:true,label:'entrée'},{y:st.stop,color:down,dash:true,label:'stop'}];zones.push({y0:st.Rz-0.4,y1:st.Rz+0.4,color:down,label:'résist.'});}
+    drawCandles(cv,st.k,{noGrid:true,axisW:64,slots:36,lines,zones});
+  }
+  $('#g14-next').onclick=round;window.addEventListener('resize',draw);window.__g14draw=draw;round();
+})();
+
+/* ---------- SMC teaching charts ---------- */
+(function(){
+  function fix(k){k.forEach((x,i)=>{if(i>0)x.o=k[i-1].c;x.h=Math.max(x.h,x.o,x.c);x.l=Math.min(x.l,x.o,x.c);});return k;}
+  const A=(()=>{
+    const k=pathCandles([[0,107],[4,104.2],[9,105.9],[14,102.4],[18,104.3],[23,102.4],[24,102.5],[28,105.9],[32,103.8],[42,108.2]],0.3,4242);
+    for(let i=10;i<25;i++){k[i].l=Math.max(k[i].l,102.12);k[i].o=Math.max(k[i].o,102.2);k[i].c=Math.max(k[i].c,102.2);}
+    k[1].h=107.8;k[14].l=102.0;k[23].l=102.0;
+    k[25]={o:102.5,c:102.1,h:102.6,l:100.6};
+    k[26]={o:102.1,c:102.8,h:103.0,l:101.9};
+    k[27]={o:102.8,c:105.6,h:105.8,l:102.7};
+    k[28]={o:105.6,c:105.9,h:106.3,l:104.1};
+    for(let i=29;i<=32;i++){k[i].l=Math.max(k[i].l,103.6);}
+    k[18].h=Math.max(k[18].h,104.6);
+    return fix(k);
+  })();
+  const B=(()=>{
+    const k=pathCandles([[0,101.2],[3,101.55],[6,100.95],[9,101.5],[12,100.95],[13,101.2],[16,100.9],[18,100.35],[21,101.1],[26,101.9],[29,101.6],[39,103.2]],0.12,777);
+    for(let i=0;i<14;i++){k[i].h=Math.min(k[i].h,101.62);k[i].l=Math.max(k[i].l,100.82);}
+    k[18].l=100.2;
+    return fix(k);
+  })();
+  function draw(){
+    const up=css('--up'),down=css('--down'),mut=css('--muted'),acc=css('--accent');
+    const ca=$('#smc-a'),cb=$('#smc-b');
+    if(ca&&ca.clientWidth)drawCandles(ca,A,{noGrid:true,axisW:62,padT:20,
+      zones:[{y0:103.0,y1:104.1,color:acc,label:'FVG'}],
+      lines:[{y:100.3,color:down,dash:true,label:'stop'},{y:107.8,color:up,dash:true,label:'cible'},{y:102.0,color:mut,dash:true,label:'EQL'}],
+      segs:[{i0:18,y0:104.6,i1:27,y1:104.6,color:mut,dash:true,width:1.5}],
+      marks:[{i:25,y:100.6,label:'1. balayage',color:down,below:true},{i:27,y:105.8,label:'2. MSS',color:acc},{i:31,y:103.6,label:'3. entrée',color:up,below:true},{i:1,y:107.8,label:'liquidité',color:up}]});
+    if(cb&&cb.clientWidth)drawCandles(cb,B,{noGrid:true,axisW:62,padT:34,
+      bands:[{from:0,to:13,color:mut,label:'Asie'},{from:14,to:21,color:down,label:'Londres'},{from:22,to:39,color:up,label:'New York'}],
+      lines:[{y:101.62,color:mut,dash:true,label:'haut'},{y:100.82,color:mut,dash:true,label:'bas'}],
+      marks:[{i:18,y:100.2,label:'faux départ',color:down,below:true},{i:37,y:103.1,label:'vrai mouvement',color:up}]});
+  }
+  window.__smcdraw=draw;window.addEventListener('resize',draw);draw();
+})();
+
+/* ---------- Game 15: SMC reading ---------- */
+(function(){
+  const cv=$('#g15-cv');let st=null,score=0,n=0;
+  const f2=v=>fmt(v,2);
+  function done(ok,text){n++;if(ok)score++;$('#g15-score').textContent=score+' / '+n;st.revealed=true;draw();
+    $('#g15-ex').hidden=false;$('#g15-ex').textContent=(ok?'Correct. ':'Raté. ')+text;$('#g15-next').hidden=false;$('#g15-next').focus();}
+  function fvgRound(){
+    const bull=Math.random()<0.5,seed=Math.floor(Math.random()*1e9);
+    let k=pathCandles([[0,100],[6,98.8],[12,100.2]],0.35,seed);
+    const p=k[k.length-1].c,big=2.4+Math.random()*0.8,gap=0.6+Math.random()*0.6;
+    let t=[{o:p,c:p+0.3,h:p+0.5,l:p-0.2}];
+    t.push({o:p+0.3,c:p+0.3+big,h:p+0.45+big,l:p+0.2});
+    t.push({o:p+0.3+big,c:p+0.7+big,h:p+0.9+big,l:p+0.5+gap});
+    let q=t[2].c;for(let i=0;i<8;i++){const c=q+(Math.random()-0.35)*0.6;t.push({o:q,c,h:Math.max(q,c)+Math.random()*0.3,l:Math.max(Math.min(q,c)-Math.random()*0.3,t[2].l+0.3)});q=c;}
+    if(!bull)t=t.map(x=>({o:2*p-x.o,c:2*p-x.c,h:2*p-x.l,l:2*p-x.h}));
+    const i=k.length;k=k.concat(t);
+    const k1=k[i],k2=k[i+1],k3=k[i+2];
+    const lo=bull?k1.h:k3.h,hi=bull?k3.l:k1.l;
+    const cands=[{a:lo,b:hi,ok:true},{a:Math.min(k2.o,k2.c),b:Math.max(k2.o,k2.c)},{a:Math.min(k1.l,k3.l),b:Math.max(k1.h,k3.h)},{a:Math.min(k1.o,k1.c),b:Math.max(k1.o,k1.c)}];
+    st={type:'fvg',k,i,lo,hi};
+    $('#g15-q').textContent=`Les bougies 1, 2 et 3 sont surlignées. Entre quels prix se trouve le FVG ${bull?'haussier':'baissier'} ?`;
+    const opts=shuffle(cands).map(c=>({t:`${f2(c.a)} – ${f2(c.b)}`,c}));
+    answerRound('#g15-opts',opts,o=>!!o.c.ok,ok=>done(ok,`Le FVG va de ${f2(lo)} à ${f2(hi)} : c'est l'espace entre ${bull?'le plus haut de la bougie 1 et le plus bas de la bougie 3':'le plus bas de la bougie 1 et le plus haut de la bougie 3'}. Aucune mèche ne l'a couvert pendant la grande bougie. Ce n'est ni le corps de la grande bougie, ni toute la zone des trois bougies. Si le prix y revient, le cours y cherche une entrée ${bull?'acheteuse':'vendeuse'}, stop au-delà de la bougie 1.`));
+  }
+  function liqRound(){
+    const H=102,L=100,seed=Math.floor(Math.random()*1e9);
+    const k=pathCandles([[0,101],[4,101.9],[8,100.1],[12,101.9],[16,100.1],[20,101.9],[24,100.1],[28,101]],0.18,seed);
+    k.forEach(x=>{x.h=Math.min(x.h,H);x.l=Math.max(x.l,L);x.o=Math.min(Math.max(x.o,L+0.05),H-0.05);x.c=Math.min(Math.max(x.c,L+0.05),H-0.05);});
+    [4,12,20].forEach(j=>k[j].h=H);[8,16,24].forEach(j=>k[j].l=L);
+    const lv={A:H+0.35,B:H-0.3,C:(H+L)/2,D:L-0.35};
+    const ask=Math.random()<0.5?'sell':'buy';
+    const good=ask==='sell'?'A':'D';
+    st={type:'liq',k,H,L,lv,good};
+    $('#g15-q').textContent=ask==='sell'
+      ?"Le prix rebondit entre des sommets égaux et des creux égaux. Où se trouvent surtout les stops de ceux qui ont vendu sous la résistance ?"
+      :"Le prix rebondit entre des sommets égaux et des creux égaux. Où se trouvent surtout les stops de ceux qui ont acheté sur le support ?";
+    const opts=['A','B','C','D'].map(x=>({t:'Ligne '+x,x}));
+    answerRound('#g15-opts',opts,o=>o.x===good,ok=>done(ok,ask==='sell'
+      ?"Ligne A. Un vendeur place son stop juste au-dessus des sommets égaux (EQH). C'est la liquidité « buy side » : ces stops sont des ordres d'achat. Le cours s'attend souvent à ce que le prix vienne les chercher avant de repartir. C'est aussi une bonne zone pour prendre des bénéfices partiels quand on est acheteur."
+      :"Ligne D. Un acheteur place son stop juste sous les creux égaux (EQL). C'est la liquidité « sell side » : ces stops sont des ordres de vente. Un passage rapide sous ce niveau suivi d'un retour dans le range est une fausse cassure, un signal que le cours surveille."));
+  }
+  function structRound(){
+    const N=[6,8,10,12][Math.floor(Math.random()*4)],I=+(3+Math.random()*3).toFixed(1);
+    const pct=[0.12,0.18,0.22,0.35,0.45,0.6][Math.floor(Math.random()*6)];
+    const m=Math.max(2,Math.round(N*[0.25,0.35,0.6,0.8][Math.floor(Math.random()*4)]));
+    const valid=pct>=0.3||m>=N/2,depth=+(I*pct).toFixed(1);
+    const k=pathCandles([[0,100],[N,100+I],[N+m,100+I-depth],[N+m+6,100+I+1.2]],0.18,Math.floor(Math.random()*1e9));
+    st={type:'st',k,N,m,I,depth};
+    $('#g15-q').textContent=`Impulsion : +${fmt(I,1)} en ${N} bougies. Repli : −${fmt(depth,1)} (${Math.round(pct*100)} %) en ${m} bougies. Selon la règle distance/temps du cours, ce repli crée-t-il un vrai creux (HL) ?`;
+    const opts=[{t:'Oui, c’est un vrai creux',v:true},{t:'Non, repli trop petit et trop court',v:false}];
+    answerRound('#g15-opts',opts,o=>o.v===valid,ok=>done(ok,`Règle du cours : un repli compte s'il reprend au moins 30 % de l'impulsion OU s'il dure au moins la moitié de ses bougies (${N} ÷ 2 = ${N/2}). Ici : ${Math.round(pct*100)} % ${pct>=0.3?'≥':'<'} 30 %, et ${m} bougie${m>1?'s':''} ${m>=N/2?'≥':'<'} ${N/2}. `+(valid?"Le creux est valide : c'est lui qu'il faut surveiller. S'il est cassé, la structure change.":"Ce n'est qu'une pause dans l'impulsion. Ne place pas ton stop suiveur derrière ce petit creux.")));
+    $('#g15-opts').querySelectorAll('.opt').forEach(b=>b.classList.remove('mono'));
+  }
+  function round(){
+    $('#g15-ex').hidden=true;$('#g15-next').hidden=true;
+    const r=Math.random();(r<0.4?fvgRound:r<0.7?liqRound:structRound)();draw();
+  }
+  function draw(){
+    if(!st)return;const up=css('--up'),down=css('--down'),mut=css('--muted'),acc=css('--accent');
+    if(st.type==='fvg'){
+      drawCandles(cv,st.k,{noGrid:true,axisW:64,slots:st.k.length+2,highlight:{from:st.i,to:st.i+2},
+        zones:st.revealed?[{y0:st.lo,y1:st.hi,color:acc,label:'FVG'}]:[],
+        marks:[1,2,3].map(j=>({i:st.i+j-1,y:st.k[st.i+j-1].l,label:String(j),color:mut,below:true}))});
+    }else if(st.type==='liq'){
+      drawCandles(cv,st.k,{noGrid:true,axisW:64,slots:32,
+        lines:Object.entries(st.lv).map(([nm,y])=>({y,color:st.revealed?(nm===st.good?up:mut):mut,dash:true,label:nm})),
+        marks:[{i:12,y:st.H,label:'EQH',color:down},{i:16,y:st.L,label:'EQL',color:up,below:true}]});
+    }else{
+      drawCandles(cv,st.k,{noGrid:true,axisW:40,slots:st.k.length+2,
+        marks:[{i:0,y:100,label:'départ',color:mut,below:true},{i:st.N,y:100+st.I,label:'sommet',color:mut},{i:st.N+st.m,y:100+st.I-st.depth,label:'creux ?',color:acc,below:true}]});
+    }
+  }
+  $('#g15-next').onclick=round;window.addEventListener('resize',draw);window.__g15draw=draw;round();
+})();
+
+/* ---------- Trade checklist ---------- */
+(function(){
+  const ITEMS=[
+    ['ctx',"Contexte : la tendance en grande unité de temps (D1/H4) va dans mon sens",true],
+    ['zone',"Zone : j'entre sur un niveau clair (support/résistance, order block, FVG, offre/demande)",true],
+    ['liq',"Liquidité : je sais où sont les stops des autres, et le balayage a déjà eu lieu",false],
+    ['trig',"Déclencheur : j'ai une confirmation (cassure de structure, figure de bougie confirmée, RSI)",false],
+    ['time',"Timing : bonne session, et pas d'annonce économique majeure dans l'heure",false],
+    ['stop',"Stop : posé au-delà de l'invalidation, décidé avant d'entrer, et je ne le déplacerai pas",true],
+    ['tgt',"Cible : prochaine liquidité ou zone opposée, avec des partiels prévus",false],
+    ['psy',"Mental : pas de revanche, perte max du jour non atteinte, trade noté dans mon journal",true]
+  ];
+  const KEY='ck-draft-v1',box=$('#ck-items');
+  box.innerHTML=ITEMS.map(([id,t,crit])=>`<label class="ck"><input type="checkbox" id="ck-${id}"><span>${t}${crit?' <b class="chip bad">obligatoire</b>':''}</span></label>`).join('');
+  const fields=['mkt','dir','tf','cap','risk','e','s','t'];
+  const val=id=>$('#ck-'+id).value, num=id=>parseFloat(String(val(id)).replace(',','.'));
+  function save(){try{const d={};fields.forEach(f=>d[f]=val(f));ITEMS.forEach(([id])=>d['c_'+id]=$('#ck-'+id).checked);localStorage.setItem(KEY,JSON.stringify(d));}catch(e){}}
+  function load(){try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(!d)return;fields.forEach(f=>{if(d[f]!=null)$('#ck-'+f).value=d[f];});ITEMS.forEach(([id])=>$('#ck-'+id).checked=!!d['c_'+id]);}catch(e){}}
+  let summary='';
+  function calc(){
+    const cap=num('cap'),r=num('risk'),E=num('e'),S=num('s'),T=num('t'),buy=val('dir')==='buy';
+    const amt=cap*r/100,dist=Math.abs(E-S);
+    const checked=ITEMS.filter(([id])=>$('#ck-'+id).checked),missCrit=ITEMS.filter(([id,,c])=>c&&!$('#ck-'+id).checked);
+    $('#ck-n').textContent=checked.length+' / 8';
+    $('#ck-amt').textContent=isFinite(amt)&&amt>0?fmt(amt,2):'–';
+    const priced=[E,S,T].every(isFinite);
+    const orderOk=priced&&(buy?(S<E&&E<T):(T<E&&E<S));
+    const rr=orderOk?Math.abs(T-E)/dist:NaN,size=orderOk&&amt>0?amt/dist:NaN;
+    $('#ck-size').textContent=isFinite(size)?fmt(size,size<10?2:0)+' unités':'–';
+    $('#ck-rr').textContent=isFinite(rr)?'1 : '+fmt(rr,2):'–';$('#ck-rr').className=isFinite(rr)?(rr>=2?'pos':'neg'):'';
+    const v=$('#ck-verdict');let msg,col;
+    if(!priced){msg="Entre le prix d'entrée, le stop et la cible pour calculer la taille et le ratio.";col='';}
+    else if(!orderOk){msg=buy?"Pour un achat, il faut : stop < entrée < cible. Vérifie tes prix.":"Pour une vente, il faut : cible < entrée < stop. Vérifie tes prix.";col='neg';}
+    else if(r>2){msg=`Feu rouge : ${fmt(r,1)} % de risque, c'est trop. Reste entre 0,5 et 1 %, 2 % au grand maximum.`;col='neg';}
+    else if(missCrit.length){msg='Feu rouge : il manque un point obligatoire. '+missCrit.map(x=>'« '+x[1].split(' :')[0]+' »').join(', ')+'. On passe ce trade.';col='neg';}
+    else if(rr<2){msg=`Feu rouge : le ratio est de 1 : ${fmt(rr,2)}. Il faut au moins 1 : 2 (idéal 1 : 3). Cherche une meilleure entrée ou passe.`;col='neg';}
+    else if(checked.length<7){msg=`Feu orange : les points obligatoires sont là et le ratio est bon (1 : ${fmt(rr,2)}), mais ${8-checked.length} point${8-checked.length>1?'s':''} manque${8-checked.length>1?'nt':''}. Réduis la taille ou attends une meilleure confirmation.`;col='';}
+    else{msg=`Feu vert : le trade respecte tes règles. Ratio 1 : ${fmt(rr,2)}. Si le stop est touché, tu perds ${fmt(amt,2)}, et c'est prévu. Ça ne garantit pas le gain.`;col='pos';}
+    v.textContent=msg;v.className='explain '+col;
+    summary=[`Trade à vérifier : ${val('mkt')||'(marché ?)'} · ${buy?'Achat':'Vente'} · entrée en ${val('tf')}`,
+      `Capital ${val('cap')} · risque ${val('risk')} % (${isFinite(amt)?fmt(amt,2):'?'})`,
+      `Entrée ${val('e')||'?'} · stop ${val('s')||'?'} · cible ${val('t')||'?'} · ratio ${isFinite(rr)?'1:'+fmt(rr,2):'?'} · taille ${isFinite(size)?fmt(size,2):'?'} unités`,
+      'Coché : '+(checked.map(x=>x[1].split(' :')[0]).join(', ')||'rien'),
+      'Non coché : '+(ITEMS.filter(([id])=>!$('#ck-'+id).checked).map(x=>x[1].split(' :')[0]).join(', ')||'rien'),
+      'Verdict de la grille : '+msg].join('\n');
+    save();
+  }
+  load();
+  box.addEventListener('change',calc);fields.forEach(f=>{$('#ck-'+f).addEventListener('input',calc);$('#ck-'+f).addEventListener('change',calc);});
+  $('#ck-copy').onclick=async()=>{
+    let ok=false;try{await navigator.clipboard.writeText(summary);ok=true;}catch(e){
+      try{const ta=document.createElement('textarea');ta.value=summary;document.body.appendChild(ta);ta.select();ok=document.execCommand('copy');ta.remove();}catch(_){}}
+    $('#ck-msg').textContent=ok?'Résumé copié. Colle-le dans la conversation avec Claude.':'Copie impossible ici : sélectionne le texte du verdict à la main.';
+  };
+  $('#ck-reset').onclick=()=>{['mkt','e','s','t'].forEach(f=>$('#ck-'+f).value='');ITEMS.forEach(([id])=>$('#ck-'+id).checked=false);$('#ck-msg').textContent='';calc();};
+  calc();
+})();
+
+window.__static=()=>{drawTeaching();drawMarkets();drawGallery();drawPro();};
+window.__static();
+window.addEventListener('resize',window.__static);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{window.__static();window.__g2draw&&window.__g2draw();});
+
+/* redraw canvases when theme changes */
+const redrawAll=()=>['__g2draw','__g3draw','__g7draw','__g8draw','__g9draw','__g10draw','__g11draw','__g12draw','__g14draw','__g15draw','__smcdraw','__mcdraw','__static'].forEach(f=>window[f]&&window[f]());
+const mo=new MutationObserver(redrawAll);
+mo.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redrawAll);
+})();
+</script>
+</body></html>

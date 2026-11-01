@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>:root{color-scheme:light}body{margin:0}[hidden]{display:none!important}</style>
+<title>Leçons de L'Art du trading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F2F4F1; --surface:#FFFFFF; --sunk:#E7ECE8; --ink:#16211C; --muted:#56655E; --line:#D3DBD6;
+  --accent:#0B6E5F; --accent-ink:#FFFFFF; --up:#1E8A4F; --down:#C4413A; --warn:#A8690F;
+  --up-soft:#DDF1E5; --down-soft:#F8E1DF; --warn-soft:#F7EBD3;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0E1412; --surface:#16201C; --sunk:#1C2823; --ink:#E3EBE6; --muted:#97A79F; --line:#2B3A34;
+    --accent:#42C2A8; --accent-ink:#06201A; --up:#40C07B; --down:#EF6B60; --warn:#E3AC4C;
+    --up-soft:#15301F; --down-soft:#3A1C1A; --warn-soft:#33270F;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0E1412; --surface:#16201C; --sunk:#1C2823; --ink:#E3EBE6; --muted:#97A79F; --line:#2B3A34;
+  --accent:#42C2A8; --accent-ink:#06201A; --up:#40C07B; --down:#EF6B60; --warn:#E3AC4C;
+  --up-soft:#15301F; --down-soft:#3A1C1A; --warn-soft:#33270F;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--body);padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:980px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1.12;margin:0}
+h1{font-size:clamp(2.1rem,5.6vw,3.5rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.5rem,3.4vw,2.2rem);font-weight:700}
+h3{font-size:1.15rem;font-weight:700}
+p{margin:0}
+a{color:var(--accent)}
+.eyebrow{font:500 .75rem/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:1.08rem;color:var(--muted);max-width:64ch}
+nav.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:-16px;padding:10px 16px;overflow-x:auto}
+nav.top ul{display:flex;gap:6px;list-style:none;margin:0 auto;padding:0;max-width:980px;white-space:nowrap}
+nav.top a{display:block;padding:6px 12px;border-radius:999px;text-decoration:none;color:var(--ink);font-size:.9rem;font-weight:500}
+nav.top a:hover{background:var(--sunk)}
+header.hero{display:grid;gap:18px;padding-block:44px 32px}
+.meta{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:500 .74rem/1 var(--mono);padding:6px 9px;border-radius:99px;background:var(--sunk);color:var(--muted)}
+.chip.good{background:var(--up-soft);color:var(--up)} .chip.mid{background:var(--warn-soft);color:var(--warn)} .chip.bad{background:var(--down-soft);color:var(--down)}
+section{padding-block:40px 6px;display:grid;gap:20px;scroll-margin-top:60px}
+.sec-head{display:grid;gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 20px;display:grid;gap:8px;align-content:start}
+.card p,.card li{font-size:.95rem}
+.card ul{margin:0;padding-left:18px;display:grid;gap:5px}
+.term{font:500 .78rem/1.2 var(--mono);color:var(--accent);letter-spacing:.05em;text-transform:uppercase}
+.foryou{font-size:.92rem;border-left:3px solid var(--accent);padding:6px 0 6px 12px;color:var(--ink)}
+.foryou b{color:var(--accent)}
+.note{border-left:3px solid var(--warn);background:var(--warn-soft);padding:12px 16px;border-radius:0 8px 8px 0;font-size:.95rem}
+.note.red{border-color:var(--down);background:var(--down-soft)}
+.note.green{border-color:var(--up);background:var(--up-soft)}
+.big{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.big div{background:var(--surface);padding:16px 18px;display:grid;gap:4px;align-content:start}
+.big b{font-family:var(--display);font-size:1.05rem}
+.big span{font-size:.93rem;color:var(--muted)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 .74rem/1.2 var(--mono);text-transform:uppercase;letter-spacing:.07em;color:var(--muted);background:var(--sunk)}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tag{display:inline-block;font:500 .72rem/1 var(--mono);padding:4px 7px;border-radius:99px;white-space:nowrap}
+.tag.up{background:var(--up-soft);color:var(--up)} .tag.down{background:var(--down-soft);color:var(--down)} .tag.flat{background:var(--sunk);color:var(--muted)}
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:s}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:auto 1fr;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px}
+ol.steps li::before{content:counter(s);font:500 1.35rem/1 var(--mono);color:var(--accent)}
+ol.steps li div{display:grid;gap:3px}
+ol.steps li p{font-size:.93rem;color:var(--muted)}
+.phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.phase{padding:16px 18px;display:grid;gap:6px;background:var(--surface);border-right:1px solid var(--line)}
+.phase:last-child{border-right:0}
+.phase .who{font-size:.85rem;color:var(--muted)}
+.calc{background:var(--surface);border:2px solid var(--accent);border-radius:14px;padding:20px;display:grid;gap:14px}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+label.fld{display:grid;gap:6px;font-size:.88rem;color:var(--muted)}
+input[type=number]{font:500 1rem var(--mono);padding:9px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.stat{background:var(--bg);border-radius:8px;padding:10px 12px;display:grid;gap:2px}
+.stat small{font-size:.75rem;color:var(--muted)}
+.stat b{font:500 1.2rem/1.2 var(--mono);font-variant-numeric:tabular-nums}
+.pos{color:var(--up)} .neg{color:var(--down)} .mid{color:var(--warn)}
+.explain{font-size:.94rem;padding:12px 14px;border-radius:8px;background:var(--sunk)}
+.game{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;gap:14px}
+.game-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:baseline}
+.badge{font:500 .75rem/1 var(--mono);padding:6px 10px;border-radius:999px;background:var(--sunk);color:var(--muted)}
+.progress{height:6px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+.opt{text-align:left;font:500 .95rem/1.35 var(--body);padding:12px 14px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.ok{background:var(--up-soft);border-color:var(--up)} .opt.ko{background:var(--down-soft);border-color:var(--down)}
+.btn{font:600 .95rem/1 var(--body);padding:12px 16px;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.q{font-size:1.08rem;font-weight:600}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+footer{padding-block:44px 0;color:var(--muted);font-size:.85rem;display:grid;gap:8px}
+@media (max-width:560px){.phase{border-right:0;border-bottom:1px solid var(--line)}.phase:last-child{border-bottom:0}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head><body>
+
+<div class="wrap">
+<header class="hero">
+  <p class="eyebrow">Fiche de lecture · les 18 chapitres et la conclusion</p>
+  <h1>Leçons de L'Art du trading</h1>
+  <p class="lede">Ce qu'il faut retenir du livre de Thami Kabbaj (3e édition, 2015, environ 640 pages), reformulé simplement pour un débutant. Chaque partie se termine par ce que ça change concrètement pour toi.</p>
+  <div class="meta"><span class="chip">5 parties</span><span class="chip">18 chapitres</span><span class="chip">Analyse technique · psychologie · gestion du risque</span></div>
+</header>
+
+<nav class="top" aria-label="Sommaire">
+  <ul>
+    <li><a href="#essentiel">L'essentiel</a></li>
+    <li><a href="#psy">Psychologie</a></li>
+    <li><a href="#nouvelles">Réagir aux nouvelles</a></li>
+    <li><a href="#lire">Lire le marché</a></li>
+    <li><a href="#strategie">Le stratège</a></li>
+    <li><a href="#risque">Money management</a></li>
+    <li><a href="#styles">Choisir son style</a></li>
+    <li><a href="#parcours">Le parcours</a></li>
+    <li><a href="#nuances">Mes nuances</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+  </ul>
+</nav>
+
+<!-- ESSENTIEL -->
+<section id="essentiel">
+  <div class="sec-head"><p class="eyebrow">Si tu ne retiens qu'une page</p><h2>Les 12 idées du livre</h2></div>
+  <div class="big">
+    <div><b>Survivre d'abord, gagner ensuite</b><span>Ton capital est ton outil de travail. Un trader ruiné ne peut plus rien faire. Chaque décision passe d'abord par « combien je peux perdre ? ».</span></div>
+    <div><b>1 à 2 % de risque par trade, maximum</b><span>Si ton stop est touché, tu ne perds jamais plus de 1 à 2 % de ton capital. À ce niveau, une perte ne te bouleverse pas et tu restes lucide.</span></div>
+    <div><b>Viser 3 fois ce que tu risques</b><span>L'auteur ne prend un trade que si le gain potentiel vaut au moins 3 fois la perte acceptée. Tu peux alors te tromper 2 fois sur 3 et rester gagnant.</span></div>
+    <div><b>Le stop se pose avant d'entrer</b><span>Et on ne le recule jamais. On a le droit de le remonter pour protéger ses gains, jamais de l'éloigner pour « laisser une chance ».</span></div>
+    <div><b>La tendance est ton alliée</b><span>Acheter en tendance haussière, vendre en tendance baissière. Jouer contre la tendance, c'est le réflexe des novices, et c'est ce qui coûte le plus cher.</span></div>
+    <div><b>La réaction compte plus que la nouvelle</b><span>Une bonne nouvelle qui fait baisser le prix est un signal d'alarme. Le marché a souvent raison avant les experts.</span></div>
+    <div><b>On joue des probabilités, pas des certitudes</b><span>Aucune méthode ne gagne à tous les coups. Un trade perdant peut être un bon trade s'il respectait ton plan.</span></div>
+    <div><b>Attendre, comme un sniper</b><span>Ne trader que quand plusieurs signaux convergent. Le vrai travail consiste à éliminer les signaux faibles, pas à en chercher.</span></div>
+    <div><b>Ton pire ennemi, c'est toi</b><span>Ego, peur, cupidité, espoir, vengeance. La méthode compte, mais le mental compte autant, sinon plus.</span></div>
+    <div><b>Un plan de trading écrit</b><span>Il fixe tes entrées, tes stops, tes sorties et ta taille de position. Tu réfléchis avant la séance ; pendant la séance, tu appliques.</span></div>
+    <div><b>Simple et spécialisé</b><span>Un marché, une méthode, une unité de temps. Les meilleurs traders ont des systèmes simples qu'ils maîtrisent parfaitement.</span></div>
+    <div><b>Apprendre à marcher avant de courir</b><span>Formation, puis 4 à 6 mois de simulation, puis seulement 5 à 10 % de ton capital en réel. Compte au moins 2 ans de travail sérieux.</span></div>
+  </div>
+</section>
+
+<!-- PSYCHOLOGIE -->
+<section id="psy">
+  <div class="sec-head">
+    <p class="eyebrow">Parties 1 et 2 · chapitres 1 à 6</p>
+    <h2>Pourquoi les prix ne sont pas toujours logiques</h2>
+    <p class="lede">L'auteur commence par la théorie. En résumé : le prix d'un actif ne reflète pas seulement sa « vraie valeur », il reflète surtout ce que les gens croient et ressentent.</p>
+  </div>
+  <div class="grid2">
+    <div class="card"><p class="term">Chapitre 1 · Analyse fondamentale</p><h3>La « vraie valeur » ne suffit pas</h3>
+      <p>L'analyse fondamentale estime ce que vaut une entreprise (bénéfices, dettes, dirigeants). C'est utile à long terme, mais inefficace pour prévoir les krachs et les bulles. Juste avant le krach de 2000, presque tous les analystes américains conseillaient d'acheter. En 2001, Enron était encore recommandée à l'achat trois mois avant sa faillite.</p>
+      <p class="foryou"><b>Pour toi :</b> une action « pas chère » peut devenir encore moins chère. Avant d'acheter, il faut aussi le bon moment (le timing).</p></div>
+    <div class="card"><p class="term">Chapitre 3 · Conventions et bulles</p><h3>Le marché suit ce que la majorité croit</h3>
+      <p>Keynes comparait la Bourse à un concours de beauté : pour gagner, il faut deviner ce que les autres vont choisir, pas ce qu'on trouve beau soi-même. Une croyance partagée par tous peut faire monter un prix très loin, jusqu'au jour où plus personne n'y croit. Exemple : le pétrole passé de 40 $ à 150 $, puis retombé de plus de 75 % en six mois.</p>
+      <p class="foryou"><b>Pour toi :</b> quand tout le monde autour de toi parle de gains faciles, la fin de la hausse est souvent proche.</p></div>
+  </div>
+
+  <div class="sec-head"><h3>Les pièges du cerveau (chapitre 2) et comment s'en protéger</h3></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Biais</th><th>Ce qu'il te fait faire</th><th>La parade</th></tr></thead>
+    <tbody>
+      <tr><td><b>Aversion à la perte</b></td><td>Une perte fait environ deux fois plus mal qu'un gain égal ne fait plaisir. Tu gardes tes positions perdantes en espérant qu'elles remontent, et tu vends trop tôt celles qui gagnent.</td><td>Stop posé à l'avance et respecté. Objectif de gain fixé avant d'entrer.</td></tr>
+      <tr><td><b>Ancrage</b></td><td>Tu restes accroché à un chiffre sans importance, comme ton prix d'achat ou le plus haut historique.</td><td>Décide selon le graphique d'aujourd'hui, pas selon ton prix d'achat.</td></tr>
+      <tr><td><b>Dissonance cognitive</b></td><td>Quand le marché te donne tort, tu ne cherches que les infos qui te donnent raison.</td><td>Écris à l'avance ce qui invaliderait ton idée, et sors quand ça arrive.</td></tr>
+      <tr><td><b>Loi des petits nombres</b></td><td>Tu tires une règle de 2 ou 3 cas.</td><td>Juge une méthode sur 50 à 100 trades, pas sur une semaine.</td></tr>
+      <tr><td><b>Excès de confiance</b></td><td>Environ 90 % des gens se croient meilleurs que la moyenne. Après une série de gains, on augmente trop les mises.</td><td>Garde la même règle de risque, surtout après des gains.</td></tr>
+      <tr><td><b>Attribution personnelle</b></td><td>Les gains viennent de ton talent, les pertes de la malchance.</td><td>Tiens un journal de trading honnête, gains comme pertes.</td></tr>
+      <tr><td><b>Biais momentum</b></td><td>Tu crois que ce qui vient de monter va continuer à monter. Tu achètes au plus haut dans un range.</td><td>Regarde d'abord si le marché est en tendance ou en range.</td></tr>
+      <tr><td><b>Mauvaise leçon</b></td><td>Un jour, tu as gagné en ne respectant pas ton stop. Tu recommenceras… jusqu'à la grosse perte.</td><td>L'auteur y voit la pire chose qui puisse arriver à un débutant : le respect du plan passe avant le résultat.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="card">
+    <p class="term">Chapitres 3 et 7 · Théorie de Dow</p>
+    <h3>Les 3 phases d'un grand mouvement haussier</h3>
+    <div class="phases">
+      <div class="phase"><span class="tag flat">1 · Accumulation</span><p>Les nouvelles sont mauvaises et le public est pessimiste. Les investisseurs bien informés achètent discrètement aux vendeurs découragés.</p><p class="who">Qui achète : les initiés, les pros patients.</p></div>
+      <div class="phase"><span class="tag up">2 · Participation</span><p>Les bonnes nouvelles arrivent et la hausse accélère. C'est la phase la plus rentable.</p><p class="who">Qui achète : les pros et les suiveurs de tendance.</p></div>
+      <div class="phase"><span class="tag down">3 · Distribution</span><p>Euphorie : les journaux sont enthousiastes et tout le monde raconte ses gains. Les pros revendent au grand public.</p><p class="who">Qui achète : les débutants, au pire moment.</p></div>
+    </div>
+    <p class="foryou"><b>Pour toi :</b> l'objectif est d'« acheter la panique et vendre l'euphorie », l'inverse de ce que fait instinctivement la foule.</p>
+  </div>
+
+  <div class="card"><p class="term">Chapitres 5 et 6 · Analyse technique</p><h3>Pourquoi les graphiques fonctionnent (parfois)</h3>
+    <p>La nature humaine ne change pas : la peur et la cupidité dessinent les mêmes figures depuis des siècles. L'auteur montre par exemple une figure de bougies visible sur le Dow Jones dès 1929, bien avant que ces figures soient connues en Occident. Les graphiques marchent aussi en partie parce que beaucoup de gens les regardent : c'est une prophétie autoréalisatrice. Selon les études qu'il cite, environ 70 % des traders professionnels utilisent l'analyse technique.</p>
+    <p>Limite importante, reconnue par l'auteur : l'analyse technique peut être redoutable entre les mains d'un trader expérimenté et dangereuse entre celles d'un novice. Les faux signaux sont de plus en plus fréquents, surtout sur les petites unités de temps.</p>
+    <p class="foryou"><b>Pour toi :</b> les signaux sur graphiques hebdomadaires ou mensuels sont plus fiables que sur 5 minutes. Commence par le journalier et l'hebdomadaire.</p></div>
+</section>
+
+<!-- NOUVELLES -->
+<section id="nouvelles">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 4 · Analyse psychologique</p>
+    <h2>Lire la réaction du marché aux nouvelles</h2>
+    <p class="lede">Le principe : repérer d'abord la tendance, puis observer comment le prix réagit à une nouvelle importante. Voici le tableau de l'auteur, simplifié. Les cases en couleur sont les signaux les plus précieux.</p>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Tendance</th><th>Nouvelle</th><th>Le prix…</th><th>Ce que ça veut dire</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag up">Haussière</span></td><td>Bonne</td><td>monte</td><td>Normal : la tendance est saine.</td></tr>
+      <tr style="background:var(--down-soft)"><td><span class="tag up">Haussière</span></td><td>Bonne</td><td><b>baisse ou stagne</b></td><td><b>Alerte majeure</b> : les acheteurs s'épuisent, un retournement à la baisse se prépare. On arrête d'acheter.</td></tr>
+      <tr><td><span class="tag up">Haussière</span></td><td>Mauvaise</td><td>baisse un peu</td><td>Simple correction. On peut chercher un point d'achat.</td></tr>
+      <tr style="background:var(--up-soft)"><td><span class="tag up">Haussière</span></td><td>Mauvaise</td><td><b>monte quand même</b></td><td><b>Tendance très puissante</b> : acheter dans son sens, avec un stop sous la dernière consolidation.</td></tr>
+      <tr><td><span class="tag down">Baissière</span></td><td>Mauvaise</td><td>baisse</td><td>Normal. Attendre un rebond pour vendre.</td></tr>
+      <tr style="background:var(--up-soft)"><td><span class="tag down">Baissière</span></td><td>Mauvaise</td><td><b>monte</b></td><td><b>Signal majeur de retournement à la hausse</b> : les vendeurs perdent la main.</td></tr>
+      <tr><td><span class="tag down">Baissière</span></td><td>Bonne</td><td>monte un peu</td><td>Simple rebond dans la baisse. Ne pas s'emballer.</td></tr>
+      <tr style="background:var(--down-soft)"><td><span class="tag down">Baissière</span></td><td>Bonne</td><td><b>baisse quand même</b></td><td><b>Baisse très forte</b> : les vendeurs dominent totalement. Surtout ne pas acheter.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid2">
+    <div class="note">Les banques centrales peuvent freiner une tendance, pas l'arrêter. En 2001, la Fed a baissé ses taux 11 fois et le Nasdaq a continué à baisser jusqu'en 2003. En 2008, le plan de 700 milliards de dollars n'a pas empêché la chute.</div>
+    <div class="note green">Adage cité : « quand tous les journaux disent d'acheter, il faut vendre ». Quand tout le monde est déjà acheteur, il ne reste plus personne pour pousser le prix plus haut.</div>
+  </div>
+</section>
+
+<!-- LIRE LE MARCHE -->
+<section id="lire">
+  <div class="sec-head">
+    <p class="eyebrow">Partie 3 · chapitres 7 à 11</p>
+    <h2>Lire le marché comme un pro</h2>
+  </div>
+
+  <div class="grid2">
+    <div class="card"><p class="term">Chapitre 7 · Tendances</p><h3>Trois états du marché, trois stratégies</h3>
+      <ul>
+        <li><b>Haussier</b> (creux et sommets de plus en plus hauts) : on cherche à acheter.</li>
+        <li><b>Baissier</b> (creux et sommets de plus en plus bas) : on vend ou on reste dehors.</li>
+        <li><b>Sans tendance / range</b> : on achète près du support, on vend près de la résistance, avec des allers-retours rapides.</li>
+      </ul>
+      <p>Selon Wilder, un marché n'est en tendance qu'environ un tiers du temps. Le reste du temps, les débutants s'épuisent à acheter les sommets et à vendre les creux.</p>
+      <p class="foryou"><b>Signal d'alerte simple :</b> quand une baisse est plus grande que la dernière hausse, la tendance haussière est menacée (et inversement).</p></div>
+    <div class="card"><p class="term">Chapitre 7 · Lignes et canaux</p><h3>Tracer la tendance</h3>
+      <ul>
+        <li>Une ligne de tendance relie au moins 2 creux (ou 2 sommets). Plus elle a de points de contact, plus elle compte.</li>
+        <li>Pente idéale proche de 45°. Trop raide, le mouvement s'essouffle vite, comme un sprint.</li>
+        <li>Une cassure de ligne est une <b>alerte</b>, pas un signal de retournement à elle seule. Le prix revient souvent tester la ligne cassée (le « pull-back »).</li>
+        <li>Dans un canal : acheter en bas, prendre ses bénéfices en haut. Si le prix n'arrive plus à passer le milieu du canal, c'est un premier signe de faiblesse.</li>
+      </ul></div>
+    <div class="card"><p class="term">Chapitre 8 · Supports et résistances</p><h3>Les murs du marché</h3>
+      <ul>
+        <li>Une résistance cassée devient souvent un support, et inversement.</li>
+        <li>Les chiffres ronds (20, 50, 100…) freinent souvent le prix.</li>
+        <li>Les marchés ont une mémoire : un niveau peut rester actif pendant des années.</li>
+        <li>4 réactions possibles sur une résistance : rejet, petite pause puis hausse, <b>fausse cassure</b> (le prix passe au-dessus puis retombe), ou va-et-vient qui épuise le trader.</li>
+        <li>En tendance haussière, une résistance sert à <b>prendre ses bénéfices</b>, pas à vendre à découvert.</li>
+      </ul></div>
+    <div class="card"><p class="term">Chapitre 8 · Figures et gaps</p><h3>Les dessins qui annoncent un changement</h3>
+      <ul>
+        <li><b>Double creux / double sommet / tête-épaules</b> : validés seulement à la cassure de la « ligne de cou ». Objectif = hauteur de la figure reportée depuis cette ligne.</li>
+        <li><b>Drapeaux et triangles</b> : pauses avant la reprise de la tendance.</li>
+        <li><b>Gaps</b> (trous entre deux cotations) : commun (vite comblé, ne pas le suivre), de rupture (début de mouvement, on le suit), de continuation, d'épuisement (fin de mouvement).</li>
+        <li>Beaucoup de doubles creux échouent dans une forte baisse : ne pas s'entêter.</li>
+      </ul></div>
+  </div>
+
+  <div class="card">
+    <p class="term">Chapitre 9 · Bougies japonaises</p>
+    <h3>Les 10 figures à maîtriser (liste de Bigalow reprise par l'auteur)</h3>
+    <p>Doji · marteau · pendu · étoile du matin · étoile du soir · avalement haussier · avalement baissier · nuage noir · pénétrante · harami. Selon Bigalow, ces figures donnent plus de 75 % des signaux de retournement. Tu les pratiques dans le jeu 9 de ta page d'apprentissage.</p>
+    <div class="grid3">
+      <div class="note"><b>Règle 1 : la confirmation.</b> Une figure n'est qu'un signal avancé. On attend la bougie suivante dans le bon sens, parfois 1 à 3 bougies.</div>
+      <div class="note"><b>Règle 2 : le contexte.</b> Les figures marchent surtout sur les extrêmes (après une forte hausse ou une forte baisse, sur un support). En pleine tendance, elles donnent beaucoup de faux signaux.</div>
+      <div class="note"><b>Règle 3 : le titre.</b> Les bougies marchent très bien sur certains titres et mal sur d'autres. Il faut les tester sur l'historique avant de les utiliser.</div>
+    </div>
+    <p class="foryou"><b>Astuce de lecture (Toby Crabel) :</b> une période calme avec de petites bougies précède souvent une accélération. Quand une grosse bougie apparaît soudain dans un marché calme, il faut être aux aguets.</p>
+  </div>
+
+  <div class="card">
+    <p class="term">Chapitres 10 et 11 · Indicateurs</p>
+    <h3>La méthode centrale du livre : la zone des 50 du RSI</h3>
+    <p>C'est l'outil que l'auteur utilise partout dans ses exemples. Le RSI va de 0 à 100 ; 50 est le point d'équilibre entre acheteurs et vendeurs.</p>
+    <ul>
+      <li><b>RSI au-dessus de 50</b> : les acheteurs dominent. On ne cherche que des achats. En tendance haussière, le RSI oscille souvent entre 40-50 et 75-80.</li>
+      <li><b>RSI en dessous de 50</b> : les vendeurs dominent. On ne cherche que des ventes, ou on reste dehors. En tendance baissière, il oscille entre 20-30 et 50-60.</li>
+      <li><b>Point d'entrée préféré</b> : pendant une correction, le RSI redescend « se poser » sur 50 sans le casser, et une bougie de retournement apparaît. On achète avec un stop proche.</li>
+      <li><b>Retournement</b> : une divergence n'est validée que lorsque le RSI casse 50. L'auteur explique être resté acheteur jusqu'à fin mars 2000, puis être passé vendeur dès la validation, juste avant le krach du Nasdaq.</li>
+      <li><b>Divergence qui échoue</b> : si le RSI casse la ligne qui formait la divergence, c'est un signal fort dans le sens de la tendance, car ceux qui avaient anticipé sont piégés.</li>
+      <li>Le RSI casse souvent un niveau <b>avant</b> le prix : c'est un signal avancé.</li>
+    </ul>
+    <div class="tbl"><table>
+      <thead><tr><th>Indicateur</th><th>À quoi il sert</th><th>Le piège à éviter</th></tr></thead>
+      <tbody>
+        <tr><td><b>Stochastique</b></td><td>Très bon en range : acheter la survente, vendre le surachat. Réglage préféré de l'auteur : (34,5,5).</td><td>En tendance, il reste collé en haut ou en bas. Ne pas vendre juste parce qu'il est « suracheté ».</td></tr>
+        <tr><td><b>Moyennes mobiles</b></td><td>Montrer la tendance. MM20, MM50 et MM200 servent souvent de supports.</td><td>Elles sont en retard. Selon Wilder, un croisement peut coûter 30 à 40 % du mouvement.</td></tr>
+        <tr><td><b>MACD</b></td><td>Tendance et divergences. La ligne zéro sert de support ou de résistance.</td><td>Signaux tardifs. Toujours le confirmer avec autre chose.</td></tr>
+        <tr><td><b>Bandes de Bollinger</b></td><td>En range : la bande haute sert de résistance, la bande basse de support. Utiles aussi pour placer un stop.</td><td>En forte tendance, le prix « colle » à une bande.</td></tr>
+        <tr><td><b>Volume</b></td><td>Confirmer un retournement : grosse chute avec gros volume, puis figure de retournement.</td><td>Un volume faible rend les figures faciles à manipuler.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="foryou"><b>La règle d'or du chapitre 11 : la convergence.</b> Plus il y a de signaux au même endroit (tendance, support, RSI sur 50, figure de bougie), meilleur est le trade. Si tu veux jouer un retournement contre la tendance, prends une position partielle (1/3 ou 1/2), avec un stop proche, et renforce seulement quand le signal est confirmé.</p>
+  </div>
+</section>
+
+<!-- STRATEGE -->
+<section id="strategie">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 15 · inspiré de L'Art de la guerre de Sun Tzu</p>
+    <h2>Penser comme un stratège</h2>
+  </div>
+  <div class="grid3">
+    <div class="card"><h3>Défendre avant d'attaquer</h3><p>Paul Tudor Jones : jouer défensif et considérer chaque position ouverte comme une erreur possible. Victor Niederhoffer, star des années 1990, s'est entêté sur des banques thaïlandaises en 1997 et a dû fermer son fonds.</p></div>
+    <div class="card"><h3>Savoir fuir</h3><p>Une position perdante te met mal à l'aise ? Sors, reprends tes esprits, reviens plus tard. Rester hors du marché en période de doute est une vraie décision.</p></div>
+    <div class="card"><h3>La patience du guépard</h3><p>Il attend d'être sûr de sa proie. Avant chaque trade, demande-toi : « Cette position vaut-elle vraiment la peine ? » Tu n'es pas payé au nombre de trades.</p></div>
+    <div class="card"><h3>Ni impulsivité ni paralysie</h3><p>Tu as raté l'entrée ? N'y cours pas après, attends le point suivant. Mais n'attends pas non plus tant de confirmations que tout le monde est déjà dedans.</p></div>
+    <div class="card"><h3>Ton avantage de particulier</h3><p>Tu as moins d'argent et d'informations que les banques, mais tu es libre : pas de contraintes, pas d'obligation d'être investi. Conseil de l'auteur : éviter les techniques trop sophistiquées et privilégier le moyen terme.</p></div>
+    <div class="card"><h3>Pas d'ego, pas de vengeance</h3><p>Ne trade pas pour te « refaire » après une perte, ni pour prouver quoi que ce soit. Après une série de gains, reste vigilant ; après une série de pertes, fais une pause.</p></div>
+    <div class="card"><h3>Pas de trade avant un chiffre clé</h3><p>Paul Tudor Jones ne prend pas de position avant une annonce économique importante : pour lui, c'est une loterie. Attends que le marché se calme.</p></div>
+    <div class="card"><h3>Préparer ses scénarios</h3><p>Avant la séance, prévois quoi faire si le scénario A ou B se produit. Réfléchis au calme avant ; applique au calme pendant. Ne modifie jamais ton système en pleine séance.</p></div>
+    <div class="card"><h3>Le processus avant le résultat</h3><p>À court terme, on peut perdre en étant bon et gagner en étant mauvais. Gagner, c'est appliquer son plan ; les profits suivent sur la durée.</p></div>
+  </div>
+</section>
+
+<!-- RISQUE -->
+<section id="risque">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitre 16 · le plus important selon l'auteur</p>
+    <h2>Le money management en pratique</h2>
+    <p class="lede">Toute stratégie repose sur trois piliers : l'analyse (dans quel sens ?), la tactique (où entrer, où sortir ?) et la gestion du risque (combien ?). Le troisième est celui que les débutants négligent.</p>
+  </div>
+
+  <div class="calc" id="calc">
+    <div class="game-head"><h3>Calculateur : combien acheter, et le trade vaut-il la peine ?</h3><span class="badge">RÈGLES DU LIVRE</span></div>
+    <div class="fields">
+      <label class="fld" for="c-cap">Capital (DH)<input id="c-cap" type="number" min="0" step="100" value="20000"></label>
+      <label class="fld" for="c-risk">Risque par trade (%)<input id="c-risk" type="number" min="0.1" max="10" step="0.1" value="1"></label>
+      <label class="fld" for="c-entry">Prix d'entrée<input id="c-entry" type="number" min="0" step="0.01" value="250"></label>
+      <label class="fld" for="c-stop">Stop (sous le support)<input id="c-stop" type="number" min="0" step="0.01" value="240"></label>
+      <label class="fld" for="c-target">Objectif (résistance)<input id="c-target" type="number" min="0" step="0.01" value="285"></label>
+    </div>
+    <div class="stats">
+      <div class="stat"><small>Montant risqué</small><b id="o-risk"></b></div>
+      <div class="stat"><small>Nombre d'actions</small><b id="o-qty"></b></div>
+      <div class="stat"><small>Coût de la position</small><b id="o-cost"></b></div>
+      <div class="stat"><small>Ratio gain / risque</small><b id="o-rr"></b></div>
+    </div>
+    <p class="explain" id="o-txt"></p>
+  </div>
+
+  <div class="grid2">
+    <div class="card"><p class="term">Formule clé</p><h3>Taille de position</h3>
+      <p><b>Nombre d'actions = (capital × % de risque) ÷ (prix d'entrée − stop)</b></p>
+      <p>Le stop est placé là où ton scénario devient faux : sous un support, en tenant compte de la volatilité. Ensuite, c'est le <b>nombre d'actions</b> que tu ajustes, jamais le stop. Resserrer le stop pour acheter plus, c'est se faire sortir juste avant que ton idée se réalise.</p></div>
+    <div class="card"><p class="term">Pourquoi perdre peu est vital</p><h3>L'asymétrie des pertes</h3>
+      <div class="tbl"><table><thead><tr><th>Perte</th><th>Gain nécessaire pour revenir</th></tr></thead><tbody>
+        <tr><td class="num">−15 %</td><td class="num">+17,6 %</td></tr><tr><td class="num">−30 %</td><td class="num">+42,9 %</td></tr><tr><td class="num">−50 %</td><td class="num">+100 %</td></tr></tbody></table></div></div>
+    <div class="card"><p class="term">Le chiffre qui compte vraiment</p><h3>Gain moyen / perte moyenne</h3>
+      <p>Exemple du livre sur 10 trades. Le trader A gagne 7 fois sur 10 mais gagne 500 et perd 1 000 : résultat +500. Le trader B ne gagne que 4 fois sur 10 mais gagne 3 000 et perd 1 000 : résultat +6 000.</p>
+      <p>Selon John Murphy, cité par l'auteur, les meilleurs traders ne gagnent qu'environ 40 % de leurs trades.</p>
+      <p class="foryou"><b>Pour toi :</b> l'important n'est pas d'avoir souvent raison, mais de gagner beaucoup quand tu as raison et de perdre peu quand tu as tort.</p></div>
+    <div class="card"><p class="term">Risque de ruine</p><h3>Pourquoi ne jamais tout miser</h3>
+      <p>Avec 60 % de réussite et des gains 2 fois plus grands que les pertes, le risque de ruine est d'environ 21 % si tu engages la moitié de ton capital à chaque fois, 2 % avec un cinquième, et presque 0 % avec un dixième. Diminuer la part exposée fait chuter ce risque bien plus vite que proportionnellement.</p>
+      <p>La formule de Kelly donne des mises beaucoup trop grosses selon l'auteur. Son conseil : pouvoir encaisser une série de 20 pertes sans être ruiné, et un day trader qui perd 5 à 10 % dans la journée doit arrêter jusqu'au lendemain.</p></div>
+    <div class="card"><p class="term">La méthode de Livermore</p><h3>Entrer en deux temps</h3>
+      <p>Ouvre la moitié de ta position. Si le marché te donne raison (nouveau point d'appui, RSI sur 50), ajoute la seconde moitié et remonte ton stop. Si tu te trompes, tu ne perds que la moitié.</p>
+      <p>Dans l'exemple chiffré du livre, cette méthode reste gagnante même avec seulement 20 % de trades réussis, alors que tout investir d'un coup perd de l'argent. Elle marche en tendance, mal en range.</p>
+      <p class="foryou"><b>À ne jamais faire :</b> « moyenner à la baisse », c'est-à-dire racheter une position perdante pour baisser son prix moyen.</p></div>
+    <div class="card"><p class="term">Gérer une position ouverte</p><h3>Stop suiveur et sorties</h3>
+      <ul>
+        <li>Quand le prix approche de l'objectif, remonte ton stop : ne laisse jamais un gain redevenir une perte.</li>
+        <li>Sors par morceaux sur les niveaux clés et garde une partie pour la suite du mouvement.</li>
+        <li>Un gap peut te faire perdre plus que prévu sous ton stop. C'est pour ça qu'on diversifie et qu'on évite le levier.</li>
+      </ul></div>
+  </div>
+  <div class="note red"><b>Les 4 règles de risque de l'auteur :</b> 1) ne prendre que les trades avec un ratio gain/risque d'au moins 3 ; 2) en swing trading, répartir sur des positions non corrélées (pas plus de 10 % du capital sur une seule) ; 3) en day trading, pas plus de 3 positions à la fois ; 4) jamais plus de 1 à 2 % du capital perdu sur une position.</div>
+</section>
+
+<!-- STYLES -->
+<section id="styles">
+  <div class="sec-head">
+    <p class="eyebrow">Chapitres 17 et 18 · conseils pratiques</p>
+    <h2>Quel style choisir ?</h2>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Style</th><th>Durée</th><th>Temps demandé</th><th>Avantages</th><th>Dangers</th></tr></thead>
+    <tbody>
+      <tr><td><b>Investissement</b></td><td>3 à 10 ans et plus</td><td>Faible</td><td>Peu de stress, gros gains si on entre au début d'une hausse.</td><td>Acheter au sommet, rester bloqué des années, garder une action qui s'effondre (Alcatel, Dexia).</td></tr>
+      <tr style="background:var(--up-soft)"><td><b>Swing trading</b> <span class="chip good">conseillé pour débuter</span></td><td>Quelques jours à 1 mois</td><td>1 à 2 h par jour après la formation</td><td>Compatible avec un travail ou des études, timing et gestion du risque, moins stressant.</td><td>Gaps de nuit (d'où la diversification), suractivité.</td></tr>
+      <tr><td><b>Day trading</b></td><td>Minutes à heures</td><td>Concentration totale, 2-3 h</td><td>Pas de risque la nuit, on repart à zéro chaque jour.</td><td>Stress, frais, overtrading, addiction. Selon l'auteur, un débutant n'y tient que quelques mois.</td></tr>
+      <tr><td><b>Scalping</b></td><td>Secondes à minutes</td><td>Écran en continu</td><td>Beaucoup d'occasions.</td><td>Terrain des algorithmes (plus de 60 % des transactions) : beaucoup de bruit et de pièges.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="grid2">
+    <div class="card"><h3>Choisir son courtier</h3><ul>
+      <li>Courtier régulé par une autorité reconnue. Au Maroc, vérifie l'agrément AMMC pour les actions marocaines.</li>
+      <li>Pas de frais minimum élevés par ordre. Dans un concours étudié par l'auteur, seulement 10 % des participants gagnaient, et les pertes venaient beaucoup des frais.</li>
+      <li><b>Ne jamais déposer tout ton capital chez un courtier</b> : il recommande environ 5 % maximum de ton épargne. Un courtier peut faire faillite (Lehman Brothers).</li>
+    </ul></div>
+    <div class="card"><h3>Équipement et organisation</h3><ul>
+      <li>Au début, un seul écran suffit. Évite de trader depuis un téléphone, sauf pour couper une position en urgence.</li>
+      <li>Prévois une solution de secours (4G, portable) pour pouvoir sortir de tes positions en cas de panne.</li>
+      <li>À la maison : horaires fixes, pas de téléphone ni de forums pendant la séance, 2-3 h maximum devant l'écran.</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- PARCOURS -->
+<section id="parcours">
+  <div class="sec-head">
+    <p class="eyebrow">Le chemin recommandé par l'auteur</p>
+    <h2>Ton parcours, étape par étape</h2>
+  </div>
+  <ol class="steps">
+    <li><div><h3>Apprendre les bases</h3><p>Les marchés, les outils, la gestion du risque. Quelques vidéos YouTube ne suffisent pas : l'auteur compare la formation d'un trader à celle d'un chirurgien.</p></div></li>
+    <li><div><h3>Choisir et se spécialiser</h3><p>Un marché, une méthode simple, une unité de temps. Choisis selon ta personnalité, ton temps disponible et ton capital. Si tu stagnes plus d'un an sur un marché, essaie-en un autre.</p></div></li>
+    <li><div><h3>Écrire son plan de trading</h3><p>Critères d'entrée, placement du stop, prises de bénéfices, taille de position, scénario catastrophe, et une vision réaliste de là où tu veux être dans quelques années.</p></div></li>
+    <li><div><h3>Simuler pendant 4 à 6 mois</h3><p>En argent virtuel, mais comme si c'était réel, « comme les pilotes d'avion » : comprendre le rythme du marché, repérer tes erreurs, gagner en sang-froid. Garde un journal de chaque trade.</p></div></li>
+    <li><div><h3>Passer au réel avec 5 à 10 % du capital</h3><p>Uniquement de l'argent que tu acceptes de perdre. Concentre-toi sur le processus, pas sur le gain.</p></div></li>
+    <li><div><h3>Augmenter seulement après des preuves</h3><p>N'augmente ta taille qu'après une performance régulière sur la durée. L'auteur parle de 12 à 24 mois avant de gérer l'argent d'autres personnes.</p></div></li>
+  </ol>
+  <div class="grid3">
+    <div class="note"><b>Attentes réalistes.</b> Les meilleurs gérants du monde font environ 30 % par an, soit moins de 3 % par mois. Beaucoup de débutants espèrent 30 % par mois.</div>
+    <div class="note"><b>Durée.</b> Compte au moins 2 ans de travail intensif pour atteindre un bon niveau. Les grands traders ont souvent connu plusieurs années de pertes avant de réussir.</div>
+    <div class="note red"><b>Interdit.</b> Ne jamais emprunter pour trader. L'argent qu'on a peur de perdre fait prendre de mauvaises décisions.</div>
+  </div>
+  <div class="card"><h3>Les 3 phases que traversent presque tous les débutants</h3>
+    <p><b>1. Accumulation</b> : on dévore livres et vidéos, on se croit capable de battre le marché. <b>2. Stagnation</b> : trop d'informations, des doutes, la motivation baisse, et beaucoup abandonnent ici. <b>3. Déclic ou abandon</b> : les premiers trades réels, souvent faits dans l'euphorie, mènent à de grosses pertes, sauf pour ceux qui ont appliqué les règles de risque. Savoir que la phase 2 est normale aide à tenir.</p>
+    <p class="foryou"><b>La qualité n°1 selon l'auteur : la persévérance.</b> Pas les diplômes. Il cite un vendeur de hot-dogs devenu l'un des meilleurs traders d'une société de trading, alors qu'un diplômé de Harvard a abandonné.</p></div>
+</section>
+
+<!-- NUANCES -->
+<section id="nuances">
+  <div class="sec-head">
+    <p class="eyebrow">Mon regard critique</p>
+    <h2>Ce qu'il faut garder en tête en lisant ce livre</h2>
+  </div>
+  <div class="grid2">
+    <div class="card"><div class="meta"><span class="chip mid">PARTI PRIS</span></div><h3>Un auteur convaincu</h3><p>Thami Kabbaj défend très fortement l'analyse technique et cite souvent sa propre école de trading. Ses études de cas sont racontées après coup : il est plus facile de voir un signal une fois qu'on connaît la suite (c'est le biais rétrospectif).</p></div>
+    <div class="card"><div class="meta"><span class="chip mid">À NUANCER</span></div><h3>« Le long terme n'est plus la panacée »</h3><p>C'est vrai pour une action isolée : Carrefour, Alcatel ou Dexia l'ont montré. Mais pour un indice diversifié, les études récentes (SPIVA) montrent que la plupart des professionnels ne battent pas l'indice sur 15 ans. Investir régulièrement dans un indice reste la base la plus solide, même si tu fais du trading à côté.</p></div>
+    <div class="card"><div class="meta"><span class="chip">DATÉ</span></div><h3>Un livre de 2015</h3><p>Pas de crypto, peu de choses sur l'IA, des chiffres de marché anciens. Les principes (risque, psychologie, tendance) restent valables ; les exemples de marché ont vieilli.</p></div>
+    <div class="card"><div class="meta"><span class="chip good">CONFIRMÉ</span></div><h3>Ce qui tient toujours</h3><p>Ses chiffres sur les échecs des day traders (environ 90 % de perdants) concordent avec les études récentes (ESMA, Barber et al.). Et ses règles de gestion du risque sont celles de la plupart des traders reconnus (1 % de Larry Hite, stops de Kovner).</p></div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="sec-head"><p class="eyebrow">Vérifie ce que tu as retenu</p><h2>Quiz sur le livre</h2></div>
+  <div class="game">
+    <div class="game-head"><h3>12 questions sur L'Art du trading</h3><span class="badge" id="qz-score">0 / 0</span></div>
+    <div class="progress"><i id="qz-bar"></i></div>
+    <div id="qz-body"></div>
+  </div>
+</section>
+
+<section id="livres">
+  <div class="sec-head"><h3>Pour aller plus loin : les livres que cite l'auteur</h3></div>
+  <div class="card"><ul>
+    <li><b>Jack Schwager</b>, <i>Les Secrets des grands traders</i> (Market Wizards) : des entretiens avec les meilleurs traders.</li>
+    <li><b>Edwin Lefèvre</b>, <i>Mémoires d'un spéculateur</i> : la vie romancée de Jesse Livermore.</li>
+    <li><b>Mark Douglas</b>, <i>Traders, entrez dans la zone</i> : la psychologie du trading.</li>
+    <li><b>Alexander Elder</b>, <i>Vivre du trading</i> : un classique complet pour débutant.</li>
+    <li><b>Steve Nison</b>, <i>Les Chandeliers japonais</i> : la référence sur les bougies.</li>
+    <li><b>Thami Kabbaj</b>, <i>Psychologie des grands traders</i> : la suite logique de ce livre.</li>
+  </ul></div>
+</section>
+
+<footer>
+  <p>Fiche rédigée à partir d'une lecture complète de <i>L'Art du trading</i> (Thami Kabbaj, Eyrolles, 3e édition, 2015). Les idées sont résumées et reformulées ; seul le livre fait foi pour le détail des méthodes.</p>
+  <p>Support pédagogique, pas un conseil en investissement.</p>
+</footer>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const fmt=(n,d=0)=>n.toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+/* calculator */
+function calc(){
+  const cap=+$('#c-cap').value||0,r=+$('#c-risk').value||0,e=+$('#c-entry').value||0,s=+$('#c-stop').value||0,t=+$('#c-target').value||0;
+  const risk=cap*r/100,dist=e-s,gain=t-e;
+  if(dist<=0||e<=0){['#o-risk','#o-qty','#o-cost','#o-rr'].forEach(x=>$(x).textContent='—');$('#o-txt').textContent="Pour un achat, le stop doit être en dessous du prix d'entrée. Place-le sous le support le plus proche.";return;}
+  const qty=Math.floor(risk/dist),cost=qty*e,rr=gain>0?gain/dist:0;
+  $('#o-risk').textContent=fmt(risk)+' DH';
+  $('#o-qty').textContent=fmt(qty);
+  $('#o-cost').textContent=fmt(cost)+' DH';
+  $('#o-rr').textContent=gain>0?'1 : '+fmt(rr,1):'—';
+  $('#o-rr').className=rr>=3?'pos':rr>=2?'mid':'neg';
+  let msg=`Tu risques ${fmt(risk)} DH (${fmt(r,1)} % de ton capital). Avec un stop à ${fmt(dist,2)} sous l'entrée, tu peux acheter ${fmt(qty)} actions. Si le stop est touché, tu perds environ ${fmt(qty*dist)} DH. `;
+  if(qty===0)msg+="Ton stop est trop loin pour ce niveau de risque : prends un plus petit risque ailleurs, ou attends un meilleur point d'entrée. ";
+  if(cost>cap)msg+="Attention : la position coûte plus que ton capital, cela supposerait du levier. Réduis la taille. ";
+  if(r>2)msg+="Le livre recommande de ne pas dépasser 1 à 2 % de risque par trade. ";
+  if(gain<=0)msg+="Indique un objectif au-dessus du prix d'entrée (la prochaine résistance).";
+  else if(rr>=3)msg+=`Ratio 1:${fmt(rr,1)} : le trade respecte la règle de l'auteur (au moins 3 fois le risque).`;
+  else if(rr>=2)msg+=`Ratio 1:${fmt(rr,1)} : acceptable pour beaucoup de traders, mais sous le seuil de 3 conseillé par l'auteur. Cherche une meilleure entrée (plus proche du support).`;
+  else msg+=`Ratio 1:${fmt(rr,1)} : le gain potentiel ne vaut pas le risque. Selon le livre, on ne prend pas ce trade.`;
+  $('#o-txt').textContent=msg;
+}
+['#c-cap','#c-risk','#c-entry','#c-stop','#c-target'].forEach(s=>$(s).addEventListener('input',calc));calc();
+
+/* quiz */
+const Q=[
+  {q:"Selon l'auteur, quel est l'objectif n°1 d'un trader ?",o:["Survivre, c'est-à-dire protéger son capital","Gagner le plus vite possible","Avoir raison sur le marché","Battre les autres traders"],e:"Un trader ruiné ne peut plus trader. Les profits viennent ensuite, comme la conséquence d'un plan bien appliqué."},
+  {q:"Quel ratio gain/risque minimum l'auteur exige-t-il avant d'ouvrir un trade ?",o:["3 fois le risque","1 fois le risque","1,5 fois le risque","Aucun, seul le signal compte"],e:"Avec un ratio de 3, on peut se tromper 2 fois sur 3 et rester à l'équilibre ou gagnant (hors frais)."},
+  {q:"En tendance haussière, une bonne nouvelle fait BAISSER le prix. Qu'est-ce que ça indique ?",o:["Un signal d'alerte : les acheteurs s'épuisent","Une occasion d'acheter plus","Rien, c'est du bruit","Que la nouvelle était fausse"],e:"C'est l'un des signaux précurseurs les plus forts du chapitre 4 : il faut arrêter d'acheter et surveiller un retournement."},
+  {q:"Le RSI est au-dessus de 50 en tendance haussière. Quel est le point d'entrée préféré de l'auteur ?",o:["Quand le RSI redescend se poser sur 50 sans le casser","Quand le RSI dépasse 80","Quand le RSI casse 50 vers le bas","Au hasard, le RSI ne sert à rien"],e:"La zone des 50 donne souvent les points bas d'une tendance haussière. On achète là, avec un stop proche, idéalement confirmé par une bougie."},
+  {q:"Tu as 20 000 DH, tu risques 1 %, entrée 200, stop 190. Combien d'actions ?",o:["20","100","10","200"],e:"1 % de 20 000 = 200 DH ; 200 ÷ (200 − 190) = 20 actions."},
+  {q:"Que dit l'auteur sur le stop une fois qu'il est posé ?",o:["On ne le déplace que pour protéger ses gains, jamais contre soi","On l'éloigne si le prix s'en approche","On le supprime si on est confiant","On le déplace à chaque bougie"],e:"Un stop sert à invalider le scénario. L'éloigner transforme une petite perte prévue en grosse perte imprévue."},
+  {q:"Qu'est-ce que la méthode de Livermore ?",o:["Ouvrir la moitié de la position et renforcer seulement si le marché donne raison","Doubler la mise après chaque perte","Tout investir d'un coup au meilleur prix","Acheter chaque mois le même montant"],e:"On teste le marché avec une demi-position ; on ne renforce que dans le sens du mouvement. À l'inverse, « moyenner à la baisse » est une faute grave."},
+  {q:"Pourquoi une figure de bougie seule ne suffit-elle pas ?",o:["Il faut une confirmation et un contexte (tendance, support, indicateurs)","Parce que les bougies ne marchent jamais","Parce qu'il faut 10 bougies identiques","Parce que seuls les pros peuvent les lire"],e:"Une figure est un signal avancé. On attend la bougie suivante et la convergence avec d'autres signaux."},
+  {q:"Quelle durée de simulation l'auteur recommande-t-il à ses élèves avant le réel ?",o:["4 à 6 mois","1 semaine","Aucune, il faut du vrai argent","5 ans"],e:"« Comme les pilotes d'avion » : 4 à 6 mois en virtuel, traités comme du réel, pour maîtriser la méthode et le stress."},
+  {q:"Quelle part de ton capital l'auteur conseille-t-il de risquer en réel au tout début ?",o:["5 à 10 % au maximum","50 %","100 %, pour être motivé","Emprunter pour avoir plus"],e:"Seulement de l'argent qu'on accepte de perdre ; ne jamais emprunter pour trader."},
+  {q:"Quel style convient le mieux à quelqu'un qui travaille ou étudie, selon le livre ?",o:["Le swing trading (quelques jours à 1 mois)","Le scalping","Le day trading à plein temps","Le trading au smartphone"],e:"Après la formation, 1 à 2 heures par jour suffisent, avec timing et gestion du risque."},
+  {q:"Qu'est-ce qui compte le plus dans l'exemple des traders A et B ?",o:["Le rapport gain moyen / perte moyenne","Le pourcentage de trades gagnants","Le nombre de trades par jour","Le nombre d'écrans"],e:"B ne gagne que 40 % du temps mais gagne 3 fois plus qu'il ne perd : +6 000 contre +500 pour A, qui gagne 70 % du temps."}
+];
+let order,i,score;
+function start(){order=shuffle(Q);i=0;score=0;render();}
+function render(){
+  const body=$('#qz-body');$('#qz-bar').style.width=(i/order.length*100)+'%';$('#qz-score').textContent=score+' / '+i;
+  if(i>=order.length){
+    const pct=Math.round(score/order.length*100);
+    body.innerHTML=`<div style="display:grid;gap:12px"><p class="q">Résultat : ${score} / ${order.length} (${pct} %)</p><p class="explain">${pct>=80?"Tu as retenu l'essentiel du livre. Relis la partie money management de temps en temps : c'est celle qu'on oublie le plus vite.":pct>=50?"Bonne base. Relis les sections « Money management » et « Lire le marché », puis recommence.":"Relis d'abord « Les 12 idées », puis « Money management », et retente le quiz."}</p><div><button class="btn" type="button" id="qz-again">Recommencer</button></div></div>`;
+    $('#qz-again').onclick=start;return;
+  }
+  const it=order[i],opts=shuffle(it.o.map((t,k)=>({t,k})));
+  body.innerHTML=`<div style="display:grid;gap:12px"><p class="eyebrow">Question ${i+1} sur ${order.length}</p><p class="q"></p><div class="opts"></div><p class="explain" hidden></p><div><button class="btn" type="button" hidden>Question suivante</button></div></div>`;
+  body.querySelector('.q').textContent=it.q;
+  const box=body.querySelector('.opts'),ex=body.querySelector('.explain'),nx=body.querySelector('.btn');
+  opts.forEach(o=>{const b=document.createElement('button');b.type='button';b.className='opt';b.textContent=o.t;
+    b.onclick=()=>{const ok=o.k===0;if(ok)score++;box.querySelectorAll('.opt').forEach((x,idx)=>{x.disabled=true;if(opts[idx].k===0)x.classList.add('ok');});if(!ok)b.classList.add('ko');
+      ex.hidden=false;ex.textContent=(ok?'Correct. ':'Raté. ')+it.e;i++;$('#qz-score').textContent=score+' / '+i;nx.hidden=false;nx.focus();};
+    box.appendChild(b);});
+  nx.onclick=render;
+}
+start();
+})();
+</script>
+</body></html>
